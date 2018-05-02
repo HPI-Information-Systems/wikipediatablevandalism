@@ -10,7 +10,7 @@ import java.io.FileInputStream
 
 
 class RevisionParser(private val kryo: Kryo) {
-    fun parsePage(file: File): List<Revision> {
+    fun parse(file: File): List<Revision> {
         val inputStream = SnappyInputStream(FileInputStream(file))
         val page = kryo.readObject(Input(inputStream), MyPageType::class.java)
 
