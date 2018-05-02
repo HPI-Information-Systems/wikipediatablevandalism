@@ -1,15 +1,16 @@
 package db
 
+import java.io.File
 import java.sql.Connection
 import java.sql.DriverManager
-import java.sql.SQLException
 
+const val DB_NAME = "index.db"
 
 object SqliteDatabase {
     lateinit var connection: Connection
 
-    fun open(path: String) {
-        val url = "jdbc:sqlite:$path"
+    fun open(dir: File) {
+        val url = "jdbc:sqlite:${dir.absolutePath.plus(DB_NAME)}"
         connection = DriverManager.getConnection(url)
         ensureTables()
     }
