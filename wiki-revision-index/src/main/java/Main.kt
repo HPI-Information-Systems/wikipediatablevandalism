@@ -1,6 +1,8 @@
+import com.esotericsoftware.kryo.Kryo
 import db.RevisionRepository
 import db.SqliteDatabase
-import model.Revision
+import parser.RevisionParser
+import java.io.File
 
 fun main(args: Array<String>) {
     // TODO: Exchange with proper cmd tool
@@ -9,7 +11,9 @@ fun main(args: Array<String>) {
     SqliteDatabase.open(path)
 
     val repository = RevisionRepository(SqliteDatabase.connection)
-    repository.insert(Revision(100))
+    val parser = RevisionParser(Kryo())
+    val revisions = parser.parsePage(File("/Users/philipphager/Desktop/595484-King_Missile.parsed"))
+    repository.insert(revisions)
 
     SqliteDatabase.close()
 }
