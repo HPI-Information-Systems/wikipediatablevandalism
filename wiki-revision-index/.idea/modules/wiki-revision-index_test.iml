@@ -37,6 +37,7 @@
     <orderEntry type="module" module-name="wiki-revision-index_main" />
     <orderEntry type="library" name="Gradle: org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.2.40" level="project" />
     <orderEntry type="library" name="Gradle: de.hpi.naumann:wikixmlsplit:0.0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" name="Gradle: org.xerial:sqlite-jdbc:3.20.1" level="project" />
     <orderEntry type="library" name="Gradle: org.sweble.wikitext:swc-dumpreader:2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.sweble.wikitext:swc-example-serialization:2.2.0" level="project" />
     <orderEntry type="library" name="Gradle: org.sweble.wikitext:swc-engine:2.2.0" level="project" />
