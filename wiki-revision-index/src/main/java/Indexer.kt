@@ -9,7 +9,6 @@ import java.io.File
 class Indexer(private val revisionParser: RevisionParser,
               private val revisionRepository: RevisionRepository) {
     fun parseRecursively(dir: File): Observable<List<Revision>> {
-        println("Parsing wiki files on ${Runtime.getRuntime().availableProcessors()} threads in parallel")
         return dir.walkTopDown()
                 .toObservable()
                 .flatMap {
