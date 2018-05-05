@@ -12,9 +12,12 @@ class Indexer(private val revisionParser: RevisionParser,
         println("Parsing wiki files on ${Runtime.getRuntime().availableProcessors()} threads in parallel")
         return dir.walkTopDown()
                 .toObservable()
-                .subscribeOn(Schedulers.computation())
-                .filter { it.isFile && it.name.endsWith(".parsed") }
-                .map { revisionParser.parse(it) }
+                .flatMap {
+                    Observable.just(it)
+                            .subscribeOn(Schedulers.computation())
+                            .filter { it.isFile && it.name.endsWith(".parsed") }
+                            .map { revisionParser.parse(it) }
+                }
                 .doOnNext {
                     revisionRepository.insert(it)
                     println("Parsed ${it.size} revisions")

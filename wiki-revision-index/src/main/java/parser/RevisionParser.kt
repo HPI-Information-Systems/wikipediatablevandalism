@@ -10,10 +10,10 @@ import java.io.FileInputStream
 
 
 class RevisionParser(private val kryo: Kryo) {
+    @Synchronized
     fun parse(file: File): List<Revision> {
-        val inputStream = SnappyInputStream(FileInputStream(file))
-        val page = kryo.readObject(Input(inputStream), MyPageType::class.java)
-
+        println("Parsing on ${Thread.currentThread().name}")
+        val page = getPage(file)
         return page.revisions
                 .map {
                     val savedAt = it.date.toInstant()
@@ -22,5 +22,11 @@ class RevisionParser(private val kryo: Kryo) {
                     Revision(it.id, page.id, savedAt, hasTables, tableHash)
                 }
                 .toList()
+    }
+
+    @Synchronized
+    private fun getPage(file: File): MyPageType {
+        val inputStream = SnappyInputStream(FileInputStream(file))
+        return kryo.readObject(Input(inputStream), MyPageType::class.java)
     }
 }
