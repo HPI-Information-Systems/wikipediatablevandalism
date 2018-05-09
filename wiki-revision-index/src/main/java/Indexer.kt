@@ -16,6 +16,7 @@ class Indexer {
                             .subscribeOn(Schedulers.computation())
                             .filter { it.isFile && it.name.endsWith(".parsed") }
                             .map { RevisionParser(Kryo()).parse(it) }
+                            .doOnNext { println("Parsed ${it.size} revisions") }
                 }
     }
 }
