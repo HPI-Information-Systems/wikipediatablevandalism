@@ -6,6 +6,7 @@ import com.beust.jcommander.ParameterException
 import com.esotericsoftware.kryo.Kryo
 import db.RevisionRepository
 import db.SqliteDatabase
+import io.reactivex.schedulers.Schedulers
 import parser.RevisionParser
 import java.io.File
 
@@ -20,9 +21,12 @@ fun main(args: Array<String>) {
         SqliteDatabase.open(arguments.indexPath)
 
         val repository = RevisionRepository(SqliteDatabase.connection)
-        Indexer(repository)
+        Indexer()
                 .parseRecursively(arguments.dataPath)
-                .blockingSubscribe()
+                .blockingSubscribe({
+                    repository.insert(it)
+                    println("Parsed ${it.size} revisions")
+                })
 
         SqliteDatabase.close()
     } catch (e: ParameterException) {

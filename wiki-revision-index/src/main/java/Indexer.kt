@@ -7,7 +7,7 @@ import model.Revision
 import parser.RevisionParser
 import java.io.File
 
-class Indexer(private val revisionRepository: RevisionRepository) {
+class Indexer {
     fun parseRecursively(dir: File): Observable<List<Revision>> {
         return dir.walkTopDown()
                 .toObservable()
@@ -16,10 +16,6 @@ class Indexer(private val revisionRepository: RevisionRepository) {
                             .subscribeOn(Schedulers.computation())
                             .filter { it.isFile && it.name.endsWith(".parsed") }
                             .map { RevisionParser(Kryo()).parse(it) }
-                }
-                .doOnNext {
-                    revisionRepository.insert(it)
-                    println("Parsed ${it.size} revisions")
                 }
     }
 }
