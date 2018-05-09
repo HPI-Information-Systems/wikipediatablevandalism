@@ -20,22 +20,14 @@ const val INSERT = "INSERT INTO Revision VALUES (?, ?, ?, ?, ?)"
 class RevisionRepository(private val connection: Connection) {
     private var insertStatement: PreparedStatement = connection.prepareStatement(INSERT)
 
-    fun insert(revision: Revision) {
-        insertStatement.setBigDecimal(1, BigDecimal(revision.id))
-        insertStatement.setBigDecimal(2, BigDecimal(revision.pageId))
-        insertStatement.setString(3, revision.createdAt.toString())
-        insertStatement.setBoolean(4, revision.hasTables)
-        insertStatement.setString(5, revision.tableHash)
-        insertStatement.execute()
-    }
-
     fun insert(revisions: List<Revision>) {
         try {
             connection.autoCommit = false
 
             for (revision in revisions) {
-                insert(revision)
+                addToBatch(revision)
             }
+            insertStatement.executeBatch()
             connection.commit()
         } catch (e: SQLException) {
             connection.rollback()
@@ -43,5 +35,14 @@ class RevisionRepository(private val connection: Connection) {
         } finally {
             connection.autoCommit = true
         }
+    }
+
+    private fun addToBatch(revision: Revision) {
+        insertStatement.setBigDecimal(1, BigDecimal(revision.id))
+        insertStatement.setBigDecimal(2, BigDecimal(revision.pageId))
+        insertStatement.setString(3, revision.createdAt.toString())
+        insertStatement.setBoolean(4, revision.hasTables)
+        insertStatement.setString(5, revision.tableHash)
+        insertStatement.addBatch()
     }
 }
