@@ -13,7 +13,7 @@ class Indexer(private val revisionRepository: RevisionRepository) {
                 .toObservable()
                 .flatMap {
                     Observable.just(it)
-                            .subscribeOn(Schedulers.io())
+                            .subscribeOn(Schedulers.computation())
                             .filter { it.isFile && it.name.endsWith(".parsed") }
                             .map { RevisionParser(Kryo()).parse(it) }
                 }
