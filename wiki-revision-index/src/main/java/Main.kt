@@ -20,8 +20,7 @@ fun main(args: Array<String>) {
         SqliteDatabase.open(arguments.indexPath)
 
         val repository = RevisionRepository(SqliteDatabase.connection)
-        val parser = RevisionParser(Kryo())
-        Indexer(parser, repository)
+        Indexer(repository)
                 .parseRecursively(arguments.dataPath)
                 .blockingSubscribe()
 

@@ -1,3 +1,4 @@
+import com.esotericsoftware.kryo.Kryo
 import db.RevisionRepository
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.toObservable
@@ -6,16 +7,15 @@ import model.Revision
 import parser.RevisionParser
 import java.io.File
 
-class Indexer(private val revisionParser: RevisionParser,
-              private val revisionRepository: RevisionRepository) {
+class Indexer(private val revisionRepository: RevisionRepository) {
     fun parseRecursively(dir: File): Observable<List<Revision>> {
         return dir.walkTopDown()
                 .toObservable()
                 .flatMap {
                     Observable.just(it)
-                            .subscribeOn(Schedulers.computation())
+                            .subscribeOn(Schedulers.io())
                             .filter { it.isFile && it.name.endsWith(".parsed") }
-                            .map { revisionParser.parse(it) }
+                            .map { RevisionParser(Kryo()).parse(it) }
                 }
                 .doOnNext {
                     revisionRepository.insert(it)
