@@ -12,7 +12,6 @@ import java.io.FileInputStream
 class RevisionParser(private val kryo: Kryo) {
     @Synchronized
     fun parse(file: File): List<Revision> {
-        println("Parsing on ${Thread.currentThread().name}")
         val page = getPage(file)
         return page.revisions
                 .map {
