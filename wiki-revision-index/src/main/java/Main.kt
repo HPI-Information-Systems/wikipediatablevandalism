@@ -23,9 +23,10 @@ fun main(args: Array<String>) {
         val repository = RevisionRepository(SqliteDatabase.connection)
         Indexer()
                 .parseRecursively(arguments.dataPath)
+                .observeOn(Schedulers.single())
                 .blockingSubscribe({
-                    repository.insert(it)
                     println("Parsed ${it.size} revisions")
+                    repository.insert(it)
                 })
 
         SqliteDatabase.close()
