@@ -31,9 +31,6 @@ class Arguments {
     @Parameter(names = ["--data"], description = "Path of directory containing *.parsed files", required = true)
     lateinit var dataPath: File
 
-    @Parameter(names = ["--index"], description = "Path of directory to index")
-    var indexPath = File("./")
-
     @Parameter(names = ["--help"], help = true)
     var help: Boolean = false
 }
