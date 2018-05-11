@@ -2,47 +2,32 @@ package db
 
 import model.Revision
 import java.math.BigDecimal
-import java.sql.Connection
-import java.sql.PreparedStatement
-import java.sql.SQLException
 
 const val CREATE_TABLE = """
     CREATE TABLE IF NOT EXISTS Revision (
         id INTEGER,
         page_id INTEGER,
         created_at TEXT,
-        has_tables INTEGER,
+        has_tables BOOLEAN,
         table_hash TEXT,
         PRIMARY KEY (id, page_id)
     );"""
 const val INSERT = "INSERT INTO Revision VALUES (?, ?, ?, ?, ?)"
 
-class RevisionRepository(private val connection: Connection) {
-    private var insertStatement: PreparedStatement = connection.prepareStatement(INSERT)
-
+class RevisionRepository(private val databaseProvider: DatabaseProvider) {
     fun insert(revisions: List<Revision>) {
-        try {
-            connection.autoCommit = false
-
-            for (revision in revisions) {
-                addToBatch(revision)
+        databaseProvider.connection().use {
+            it.prepareStatement(INSERT).use {
+                for (revision in revisions) {
+                    it.setBigDecimal(1, BigDecimal(revision.id))
+                    it.setBigDecimal(2, BigDecimal(revision.pageId))
+                    it.setString(3, revision.createdAt.toString())
+                    it.setBoolean(4, revision.hasTables)
+                    it.setString(5, revision.tableHash)
+                    it.addBatch()
+                }
+                it.executeBatch()
             }
-            insertStatement.executeBatch()
-            connection.commit()
-        } catch (e: SQLException) {
-            connection.rollback()
-            throw e
-        } finally {
-            connection.autoCommit = true
         }
-    }
-
-    private fun addToBatch(revision: Revision) {
-        insertStatement.setBigDecimal(1, BigDecimal(revision.id))
-        insertStatement.setBigDecimal(2, BigDecimal(revision.pageId))
-        insertStatement.setString(3, revision.createdAt.toString())
-        insertStatement.setBoolean(4, revision.hasTables)
-        insertStatement.setString(5, revision.tableHash)
-        insertStatement.addBatch()
     }
 }

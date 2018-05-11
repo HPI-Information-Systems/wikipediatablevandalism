@@ -3,14 +3,12 @@
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
-import com.esotericsoftware.kryo.Kryo
-import db.RevisionRepository
-import db.SqliteDatabase
-import io.reactivex.schedulers.Schedulers
-import parser.RevisionParser
+import kotlinx.coroutines.experimental.runBlocking
+import tracker.ProgressTracker
+import utils.countWikiPages
 import java.io.File
 
-fun main(args: Array<String>) {
+fun main(args: Array<String>) = runBlocking {
     val arguments = Arguments()
     val cmd = JCommander.newBuilder()
             .addObject(arguments)
@@ -18,16 +16,12 @@ fun main(args: Array<String>) {
 
     try {
         cmd.parse(*args)
-        SqliteDatabase.open(arguments.indexPath)
+        val file = arguments.dataPath
+        val totalPages = file.countWikiPages()
 
-        val repository = RevisionRepository(SqliteDatabase.connection)
-        Indexer()
-                .parseRecursively(arguments.dataPath)
-                .blockingSubscribe({
-                    repository.insert(it)
-                })
-
-        SqliteDatabase.close()
+        Indexer(ProgressTracker(totalPages.toLong()))
+                .parseRecursively(file)
+                .forEach { it.join() }
     } catch (e: ParameterException) {
         cmd.usage()
     }

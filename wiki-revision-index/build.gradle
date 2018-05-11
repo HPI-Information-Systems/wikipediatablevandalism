@@ -26,16 +26,18 @@ sourceCompatibility = 1.8
 repositories {
     mavenLocal()
     mavenCentral()
+    jcenter()
 }
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     implementation "de.hpi.naumann:wikixmlsplit:0.0.1-SNAPSHOT"
-    implementation "org.xerial:sqlite-jdbc:3.20.1"
+    implementation "org.postgresql:postgresql:42.2.2"
     implementation "commons-codec:commons-codec:1.11"
-    implementation "io.reactivex.rxjava2:rxjava:2.1.13"
-    implementation "io.reactivex.rxjava2:rxkotlin:2.2.0"
     implementation "com.beust:jcommander:1.71"
+    implementation "com.zaxxer:HikariCP:2.7.8"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21"
+    implementation "me.tongfei:progressbar:0.6.0"
 
     testCompile "junit:junit:4.12"
 }
@@ -45,4 +47,10 @@ compileKotlin {
 }
 compileTestKotlin {
     kotlinOptions.jvmTarget = "1.8"
+}
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
 }
