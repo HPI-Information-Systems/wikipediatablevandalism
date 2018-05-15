@@ -21,8 +21,7 @@ class RevisionParser(private val kryo: Kryo) {
             previousTables = tables
 
             val savedAt = pageRevision.date.toInstant()
-            val hasTables = pageRevision.parsed != null
-            revisions.add(Revision(pageRevision.id, page.id, savedAt, hasTables, changedTables))
+            revisions.add(Revision(pageRevision.id, page.id, savedAt, tables.size, changedTables))
         }
 
         return revisions

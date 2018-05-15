@@ -8,7 +8,7 @@ const val CREATE_TABLE = """
         id INTEGER,
         page_id INTEGER,
         created_at TEXT,
-        has_tables BOOLEAN,
+        table_count INTEGER,
         changed_tables INTEGER,
         PRIMARY KEY (id, page_id)
     );"""
@@ -22,7 +22,7 @@ class RevisionRepository(private val databaseProvider: DatabaseProvider) {
                     it.setBigDecimal(1, BigDecimal(revision.id))
                     it.setBigDecimal(2, BigDecimal(revision.pageId))
                     it.setString(3, revision.createdAt.toString())
-                    it.setBoolean(4, revision.hasTables)
+                    it.setInt(4, revision.tableCount)
                     it.setInt(5, revision.changedTables)
                     it.addBatch()
                 }

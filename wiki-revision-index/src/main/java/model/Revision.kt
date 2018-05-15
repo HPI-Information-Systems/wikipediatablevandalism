@@ -8,6 +8,6 @@ data class Revision(
         val id: BigInteger,
         val pageId: BigInteger,
         val createdAt: Instant,
-        val hasTables: Boolean,
+        val tableCount: Int,
         val changedTables: Int
 )
