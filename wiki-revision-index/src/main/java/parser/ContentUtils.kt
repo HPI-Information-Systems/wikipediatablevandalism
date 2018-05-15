@@ -5,8 +5,15 @@ import org.apache.commons.codec.digest.DigestUtils
 fun hash(content: List<String>?): String {
     if (content == null) return ""
 
-    val contentBytes = content
-            .flatMap { it.toByteArray().asIterable() }
-            .toByteArray()
-    return DigestUtils.sha1Hex(contentBytes)
+    var size = 0
+    for (json in content) {
+        size += json.length
+    }
+
+    val buffer = StringBuffer(size)
+    for (json in content) {
+        buffer.append(json)
+    }
+
+    return DigestUtils.sha1Hex(buffer.toString())
 }
