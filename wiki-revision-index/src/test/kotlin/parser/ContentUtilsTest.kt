@@ -3,24 +3,43 @@ package parser
 import org.junit.Test
 
 class ContentUtilsTest {
-    @Test fun hashEqualsIfListsAreEqual() {
-        val listOfStrings = listOf("John", "Doe")
-        val otherListOfStrings = listOf("John", "Doe")
+    @Test
+    fun emptyListsHaveNoTableChange() {
+        val previousTables = listOf<String>()
+        val tables = listOf<String>()
 
-        assert(hash(listOfStrings) == hash(otherListOfStrings))
+        assert(changedTables(previousTables, tables) == 0)
     }
 
-    @Test fun hashDiffersIfListsAreEqual() {
-        val listOfStrings = listOf("John", "Do")
-        val otherListOfStrings = listOf("John", "Doe")
+    @Test
+    fun countSingleAddedTable() {
+        val previousTables = listOf<String>()
+        val tables = listOf("Table")
 
-        assert(hash(listOfStrings) != hash(otherListOfStrings))
+        assert(changedTables(previousTables, tables) == 1)
     }
 
-    @Test fun hashesOfEmptyListsAreEqual() {
-        val listOfStrings = listOf<String>()
-        val otherListOfStrings = listOf<String>()
+    @Test
+    fun countSingleDeletedTable() {
+        val previousTables = listOf("Table")
+        val tables = listOf<String>()
 
-        assert(hash(listOfStrings) == hash(otherListOfStrings))
+        assert(changedTables(previousTables, tables) == 1)
+    }
+
+    @Test
+    fun countModifiedTableAsDeletionAndInsertion() {
+        val previousTables = listOf("Table")
+        val tables = listOf("Different Table")
+
+        assert(changedTables(previousTables, tables) == 2)
+    }
+
+    @Test
+    fun countMultipleTableChanges() {
+        val previousTables = listOf("Table", "Deleted Table")
+        val tables = listOf("New Table", "Table")
+
+        assert(changedTables(previousTables, tables) == 2)
     }
 }

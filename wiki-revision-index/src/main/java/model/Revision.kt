@@ -9,5 +9,5 @@ data class Revision(
         val pageId: BigInteger,
         val createdAt: Instant,
         val hasTables: Boolean,
-        val tableHash: String
+        val changedTables: Int
 )

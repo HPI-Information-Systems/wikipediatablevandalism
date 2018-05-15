@@ -9,7 +9,7 @@ const val CREATE_TABLE = """
         page_id INTEGER,
         created_at TEXT,
         has_tables BOOLEAN,
-        table_hash TEXT,
+        changed_tables INTEGER,
         PRIMARY KEY (id, page_id)
     );"""
 const val INSERT = "INSERT INTO Revision VALUES (?, ?, ?, ?, ?)"
@@ -23,7 +23,7 @@ class RevisionRepository(private val databaseProvider: DatabaseProvider) {
                     it.setBigDecimal(2, BigDecimal(revision.pageId))
                     it.setString(3, revision.createdAt.toString())
                     it.setBoolean(4, revision.hasTables)
-                    it.setString(5, revision.tableHash)
+                    it.setInt(5, revision.changedTables)
                     it.addBatch()
                 }
                 it.executeBatch()
