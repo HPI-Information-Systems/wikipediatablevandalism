@@ -3,9 +3,10 @@
 import com.beust.jcommander.JCommander
 import com.beust.jcommander.Parameter
 import com.beust.jcommander.ParameterException
+import db.DatabaseProvider
 import kotlinx.coroutines.experimental.runBlocking
 import tracker.ProgressTracker
-import utils.countWikiPages
+import utils.wikiPages
 import java.io.File
 
 fun main(args: Array<String>) = runBlocking {
@@ -14,16 +15,25 @@ fun main(args: Array<String>) = runBlocking {
             .addObject(arguments)
             .build()
 
+    var progressTracker: ProgressTracker? = null
+
     try {
         cmd.parse(*args)
-        val file = arguments.dataPath
-        val totalPages = file.countWikiPages()
 
-        Indexer(ProgressTracker(totalPages.toLong()))
-                .parseRecursively(file)
-                .forEach { it.join() }
+        val databaseProvider = DatabaseProvider
+
+        val file = arguments.dataPath
+        val pages = file.wikiPages()
+        progressTracker = ProgressTracker(pages.size.toLong())
+        Indexer(databaseProvider, progressTracker)
+                .parse(pages)
+                .forEach { it.await() }
     } catch (e: ParameterException) {
         cmd.usage()
+    } finally {
+        if (progressTracker != null) {
+            progressTracker.stop()
+        }
     }
 }
 
