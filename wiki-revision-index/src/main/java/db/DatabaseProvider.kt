@@ -23,6 +23,7 @@ object DatabaseProvider {
             maximumPoolSize = maxConnectionPoolSize()
         }
         HikariDataSource(config).also {
+            it.connection.prepareStatement(DROP_TABLE).execute()
             it.connection.prepareStatement(CREATE_TABLE).execute()
         }
     }

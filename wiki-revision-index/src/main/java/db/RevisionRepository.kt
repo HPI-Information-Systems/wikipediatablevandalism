@@ -12,6 +12,7 @@ const val CREATE_TABLE = """
         changed_tables INTEGER,
         PRIMARY KEY (id, page_id)
     );"""
+const val DROP_TABLE = "DROP TABLE IF EXISTS Revision"
 const val INSERT = "INSERT INTO Revision VALUES (?, ?, ?, ?, ?)"
 
 class RevisionRepository(private val databaseProvider: DatabaseProvider) {
