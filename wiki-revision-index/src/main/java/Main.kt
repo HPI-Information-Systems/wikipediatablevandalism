@@ -19,15 +19,25 @@ fun main(args: Array<String>) = runBlocking {
 
     try {
         cmd.parse(*args)
-
         val databaseProvider = DatabaseProvider
-
         val file = arguments.dataPath
         val pages = file.wikiPages()
         progressTracker = ProgressTracker(pages.size.toLong())
-        Indexer(databaseProvider, progressTracker)
-                .parse(pages)
-                .forEach { it.await() }
+
+        var startIndex = 0
+        val maxBatchSize = 1000
+
+        while (startIndex < pages.size) {
+            val batchSize = if (startIndex + maxBatchSize < pages.size) maxBatchSize else pages.size - startIndex
+            val endIndex = startIndex + batchSize
+            val batch = pages.subList(startIndex, endIndex)
+
+            Indexer(databaseProvider, progressTracker)
+                    .parse(batch)
+                    .forEach { it.join() }
+
+            startIndex = endIndex
+        }
     } catch (e: ParameterException) {
         cmd.usage()
     } finally {
