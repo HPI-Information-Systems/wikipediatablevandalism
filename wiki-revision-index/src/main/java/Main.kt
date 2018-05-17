@@ -25,7 +25,7 @@ fun main(args: Array<String>) = runBlocking {
         progressTracker = ProgressTracker(pages.size.toLong())
 
         var startIndex = 0
-        val maxBatchSize = 1000
+        val maxBatchSize = 500
 
         while (startIndex < pages.size) {
             val batchSize = if (startIndex + maxBatchSize < pages.size) maxBatchSize else pages.size - startIndex
