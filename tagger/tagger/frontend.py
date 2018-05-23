@@ -25,7 +25,8 @@ class CursesFrontend(object):
         curses.cbreak()
 
         self.tags = self.tag_controller.get_tags()
-        self.revision_controller.get_next_revision()
+        if not self.revision_controller.get_next_revision():
+            raise QuitException("Could not retrieve first revision")
 
     def _quit(self):
         raise QuitException

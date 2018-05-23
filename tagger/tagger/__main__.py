@@ -5,7 +5,7 @@ import psycopg2
 
 from tagger.frontend import CursesFrontend
 from tagger.tag import TagController
-from tagger.revision import RevisionController
+from tagger.revision import RevisionController, FileRevisionSource
 from tagger.open_handler import OpenHandler
 
 
@@ -16,6 +16,8 @@ def parse_args():
                         help='Use Selenium Web Driver to remotely control the browser')
     parser.add_argument('-t', '--tags', default='tags.txt',
                         help='Text file with tags, one per line')
+    parser.add_argument('-r', '--revisions', default='revisions.txt',
+                        help='Text file with revisions to tag, one per line')
 
     pg = parser.add_argument_group('Postgres', description='Database settings')
     pg.add_argument('--host', help='Host', default='localhost')
@@ -39,8 +41,8 @@ def create_tag_controller(connection, args):
     return tc
 
 
-def create_revision_controller(connection, open_handler, tag_controller):
-    rc = RevisionController(connection, open_handler, tag_controller)
+def create_revision_controller(connection, open_handler, tag_controller, revisions):
+    rc = RevisionController(connection, open_handler, tag_controller, revisions)
     rc.setup()
     return rc
 
@@ -52,13 +54,18 @@ def create_connection(args):
                             password=args.password)
 
 
+def create_revision_source(args):
+    return FileRevisionSource(args.revisions)
+
+
 def main():
     args = parse_args()
+    revisions = create_revision_source(args)
     connection = create_connection(args)
     try:
         tag_controller = create_tag_controller(connection, args)
         with create_open_handler(args) as open_handler:
-            revision_controller = create_revision_controller(connection, open_handler, tag_controller)
+            revision_controller = create_revision_controller(connection, open_handler, tag_controller, revisions)
             CursesFrontend.main(tag_controller, revision_controller)
     finally:
         connection.close()

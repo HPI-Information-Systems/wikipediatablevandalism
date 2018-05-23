@@ -1,17 +1,28 @@
 #! -*- encoding: utf-8 -*-
 from collections import namedtuple
 
+Revision = namedtuple('Revision', ('id', 'page_id', 'created_at', 'table_count', 'changed_tables'))
 
-Revision = namedtuple('Revision', ('id', 'page_id', 'created_at', 'has_tables', 'table_hash'))
+
+class FileRevisionSource(object):
+
+    def __init__(self, filename):
+        self.filename = filename
+        with open(self.filename, 'r') as f:
+            self.revisions = list(filter(bool, [line.strip() for line in f]))
+        self.iterator = iter(self.revisions)
+
+    def next_revision(self):
+        return next(self.iterator, None)
 
 
 class RevisionController(object):
 
-    def __init__(self, connection, open_handler, tag_controller):
+    def __init__(self, connection, open_handler, tag_controller, revision_source):
         self.connection = connection
         self.tag_controller = tag_controller
         self.open_handler = open_handler
-        self.cursor = None
+        self.revision_source = revision_source
         self.current_revision = None
 
     def setup(self):
@@ -23,14 +34,21 @@ class RevisionController(object):
             UNIQUE (revision_id, revision_page_id, tag_id))
             """)
 
-        self.cursor = self.connection.cursor()
-        self.cursor.execute("""
-        SELECT id, page_id, created_at, has_tables, table_hash FROM Revision WHERE has_tables IS TRUE
-        """)
-
     def get_next_revision(self):
-        self._next()
-        return self.current_revision
+        while True:
+            revision_id = self.revision_source.next_revision()
+            if revision_id:
+                revision = self._fetch_revision(revision_id)
+                if revision:
+                    self.current_revision = revision
+                    return revision
+                else:
+                    # Revision not found - retry with next
+                    continue
+            else:
+                # revision source is exhausted
+                self.current_revision = None
+                break
 
     def mark_current_revision(self, tags):
         if not self.current_revision:
@@ -45,22 +63,21 @@ class RevisionController(object):
 
     def get_current_revision(self):
         if not self.current_revision:
-            self._next()
+            self.get_next_revision()
         return self.current_revision
 
     def open_current_revision(self):
         self.open_handler.open(self.get_current_revision().id)
 
-    def _next(self):
-        next_item = next(self.cursor, None)
-
-        if not next_item:
-            self.current_revision = None
-            return
-
-        rev_id, page_id, created_at, has_tables, table_hash = next_item
-        self.current_revision = Revision(id=rev_id,
-                                         page_id=page_id,
-                                         created_at=created_at,
-                                         has_tables=has_tables,
-                                         table_hash=table_hash)
+    def _fetch_revision(self, revision_id):
+        with self.connection, self.connection.cursor() as cursor:
+            cursor.execute("SELECT id, page_id, created_at, table_count, changed_tables FROM Revision WHERE id = %s",
+                           (revision_id,))
+            record = cursor.fetchone()
+            if record:
+                rev_id, page_id, created_at, table_count, changed_tables = record
+                return Revision(id=rev_id,
+                                page_id=page_id,
+                                created_at=created_at,
+                                table_count=table_count,
+                                changed_tables=changed_tables)
