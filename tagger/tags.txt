@@ -1,0 +1,11 @@
+Blanking
+Nonsense
+QualityIssue
+PersonalStory
+FalseFacts
+Syntax
+MergeConflict
+Template
+EditWars
+SEO
+Intention
