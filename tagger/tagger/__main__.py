@@ -21,6 +21,8 @@ def parse_args():
                         help='Text file with revisions to tag, one per line')
     parser.add_argument('-l', '--log', default='log.txt',
                         help='Filename of the logfile')
+    parser.add_argument('-s', '--last-seen',
+                        help='Resume a tagging session by specifying the last seen revision ID')
 
     pg = parser.add_argument_group('Postgres', description='Database settings')
     pg.add_argument('--host', help='Host', default='localhost')
@@ -58,7 +60,7 @@ def create_connection(args):
 
 
 def create_revision_source(args):
-    return FileRevisionSource(args.revisions)
+    return FileRevisionSource(args.revisions, args.last_seen)
 
 
 def setup_logging(args):

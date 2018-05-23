@@ -6,13 +6,31 @@ from .tag import TAG_CONSTRUCTIVE
 Revision = namedtuple('Revision', ('id', 'page_id', 'created_at', 'table_count', 'changed_tables'))
 
 
+class InvalidRevisionId(BaseException):
+    pass
+
+
 class FileRevisionSource(object):
 
-    def __init__(self, filename):
+    def __init__(self, filename, start_revision=None):
         self.filename = filename
+        self.iterator = iter(self._get_revisions(start_revision))
+
+    def _get_revisions(self, start_revision):
+        revisions = self._read_file()
+
+        if start_revision is None:
+            return revisions
+
+        if start_revision not in revisions:
+            raise InvalidRevisionId("Start revision %s not found" % start_revision)
+
+        begin = revisions.index(start_revision) + 1
+        return revisions[begin:]
+
+    def _read_file(self):
         with open(self.filename, 'r') as f:
-            self.revisions = list(filter(bool, [line.strip() for line in f]))
-        self.iterator = iter(self.revisions)
+            return list(filter(bool, [line.strip() for line in f]))
 
     def next_revision(self):
         return next(self.iterator, None)
