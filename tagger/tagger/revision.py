@@ -1,5 +1,6 @@
 #! -*- encoding: utf-8 -*-
 from collections import namedtuple
+import logging
 
 Revision = namedtuple('Revision', ('id', 'page_id', 'created_at', 'table_count', 'changed_tables'))
 
@@ -24,6 +25,7 @@ class RevisionController(object):
         self.open_handler = open_handler
         self.revision_source = revision_source
         self.current_revision = None
+        self.logger = logging.getLogger(__name__)
 
     def setup(self):
         with self.connection, self.connection.cursor() as cursor:
@@ -43,10 +45,10 @@ class RevisionController(object):
                     self.current_revision = revision
                     return revision
                 else:
-                    # Revision not found - retry with next
+                    self.logger.warning("Revision ID %s not found, trying next", revision_id)
                     continue
             else:
-                # revision source is exhausted
+                self.logger.debug("Revision source exhausted")
                 self.current_revision = None
                 break
 
@@ -60,6 +62,8 @@ class RevisionController(object):
             cursor.executemany("""
             INSERT INTO RevisionTag(revision_id, revision_page_id, tag_id) VALUES (%s, %s, %s) ON CONFLICT DO NOTHING
             """, to_insert)
+
+        self.logger.info("Marked revision %s with %s", self.current_revision.id, tags)
 
     def get_current_revision(self):
         if not self.current_revision:

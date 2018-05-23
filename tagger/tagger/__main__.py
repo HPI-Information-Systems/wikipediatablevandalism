@@ -1,6 +1,7 @@
 #! -*- encoding: utf-8 -*-
 
 import argparse
+import logging
 import psycopg2
 
 from tagger.frontend import CursesFrontend
@@ -18,6 +19,8 @@ def parse_args():
                         help='Text file with tags, one per line')
     parser.add_argument('-r', '--revisions', default='revisions.txt',
                         help='Text file with revisions to tag, one per line')
+    parser.add_argument('-l', '--log', default='log.txt',
+                        help='Filename of the logfile')
 
     pg = parser.add_argument_group('Postgres', description='Database settings')
     pg.add_argument('--host', help='Host', default='localhost')
@@ -58,8 +61,15 @@ def create_revision_source(args):
     return FileRevisionSource(args.revisions)
 
 
+def setup_logging(args):
+    logging.basicConfig(filename=args.log,
+                        level=logging.INFO,
+                        format='%(asctime)s %(name)-14s %(levelname)-8s %(message)s')
+
+
 def main():
     args = parse_args()
+    setup_logging(args)
     revisions = create_revision_source(args)
     connection = create_connection(args)
     try:
