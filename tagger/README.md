@@ -24,6 +24,11 @@ In case you are experiencing issues while installing Selenium or the driver comp
     python -m tagger -h 			# Show help
     python -m tagger  				# Run
     python -m tagger --no-selenium	# Run without Selenium
+    
+From IDE (IntelliJ):
+
+- In the Run/Debug Configuration, select "Module name" instead of "Script path".
+- Tick "Emulate terminal in output console".
 
 ## Keyboard Shortcuts
 
