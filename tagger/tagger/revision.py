@@ -1,6 +1,7 @@
 #! -*- encoding: utf-8 -*-
 from collections import namedtuple
 import logging
+from .tag import TAG_CONSTRUCTIVE
 
 Revision = namedtuple('Revision', ('id', 'page_id', 'created_at', 'table_count', 'changed_tables'))
 
@@ -55,6 +56,9 @@ class RevisionController(object):
     def mark_current_revision(self, tags):
         if not self.current_revision:
             return
+
+        if not tags:
+            tags = [TAG_CONSTRUCTIVE]
 
         tag_ids = self.tag_controller.find_tag_ids(tags)
         to_insert = [(self.current_revision.id, self.current_revision.page_id, tag_id) for tag_id in tag_ids]

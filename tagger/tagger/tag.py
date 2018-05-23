@@ -2,6 +2,8 @@
 
 import logging
 
+TAG_CONSTRUCTIVE = 'constructive'
+
 
 class TagController(object):
 
@@ -13,7 +15,7 @@ class TagController(object):
     def setup(self):
         with self.connection, self.connection.cursor() as cursor:
             cursor.execute("CREATE TABLE IF NOT EXISTS Tag (id SERIAL PRIMARY KEY, name varchar(30) UNIQUE)")
-            tags = self.get_tags()
+            tags = self.get_tags() + [TAG_CONSTRUCTIVE]
             cursor.executemany("""INSERT INTO Tag(name) VALUES (%s) ON CONFLICT DO NOTHING""",
                                [(t,) for t in tags])
 
