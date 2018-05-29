@@ -2,7 +2,8 @@
 CREATE OR REPLACE VIEW changedTables AS SELECT * FROM revision WHERE NOT (table_count = 0 AND changed_tables = 0);
 
 --window of page_id´s
-CREATE OR REPLACE VIEW windows AS SELECT *, rank() OVER (PARTITION BY page_id ORDER BY created_at) FROM changedTables;
+-- order also by ID if timestamp resolution is insufficient
+CREATE OR REPLACE VIEW windows AS SELECT *, rank() OVER (PARTITION BY page_id ORDER BY created_at, id) FROM changedTables;
 
 --all deleted
 CREATE OR REPLACE VIEW allDeletedTables
@@ -16,7 +17,9 @@ CREATE OR REPLACE VIEW allCreatedTables
 AS SELECT DISTINCT actual.id, actual.page_id, actual.created_at, actual.table_count, actual.changed_tables, before.table_count AS table_count_before
 FROM windows actual
 INNER JOIN windows before
-ON actual.page_id = before.page_id AND before.rank+1 = actual.rank AND actual.table_count > before.table_count;
+ON actual.page_id = before.page_id AND (
+	(before.rank+1 = actual.rank AND actual.table_count > before.table_count) OR -- true increase
+	actual.rank = 1); -- treat very first revision as created
 
 --all modified
 CREATE OR REPLACE VIEW allModifiedTables
