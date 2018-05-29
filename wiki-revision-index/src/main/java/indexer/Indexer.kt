@@ -1,3 +1,5 @@
+package indexer
+
 import com.esotericsoftware.kryo.Kryo
 import db.DatabaseProvider
 import db.RevisionRepository
