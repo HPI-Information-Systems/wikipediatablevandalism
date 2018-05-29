@@ -31,9 +31,10 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    implementation "de.hpi.naumann:wikixmlsplit:0.0.1-SNAPSHOT"
+    implementation "de.hpi.naumann:wikixmlsplit:0.0.2-SNAPSHOT"
     implementation "org.postgresql:postgresql:42.2.2"
     implementation "commons-codec:commons-codec:1.11"
+    implementation 'org.apache.commons:commons-csv:1.5'
     implementation "com.beust:jcommander:1.71"
     implementation "com.zaxxer:HikariCP:2.7.8"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21"
