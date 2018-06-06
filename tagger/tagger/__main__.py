@@ -2,10 +2,9 @@
 
 import argparse
 import logging
-import psycopg2
+import os
 
-from tagger.frontend import CursesFrontend
-from tagger.tag import TagController
+from tagger.tag import FileTagController, DatabaseTagController, read_tags
 from tagger.revision import RevisionController, FileRevisionSource
 from tagger.open_handler import OpenHandler
 
@@ -19,10 +18,16 @@ def parse_args():
                         help='Text file with tags, one per line')
     parser.add_argument('-r', '--revisions', default='revisions.txt',
                         help='Text file with revisions to tag, one per line')
+    parser.add_argument('--revision-delimiter', default='|',
+                        help='Delimiter of the revsions file')
     parser.add_argument('-l', '--log', default='log.txt',
                         help='Filename of the logfile')
     parser.add_argument('-s', '--last-seen',
                         help='Resume a tagging session by specifying the last seen revision ID')
+    parser.add_argument('--output', '-o',
+                        help='Where to store tags; if omitted, the database is used')
+    parser.add_argument('--no-curses', action='store_true',
+                        help='Disable Curses UI; implicitly activated if on Windows')
 
     pg = parser.add_argument_group('Postgres', description='Database settings')
     pg.add_argument('--host', help='Host', default='localhost')
@@ -39,20 +44,18 @@ def create_open_handler(args):
     return OpenHandler.selenium()
 
 
-def create_tag_controller(connection, args):
-    tc = TagController(filename=args.tags,
-                       connection=connection)
+def create_database_tag_controller(connection, tags):
+    tc = DatabaseTagController(connection=connection, tags=tags)
     tc.setup()
     return tc
 
 
-def create_revision_controller(connection, open_handler, tag_controller, revisions):
-    rc = RevisionController(connection, open_handler, tag_controller, revisions)
-    rc.setup()
-    return rc
+def create_revision_controller(open_handler, tag_controller, revisions):
+    return RevisionController(open_handler, tag_controller, revisions)
 
 
 def create_connection(args):
+    import psycopg2
     return psycopg2.connect(host=args.host,
                             database=args.database,
                             username=args.username,
@@ -60,7 +63,7 @@ def create_connection(args):
 
 
 def create_revision_source(args):
-    return FileRevisionSource(args.revisions, args.last_seen)
+    return FileRevisionSource(args.revisions, args.revision_delimiter, args.last_seen)
 
 
 def setup_logging(args):
@@ -73,14 +76,27 @@ def main():
     args = parse_args()
     setup_logging(args)
     revisions = create_revision_source(args)
-    connection = create_connection(args)
+    tags = read_tags(args.tags)
+
+    if args.output:
+        connection = None
+        tag_controller = FileTagController(args.output, tags)
+    else:
+        connection = create_connection(args)
+        tag_controller = create_database_tag_controller(connection, tags)
+
     try:
-        tag_controller = create_tag_controller(connection, args)
         with create_open_handler(args) as open_handler:
-            revision_controller = create_revision_controller(connection, open_handler, tag_controller, revisions)
-            CursesFrontend.main(tag_controller, revision_controller)
+            revision_controller = create_revision_controller(open_handler, tag_controller, revisions)
+            if os.name == 'nt' or args.no_curses:
+                from tagger.frontend_mini import MinimalFrontend
+                MinimalFrontend.main(tag_controller, revision_controller)
+            else:
+                from tagger.frontend_curses import CursesFrontend
+                CursesFrontend.main(tag_controller, revision_controller)
     finally:
-        connection.close()
+        if connection:
+            connection.close()
 
 
 if __name__ == '__main__':

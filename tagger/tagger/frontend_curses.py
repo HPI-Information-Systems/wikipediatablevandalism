@@ -46,14 +46,17 @@ class CursesFrontend(object):
         revision = self.revision_controller.get_current_revision()
         window.addstr(2, 1, "Current Revision: {}, page_id={}".format(revision.id, revision.page_id))
 
+        seen, total = self.revision_controller.get_progress()
+        window.addstr(3, 1, "Progress: {} remaining".format(total - seen))
+
         selected_tags = ", ".join(self.selected_tags)
-        window.addstr(3, 1, "Current Tags: {}".format(selected_tags))
+        window.addstr(4, 1, "Current Tags: {}".format(selected_tags))
         return window
 
     def _draw_tag(self, window, index, tag):
         sub = window.subwin(
             # number of preceding lines from _create_root_window + 1 + box count times height
-            4 + index * CursesFrontend.TAG_HEIGHT,
+            5 + index * CursesFrontend.TAG_HEIGHT,
             1)
         style = curses.A_STANDOUT if self.highlight == index else curses.A_NORMAL
         message = "({}) {}".format(index + 1, tag)
@@ -132,7 +135,6 @@ class QuitException(BaseException):
 
 
 class InvalidScreenSizeException(BaseException):
-
     """
     Possibly the size of your terminal is too small to display all content.
     Please try to resize it.
