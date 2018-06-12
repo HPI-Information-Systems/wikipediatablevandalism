@@ -2,7 +2,6 @@
 
 import argparse
 import logging
-import os
 
 from tagger.tag import FileTagController, DatabaseTagController, read_tags
 from tagger.revision import RevisionController, FileRevisionSource
@@ -26,8 +25,8 @@ def parse_args():
                         help='Resume a tagging session by specifying the last seen revision ID')
     parser.add_argument('--output', '-o',
                         help='Where to store tags; if omitted, the database is used')
-    parser.add_argument('--no-curses', action='store_true', default=True,
-                        help='Disable Curses UI; implicitly activated if on Windows')
+    parser.add_argument('--curses', action='store_true',
+                        help='Use Curses UI (not available on Windows')
     parser.add_argument('--use-database', action='store_true',
                         help='Enable Postgres access')
 
@@ -97,12 +96,12 @@ def main():
     try:
         with create_open_handler(args) as open_handler:
             revision_controller = create_revision_controller(open_handler, tag_controller, revisions)
-            if os.name == 'nt' or args.no_curses:
-                from tagger.frontend_mini import MinimalFrontend
-                MinimalFrontend.main(tag_controller, revision_controller)
-            else:
+            if args.curses:
                 from tagger.frontend_curses import CursesFrontend
                 CursesFrontend.main(tag_controller, revision_controller)
+            else:
+                from tagger.frontend_mini import MinimalFrontend
+                MinimalFrontend.main(tag_controller, revision_controller)
     finally:
         if connection:
             connection.close()

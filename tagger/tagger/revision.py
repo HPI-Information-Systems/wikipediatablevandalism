@@ -1,7 +1,6 @@
 #! -*- encoding: utf-8 -*-
 from collections import namedtuple
 import logging
-from .tag import TAG_CONSTRUCTIVE
 
 Revision = namedtuple('Revision', ('id', 'page_id'))
 
@@ -69,7 +68,7 @@ class RevisionController(object):
             return
 
         if not tags:
-            tags = [TAG_CONSTRUCTIVE]
+            tags = self.tag_controller.fallback_tags()
 
         self.tag_controller.mark_revision(self.current_revision.page_id,
                                           self.current_revision.id,

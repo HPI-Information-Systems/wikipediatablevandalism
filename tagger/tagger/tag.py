@@ -3,9 +3,6 @@ import json
 import logging
 
 
-TAG_CONSTRUCTIVE = 'constructive'
-
-
 class Tag(object):
     def __init__(self, pk, name, visible=True, enabled=True):
         self.pk = pk
@@ -23,11 +20,18 @@ def read_tags(filename):
         return [t for t in tags if t.enabled]
 
 
+def find_constructive(tags):
+    constructive = next((t for t in tags if t.name == 'constructive'), None)
+    assert constructive, "fallback 'constructive' tag should be present"
+    return constructive
+
+
 class DatabaseTagController(object):
 
     def __init__(self, connection, tags):
         self.connection = connection
         self.tags = tags
+        self.tag_constructive = find_constructive(tags)
         self.logger = logging.getLogger(__name__)
 
     def setup(self):
@@ -55,12 +59,16 @@ class DatabaseTagController(object):
     def get_tags(self):
         return [t for t in self.tags if t.visible]
 
+    def fallback_tags(self):
+        return [self.tag_constructive]
+
 
 class FileTagController(object):
 
     def __init__(self, filename, tags):
         self.filename = filename
         self.tags = tags
+        self.tag_constructive = find_constructive(tags)
         self.logger = logging.getLogger(__name__)
 
     def mark_revision(self, page_id, revision_id, tags):
@@ -76,3 +84,6 @@ class FileTagController(object):
 
     def get_tags(self):
         return [t for t in self.tags if t.visible]
+
+    def fallback_tags(self):
+        return [self.tag_constructive]
