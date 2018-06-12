@@ -49,7 +49,7 @@ class CursesFrontend(object):
         seen, total = self.revision_controller.get_progress()
         window.addstr(3, 1, "Progress: {} remaining".format(total - seen))
 
-        selected_tags = ", ".join(self.selected_tags)
+        selected_tags = ", ".join(t.name for t in self.selected_tags)
         window.addstr(4, 1, "Current Tags: {}".format(selected_tags))
         return window
 

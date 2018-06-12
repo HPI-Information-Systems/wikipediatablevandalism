@@ -67,6 +67,8 @@ class RevisionController(object):
         if not self.current_revision:
             return
 
+        tags = list(tags)
+        
         if not tags:
             tags = self.tag_controller.fallback_tags()
 
