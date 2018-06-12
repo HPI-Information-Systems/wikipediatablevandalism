@@ -41,12 +41,12 @@ class MinimalFrontend(object):
                 if not len(read):
                     return []
 
-                if "quit" in read or "q" in read:
+                if "quit" in read or "exit" in read:
                     return
 
                 selected_ids = read.split(" ")
                 return [tags[int(x) - 1] for x in selected_ids]
-            except ValueError:
+            except (ValueError, IndexError):
                 print("Input not recognized, please try again.")
             except KeyboardInterrupt:
                 print("Quitting...")

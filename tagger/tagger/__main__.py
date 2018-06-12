@@ -20,14 +20,16 @@ def parse_args():
                         help='Text file with revisions to tag, one per line')
     parser.add_argument('--revision-delimiter', default='|',
                         help='Delimiter of the revsions file')
-    parser.add_argument('-l', '--log', default='log.txt',
+    parser.add_argument('-l', '--log',
                         help='Filename of the logfile')
     parser.add_argument('-s', '--last-seen',
                         help='Resume a tagging session by specifying the last seen revision ID')
     parser.add_argument('--output', '-o',
                         help='Where to store tags; if omitted, the database is used')
-    parser.add_argument('--no-curses', action='store_true',
+    parser.add_argument('--no-curses', action='store_true', default=True,
                         help='Disable Curses UI; implicitly activated if on Windows')
+    parser.add_argument('--use-database', action='store_true',
+                        help='Enable Postgres access')
 
     pg = parser.add_argument_group('Postgres', description='Database settings')
     pg.add_argument('--host', help='Host', default='localhost')
@@ -67,9 +69,15 @@ def create_revision_source(args):
 
 
 def setup_logging(args):
-    logging.basicConfig(filename=args.log,
+    filename = args.log or replace_extension(args.revisions, ".log")
+    logging.basicConfig(filename=filename,
                         level=logging.INFO,
                         format='%(asctime)s %(name)-14s %(levelname)-8s %(message)s')
+
+
+def replace_extension(filename, new_extension):
+    name, _ = filename.rsplit(".", 1)
+    return name + new_extension
 
 
 def main():
@@ -78,12 +86,13 @@ def main():
     revisions = create_revision_source(args)
     tags = read_tags(args.tags)
 
-    if args.output:
-        connection = None
-        tag_controller = FileTagController(args.output, tags)
-    else:
+    if args.use_database:
         connection = create_connection(args)
         tag_controller = create_database_tag_controller(connection, tags)
+    else:
+        connection = None
+        output_file = args.output or replace_extension(args.revisions, "_tags.csv")
+        tag_controller = FileTagController(output_file, tags)
 
     try:
         with create_open_handler(args) as open_handler:
