@@ -1,0 +1,51 @@
+[
+  {
+    "pk": 1,
+    "name": "Blanking"
+  },
+  {
+    "pk": 2,
+    "name": "Nonsense"
+  },
+  {
+    "pk": 3,
+    "name": "QualityIssue"
+  },
+  {
+    "pk": 4,
+    "name": "PersonalStory"
+  },
+  {
+    "pk": 5,
+    "name": "FalseFacts"
+  },
+  {
+    "pk": 6,
+    "name": "Syntax"
+  },
+  {
+    "pk": 7,
+    "name": "MergeConflict"
+  },
+  {
+    "pk": 8,
+    "name": "Template"
+  },
+  {
+    "pk": 9,
+    "name": "EditWars"
+  },
+  {
+    "pk": 10,
+    "name": "SEO"
+  },
+  {
+    "pk": 11,
+    "name": "Intention"
+  },
+  {
+    "pk": 12,
+    "name": "constructive",
+    "visible": false
+  }
+]

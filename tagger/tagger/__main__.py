@@ -14,7 +14,7 @@ def parse_args():
                                      formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument('--no-selenium', action='store_true',
                         help='Use Selenium Web Driver to remotely control the browser')
-    parser.add_argument('-t', '--tags', default='tags.txt',
+    parser.add_argument('-t', '--tags', default='tags.json',
                         help='Text file with tags, one per line')
     parser.add_argument('-r', '--revisions', default='revisions.txt',
                         help='Text file with revisions to tag, one per line')
