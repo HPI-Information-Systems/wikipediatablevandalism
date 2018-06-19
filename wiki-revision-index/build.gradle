@@ -1,0 +1,57 @@
+buildscript {
+    ext.kotlin_version = '1.2.40'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.github.jengelman.gradle.plugins:shadow:2.0.4"
+    }
+}
+
+group 'de.hpi.naumann.tablevandalism'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+mainClassName = "Main"
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    implementation "de.hpi.naumann:wikixmlsplit:0.0.2-SNAPSHOT"
+    implementation "org.postgresql:postgresql:42.2.2"
+    implementation "commons-codec:commons-codec:1.11"
+    implementation 'org.apache.commons:commons-csv:1.5'
+    implementation "com.beust:jcommander:1.71"
+    implementation "com.zaxxer:HikariCP:2.7.8"
+    implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:0.21"
+    implementation "me.tongfei:progressbar:0.6.0"
+
+    testCompile "junit:junit:4.12"
+}
+
+compileKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+    kotlinOptions.jvmTarget = "1.8"
+}
+
+kotlin {
+    experimental {
+        coroutines 'enable'
+    }
+}
