@@ -1,5 +1,7 @@
 import lombok.extern.log4j.Log4j2;
+import lombok.val;
 import model.RevisionTag;
+import wikixmlsplit.datastructures.MyPageType;
 
 import java.io.IOException;
 import java.util.List;
@@ -8,9 +10,9 @@ import java.util.List;
 public class Main {
     public void importDataSet() {
         try {
-            String revisionTagPath = getClass().getResource("revisiontag_deleted_1k.csv").getPath();
-            RevisionTagParser revisionTagParser = new RevisionTagParser();
-            List<RevisionTag> revisionTags = revisionTagParser.load(revisionTagPath);
+            val revisionTagPath = getClass().getResource("revisiontag_deleted_1k.csv").getPath();
+            val revisionTagParser = new RevisionTagParser();
+            val revisionTags = revisionTagParser.load(revisionTagPath);
         } catch (IOException e) {
             log.error(e);
         }
