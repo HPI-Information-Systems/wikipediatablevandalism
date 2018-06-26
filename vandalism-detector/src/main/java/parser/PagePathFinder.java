@@ -10,14 +10,14 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
-public class RevisionParser {
+public class PagePathFinder {
     private final String path;
 
-    public RevisionParser(String path) {
+    public PagePathFinder(String path) {
         this.path = path;
     }
 
-    public Map<Integer, Path> parse(List<Integer> pageIds) {
+    public Map<Integer, Path> find(List<Integer> pageIds) {
         try {
             val baseDir = Paths.get(path);
             val pageFileVisitor = new PageFileVisitor(pageIds);

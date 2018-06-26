@@ -1,7 +1,7 @@
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import model.RevisionTag;
-import parser.RevisionParser;
+import parser.PagePathFinder;
 import parser.RevisionTagParser;
 
 import java.io.IOException;
@@ -16,14 +16,14 @@ public class Main {
             val revisionTagPath = getClass().getResource("revisiontag_deleted_1k.csv").getPath();
             val revisionTagParser = new RevisionTagParser();
             val revisionTags = revisionTagParser.load(revisionTagPath);
-            val revisionParser = new RevisionParser(revisionPath);
+            val pagePathFinder = new PagePathFinder(revisionPath);
             val pageIds = revisionTags.values()
                     .stream()
                     .flatMap(List::stream)
                     .map(RevisionTag::getRevisionPageId)
                     .distinct()
                     .collect(Collectors.toList());
-            val pagePaths = revisionParser.parse(pageIds);
+            val pagePaths = pagePathFinder.find(pageIds);
 
             log.debug(pagePaths);
         } catch (IOException e) {
