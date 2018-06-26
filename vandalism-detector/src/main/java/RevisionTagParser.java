@@ -21,7 +21,11 @@ public class RevisionTagParser {
                     int revisionId = Integer.valueOf(record.get(0));
                     int revisionPageId = Integer.valueOf(record.get(1));
                     int tagId = Integer.valueOf(record.get(2));
-                    return new RevisionTag(revisionId, revisionPageId, tagId);
+                    return RevisionTag.builder()
+                            .revisionId(revisionId)
+                            .revisionPageId(revisionPageId)
+                            .tagId(tagId)
+                            .build();
                 }).collect(Collectors.toList());
     }
 }

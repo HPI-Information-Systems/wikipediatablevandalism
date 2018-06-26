@@ -1,13 +1,12 @@
 package model;
 
-public class RevisionTag {
-    public final int revisionId;
-    public final int revisionPageId;
-    public final int tagId;
+import lombok.Builder;
+import lombok.Data;
 
-    public RevisionTag(int revisionId, int revisionPageId, int tagId) {
-        this.revisionId = revisionId;
-        this.revisionPageId = revisionPageId;
-        this.tagId = tagId;
-    }
+@Data
+@Builder
+public class RevisionTag {
+    private final int revisionId;
+    private final int revisionPageId;
+    private final int tagId;
 }
