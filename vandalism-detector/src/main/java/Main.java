@@ -29,7 +29,7 @@ public class Main {
             for (PageRevision pageRevision : revisionTags.keySet()) {
                 val path = pagePaths.get(pageRevision.getPageId());
                 val page = pageParser.parse(path);
-                log.debug("Parsed", page.getTitle());
+                log.debug(page.getTitle());
             }
         } catch (IOException e) {
             log.error(e);
