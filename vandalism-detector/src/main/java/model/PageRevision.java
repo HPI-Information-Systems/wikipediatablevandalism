@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 @Builder
 @RequiredArgsConstructor(staticName = "of")
 public class PageRevision {
-    private final int pageId;
-    private final int revisionId;
+
+  private final int pageId;
+  private final int revisionId;
 }

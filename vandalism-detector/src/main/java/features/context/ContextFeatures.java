@@ -3,7 +3,6 @@ package features.context;
 import com.google.common.collect.ImmutableMap;
 import features.Feature;
 import java.time.LocalDate;
-import java.time.temporal.TemporalField;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import javax.xml.datatype.DatatypeConstants;

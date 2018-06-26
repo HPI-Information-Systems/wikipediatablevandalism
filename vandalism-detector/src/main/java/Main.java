@@ -1,5 +1,3 @@
-import static java.util.Arrays.asList;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.esotericsoftware.kryo.Kryo;
@@ -39,8 +37,7 @@ public class Main {
 
         sink.begin();
 
-        //for (PageRevision pageRevision : revisionTags.keySet()) {
-        for (PageRevision pageRevision : asList(PageRevision.of(540056, 551481516))) {
+        for (PageRevision pageRevision : revisionTags.keySet()) {
           val path = pagePaths.get(pageRevision.getPageId());
           val page = pageParser.parse(path);
 
@@ -57,6 +54,7 @@ public class Main {
     } catch (IOException e) {
       log.error(e);
     }
+
   }
 
   public static void main(String[] args) {

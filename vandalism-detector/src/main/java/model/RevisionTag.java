@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class RevisionTag {
-    private final PageRevision pageRevision;
-    private final Tag tag;
+
+  private final PageRevision pageRevision;
+  private final Tag tag;
 }
