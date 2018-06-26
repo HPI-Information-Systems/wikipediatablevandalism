@@ -1,5 +1,6 @@
 package parser;
 
+import lombok.extern.log4j.Log4j2;
 import lombok.val;
 
 import java.nio.file.FileVisitResult;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Log4j2
 public class PageFileVisitor extends SimpleFileVisitor<Path> {
     private List<Integer> pageIds;
     private Map<Integer, Path> parsedPages;

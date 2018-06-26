@@ -1,6 +1,9 @@
 package parser;
 
+import lombok.val;
+import model.PageRevision;
 import model.RevisionTag;
+import model.Tag;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 
@@ -13,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class RevisionTagParser {
-    public Map<Integer, List<RevisionTag>> load(String path) throws IOException {
+    public Map<PageRevision, List<Tag>> load(String path) throws IOException {
         Reader in = new FileReader(path);
         CSVParser parser = CSVFormat.DEFAULT
                 .withFirstRecordAsHeader()
@@ -24,11 +27,15 @@ public class RevisionTagParser {
                     int revisionId = Integer.valueOf(record.get(0));
                     int revisionPageId = Integer.valueOf(record.get(1));
                     int tagId = Integer.valueOf(record.get(2));
-                    return RevisionTag.builder()
+                    val pageRevision = PageRevision.builder()
                             .revisionId(revisionId)
-                            .revisionPageId(revisionPageId)
-                            .tagId(tagId)
+                            .pageId(revisionPageId)
                             .build();
-                }).collect(Collectors.groupingBy(RevisionTag::getRevisionId));
+                    val tag = new Tag(tagId);
+                    return new RevisionTag(pageRevision, tag);
+                }).collect(Collectors.groupingBy(
+                        RevisionTag::getPageRevision,
+                        Collectors.mapping(RevisionTag::getTag, Collectors.toList())
+                ));
     }
 }

@@ -17,7 +17,7 @@ public class PagePathFinder {
         this.path = path;
     }
 
-    public Map<Integer, Path> find(List<Integer> pageIds) {
+    public Map<Integer, Path> findAll(List<Integer> pageIds) {
         try {
             val baseDir = Paths.get(path);
             val pageFileVisitor = new PageFileVisitor(pageIds);
