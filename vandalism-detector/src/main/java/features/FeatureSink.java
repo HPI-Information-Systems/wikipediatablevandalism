@@ -1,5 +1,6 @@
 package features;
 
+import com.google.common.collect.Ordering;
 import features.context.ContextFeatures;
 import java.io.IOException;
 import java.io.UncheckedIOException;
@@ -8,15 +9,18 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import lombok.val;
+import model.Tag;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
 
 public class FeatureSink implements AutoCloseable {
+  private static final String TAG = "tag";
 
   private final String outputFilename;
   private final String[] header;
@@ -24,9 +28,10 @@ public class FeatureSink implements AutoCloseable {
 
   public FeatureSink(final String outputFilename, final ContextFeatures contextFeatures) {
     this.outputFilename = outputFilename;
-    Set<String> names = contextFeatures.features().keySet();
+    List<String> names = new ArrayList<>(contextFeatures.features().keySet());
+    names.sort(Ordering.natural());
+    names.add(TAG);
     header = names.toArray(new String[names.size()]);
-    Arrays.sort(header);
   }
 
   public void begin() {
@@ -38,17 +43,22 @@ public class FeatureSink implements AutoCloseable {
     }
   }
 
-  public void accept(final Map<String, Object> values) {
+  public void accept(final List<Tag> tags, final Map<String, Object> values) {
     List<Entry<String, Object>> entries = new ArrayList<>(values.entrySet());
     entries.sort(Comparator.comparing(Map.Entry::getKey));
 
-    List<Object> toWrite = new ArrayList<>(entries.size());
+    List<Object> toWrite = new ArrayList<>(entries.size() + 1);
     for (Entry<String, Object> entry : entries) {
       toWrite.add(entry.getValue());
     }
 
+    toWrite.add("");
+
     try {
-      printer.printRecord(toWrite);
+      for (final Tag t : tags) {
+        toWrite.set(toWrite.size() - 1, t.getTagId());
+        printer.printRecord(toWrite);
+      }
     } catch (final IOException e) {
       throw new UncheckedIOException(e);
     }

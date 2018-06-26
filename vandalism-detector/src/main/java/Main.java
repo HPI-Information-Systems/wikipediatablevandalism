@@ -49,7 +49,7 @@ public class Main {
               .findFirst()
               .orElseThrow(IllegalArgumentException::new);
 
-          collector.collectFeatures(revision);
+          collector.collectFeatures(revisionTags.get(pageRevision), revision);
 
           log.debug(page.getTitle());
         }
