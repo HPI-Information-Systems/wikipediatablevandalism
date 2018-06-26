@@ -10,19 +10,28 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    apt
+    implementation.extendsFrom apt
+}
+
 dependencies {
     // Wiki
     implementation 'de.hpi.naumann:wikixmlsplit:0.0.2-SNAPSHOT'
 
     // Csv
-    implementation  'org.apache.commons:commons-csv:1.5'
+    implementation 'org.apache.commons:commons-csv:1.5'
 
     // Logging
-    implementation  'org.apache.logging.log4j:log4j-core:2.11.0'
-    compileOnly 'org.projectlombok:lombok:1.18.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.11.0'
+    apt 'org.projectlombok:lombok:1.18.0'
 
     implementation "com.beust:jcommander:1.71"
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+}
+
+compileJava {
+    options.annotationProcessorPath = configurations.apt
 }
