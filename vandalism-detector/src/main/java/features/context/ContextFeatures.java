@@ -1,83 +1,36 @@
 package features.context;
 
-import com.google.common.collect.ImmutableMap;
-import features.Feature;
-import java.time.LocalDate;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import javax.xml.datatype.DatatypeConstants;
+import features.FeaturePack;
 import lombok.val;
-import wikixmlsplit.datastructures.MyRevisionType;
 
+/**
+ * Configure all context features with their metadata, e.g., name.
+ */
 public class ContextFeatures {
 
-  public Map<String, Feature> features() {
-    return ImmutableMap.<String, Feature>builder()
-        .put("anonym", isAnonymous())
-        .put("deleted", isDeleted())
-        .put("tod", createdTimeOfDay())
-        .put("dow", createdDayOfWeek())
-        .put("minor", isMinor())
-        .put("commentLength", commentLength())
-        .put("commentDeleted", commentDeleted())
+  private static final ContextFeatures INSTANCE = new ContextFeatures();
+
+  private final FeaturePack features;
+
+  private ContextFeatures() {
+    val factory = new ContextFeatureFactory();
+
+    features = FeaturePack.builder()
+        .feature("anonymous", factory.isAnonymous())
+        .feature("user_deleted", factory.isContributorDeleted())
+        .feature("created_time_of_day", factory.createdTimeOfDay())
+        .feature("created_day_of_week", factory.createdDayOfWeek())
+        .feature("is_minor_edit", factory.isMinorEdit())
+        .feature("comment_length", factory.commentLength())
+        .feature("comment_deleted", factory.isCommentDeleted())
         .build();
   }
 
-  private Feature isAnonymous() {
-    return revision -> revision.getContributor().getUsername() == null;
+  public FeaturePack getFeatures() {
+    return features;
   }
 
-  private Feature isDeleted() {
-    return revision -> revision.getContributor().getDeleted() != null;
-  }
-
-  /**
-   * @return the seconds since midnight
-   */
-  private Feature createdTimeOfDay() {
-    return revision -> {
-      val ts = revision.getTimestamp();
-      val seconds = valid(ts.getSecond());
-      val minutes = TimeUnit.SECONDS.convert(valid(ts.getMinute()), TimeUnit.MINUTES);
-      val hours = TimeUnit.SECONDS.convert(valid(ts.getHour()), TimeUnit.HOURS);
-      return hours + minutes + seconds;
-    };
-  }
-
-  private Feature createdDayOfWeek() {
-    return revision -> {
-      val ts = revision.getTimestamp();
-      val day = valid(ts.getDay());
-      val month = valid(ts.getMonth());
-      val year = valid(ts.getYear());
-      return LocalDate.of(year, month, day).getDayOfWeek().getValue();
-    };
-  }
-
-  private Feature isMinor() {
-    return MyRevisionType::isMinor;
-  }
-
-  private Feature commentLength() {
-    return revision -> {
-      val comment = revision.getComment();
-
-      if (comment == null || comment.getValue() == null) {
-        return 0;
-      }
-
-      return comment.getValue().length();
-    };
-  }
-
-  private Feature commentDeleted() {
-    return revision -> revision.getComment() != null && revision.getComment().getDeleted() != null;
-  }
-
-  private int valid(final int value) {
-    if (value == DatatypeConstants.FIELD_UNDEFINED) {
-      throw new IllegalArgumentException("field undefined");
-    }
-    return value;
+  public static ContextFeatures get() {
+    return INSTANCE;
   }
 }

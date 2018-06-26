@@ -2,10 +2,11 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.esotericsoftware.kryo.Kryo;
 import features.FeatureCollector;
-import features.FeatureSink;
 import features.context.ContextFeatures;
+import features.output.Output;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.nio.file.Path;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -32,10 +33,9 @@ public class Main {
       val pagePaths = pagePathFinder.findAll(pageIds);
       val pageParser = new PageParser(new Kryo());
 
-      try (val sink = new FeatureSink(arguments.getOutputPath(), new ContextFeatures())) {
-        val collector = new FeatureCollector(sink);
-
-        sink.begin();
+      try (val output = Output.csv(arguments.getOutputPath())) {
+        val pack = ContextFeatures.get().getFeatures();
+        val collector = new FeatureCollector(pack, output);
 
         for (PageRevision pageRevision : revisionTags.keySet()) {
           val path = pagePaths.get(pageRevision.getPageId());
@@ -46,7 +46,7 @@ public class Main {
               .findFirst()
               .orElseThrow(IllegalArgumentException::new);
 
-          collector.collectFeatures(revisionTags.get(pageRevision), revision);
+          collector.accept(revisionTags.get(pageRevision), revision);
 
           log.debug(page.getTitle());
         }
@@ -70,9 +70,9 @@ public class Main {
   public static class Arguments {
 
     @Parameter(names = {"--revision-path"})
-    String revisionPath;
+    Path revisionPath;
 
     @Parameter(names = {"--output"})
-    String outputPath;
+    Path outputPath;
   }
 }
