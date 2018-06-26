@@ -1,3 +1,5 @@
+package parser;
+
 import model.RevisionTag;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
@@ -6,11 +8,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class RevisionTagParser {
-    public List<RevisionTag> load(String path) throws IOException {
+    public Map<Integer, List<RevisionTag>> load(String path) throws IOException {
         Reader in = new FileReader(path);
         CSVParser parser = CSVFormat.DEFAULT
                 .withFirstRecordAsHeader()
@@ -26,6 +29,6 @@ public class RevisionTagParser {
                             .revisionPageId(revisionPageId)
                             .tagId(tagId)
                             .build();
-                }).collect(Collectors.toList());
+                }).collect(Collectors.groupingBy(RevisionTag::getRevisionId));
     }
 }
