@@ -1,21 +1,27 @@
-import smile.data.AttributeDataset;
-import smile.data.NominalAttribute;
-import smile.data.parser.DelimitedTextParser;
+import model.RevisionTag;
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVParser;
 
+import java.io.FileReader;
 import java.io.IOException;
-import java.text.ParseException;
+import java.io.Reader;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 public class RevisionTagParser {
-    private final DelimitedTextParser parser;
+    public List<RevisionTag> load(String path) throws IOException {
+        Reader in = new FileReader(path);
+        CSVParser parser = CSVFormat.DEFAULT
+                .withFirstRecordAsHeader()
+                .parse(in);
 
-    public RevisionTagParser() {
-        parser = new DelimitedTextParser();
-        parser.setDelimiter(",");
-        parser.setColumnNames(true);
-        parser.setResponseIndex(new NominalAttribute("tag_id"), 2);
-    }
-
-    public AttributeDataset read(String path) throws IOException, ParseException {
-        return parser.parse(path);
+        return StreamSupport.stream(parser.spliterator(), false)
+                .map(record -> {
+                    int revisionId = Integer.valueOf(record.get(0));
+                    int revisionPageId = Integer.valueOf(record.get(1));
+                    int tagId = Integer.valueOf(record.get(2));
+                    return new RevisionTag(revisionId, revisionPageId, tagId);
+                }).collect(Collectors.toList());
     }
 }

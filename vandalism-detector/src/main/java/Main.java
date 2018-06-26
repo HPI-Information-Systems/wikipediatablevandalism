@@ -1,20 +1,18 @@
 import lombok.extern.log4j.Log4j2;
-import smile.data.AttributeDataset;
+import model.RevisionTag;
 
 import java.io.IOException;
-import java.text.ParseException;
+import java.util.List;
 
 @Log4j2
 public class Main {
     public void importDataSet() {
-        RevisionTagParser parser = new RevisionTagParser();
-
         try {
-            String revisionTagPath = getClass().getResource("revisiontag.csv").getPath();
-            AttributeDataset dataset = parser.read(revisionTagPath);
-            log.debug("Hello");
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            String revisionTagPath = getClass().getResource("revisiontag_deleted_1k.csv").getPath();
+            RevisionTagParser revisionTagParser = new RevisionTagParser();
+            List<RevisionTag> revisionTags = revisionTagParser.load(revisionTagPath);
+        } catch (IOException e) {
+            log.error(e);
         }
     }
 
