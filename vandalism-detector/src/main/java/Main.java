@@ -1,4 +1,15 @@
+import static java.util.Arrays.asList;
+
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
 import com.esotericsoftware.kryo.Kryo;
+import features.FeatureCollector;
+import features.FeatureSink;
+import features.context.ContextFeatures;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.util.stream.Collectors;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
 import model.PageRevision;
@@ -6,38 +17,64 @@ import parser.PageParser;
 import parser.PagePathFinder;
 import parser.RevisionTagParser;
 
-import java.io.IOException;
-import java.util.stream.Collectors;
-
 @Log4j2
 public class Main {
-    public void importDataSet() {
-        try {
-            val revisionPath = "/Volumes/Calcutec/vandalism-detection/corpus/corpus/";
-            val revisionTagPath = getClass().getResource("revisiontag_deleted_1k.csv").getPath();
-            val revisionTagParser = new RevisionTagParser();
-            val revisionTags = revisionTagParser.load(revisionTagPath);
-            val pagePathFinder = new PagePathFinder(revisionPath);
-            val pageIds = revisionTags.keySet()
-                    .stream()
-                    .map(PageRevision::getPageId)
-                    .distinct()
-                    .collect(Collectors.toList());
-            val pagePaths = pagePathFinder.findAll(pageIds);
-            val pageParser = new PageParser(new Kryo());
 
-            for (PageRevision pageRevision : revisionTags.keySet()) {
-                val path = pagePaths.get(pageRevision.getPageId());
-                val page = pageParser.parse(path);
-                log.debug(page.getTitle());
-            }
-        } catch (IOException e) {
-            log.error(e);
+  public void importDataSet(final Arguments arguments) {
+    try {
+      val revisionTagPath = getClass().getResource("revisiontag_deleted_1k.csv").getPath();
+      val revisionTagParser = new RevisionTagParser();
+      val revisionTags = revisionTagParser.load(revisionTagPath);
+      val pagePathFinder = new PagePathFinder(arguments.getRevisionPath());
+      val pageIds = revisionTags.keySet()
+          .stream()
+          .map(PageRevision::getPageId)
+          .distinct()
+          .collect(Collectors.toList());
+      val pagePaths = pagePathFinder.findAll(pageIds);
+      val pageParser = new PageParser(new Kryo());
+
+      try (val sink = new FeatureSink(arguments.getOutputPath(), new ContextFeatures())) {
+        val collector = new FeatureCollector(sink);
+
+        sink.begin();
+
+        //for (PageRevision pageRevision : revisionTags.keySet()) {
+        for (PageRevision pageRevision : asList(PageRevision.of(540056, 551481516))) {
+          val path = pagePaths.get(pageRevision.getPageId());
+          val page = pageParser.parse(path);
+
+          val revision = page.getRevisions().stream()
+              .filter(r -> r.getId().equals(BigInteger.valueOf(pageRevision.getRevisionId())))
+              .findFirst()
+              .orElseThrow(IllegalArgumentException::new);
+
+          collector.collectFeatures(revision);
+
+          log.debug(page.getTitle());
         }
+      }
+    } catch (IOException e) {
+      log.error(e);
     }
+  }
 
-    public static void main(String[] args) {
-        Main main = new Main();
-        main.importDataSet();
-    }
+  public static void main(String[] args) {
+    val arguments = new Arguments();
+    val jcommander = JCommander.newBuilder().addObject(arguments).build();
+    jcommander.parse(args);
+
+    Main main = new Main();
+    main.importDataSet(arguments);
+  }
+
+  @Getter
+  public static class Arguments {
+
+    @Parameter(names = {"--revision-path"})
+    String revisionPath;
+
+    @Parameter(names = {"--output"})
+    String outputPath;
+  }
 }
