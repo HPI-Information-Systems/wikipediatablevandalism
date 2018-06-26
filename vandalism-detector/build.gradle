@@ -12,7 +12,7 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
-    // Smile
+    // Csv
     compile 'org.apache.commons:commons-csv:1.5'
 
     // Logging
