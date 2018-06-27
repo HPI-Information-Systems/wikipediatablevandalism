@@ -1,6 +1,7 @@
 package features.context;
 
 import javax.xml.datatype.DatatypeConstants;
+import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 
 class Utils {
 
@@ -16,5 +17,9 @@ class Utils {
       throw new IllegalArgumentException("field undefined");
     }
     return value;
+  }
+
+  static boolean isAnonymous(final ContributorType contributor) {
+    return contributor.getUsername() == null;
   }
 }
