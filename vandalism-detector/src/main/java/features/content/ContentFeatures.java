@@ -14,7 +14,9 @@ public class ContentFeatures {
     val factory = new ContentFeatureFactory(new MatchService());
 
     features = FeaturePack.builder()
-        .feature("tableGeometryChange", factory.geometryChange())
+        .feature("cellCountChange", factory.cellCount())
+        .feature("rowCountChange", factory.rowCount())
+        .feature("columnCountChange", factory.columnCount())
         .build();
   }
 
