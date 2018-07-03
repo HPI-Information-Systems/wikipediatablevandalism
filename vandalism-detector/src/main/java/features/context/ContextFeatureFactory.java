@@ -4,7 +4,6 @@ import static features.context.Utils.valid;
 
 import features.Feature;
 import java.time.LocalDate;
-import java.util.concurrent.TimeUnit;
 import lombok.val;
 
 /**
@@ -26,10 +25,7 @@ class ContextFeatureFactory {
   Feature timeOfDay() {
     return (revision, ignored) -> {
       val ts = revision.getTimestamp();
-      val seconds = valid(ts.getSecond());
-      val minutes = TimeUnit.SECONDS.convert(valid(ts.getMinute()), TimeUnit.MINUTES);
-      val hours = TimeUnit.SECONDS.convert(valid(ts.getHour()), TimeUnit.HOURS);
-      return hours + minutes + seconds;
+      return valid(ts.getHour());
     };
   }
 
