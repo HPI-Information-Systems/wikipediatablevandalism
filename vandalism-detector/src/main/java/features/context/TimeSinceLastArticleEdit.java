@@ -26,7 +26,7 @@ class TimeSinceLastArticleEdit implements Feature {
     val previousContribution = precursors.stream()
         .filter(precursor -> sameContributor.test(precursor.getContributor()))
         .findFirst();
-    return previousContribution.map(precursor -> timeDelta(precursor, revision)).orElse(null);
+    return previousContribution.map(precursor -> timeDelta(precursor, revision)).orElse(-1l);
   }
 
   private Predicate<ContributorType> getContributorFilter(final ContributorType toCompare) {
@@ -37,11 +37,11 @@ class TimeSinceLastArticleEdit implements Feature {
   }
 
   private Predicate<ContributorType> sameIpAs(final ContributorType toCompare) {
-    return contributor -> contributor.getIp().equals(toCompare.getIp());
+    return contributor -> toCompare.getIp().equals(contributor.getIp());
   }
 
   private Predicate<ContributorType> sameNameAs(final ContributorType toCompare) {
-    return contributor -> contributor.getUsername().equals(toCompare.getUsername());
+    return contributor -> toCompare.getUsername().equals(contributor.getUsername());
   }
 
   private long timeDelta(final MyRevisionType previous, final MyRevisionType next) {
