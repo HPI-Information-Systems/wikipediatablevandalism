@@ -18,12 +18,10 @@ public class ContextFeatures {
 
     features = FeaturePack.builder()
         .feature("is_contributor_anonymous", contextFactory.isContributorAnonymous())
-        .feature("is_contributor_deleted", contextFactory.isContributorDeleted())
         .feature("time_of_day", contextFactory.timeOfDay())
         .feature("day_of_week", contextFactory.dayOfWeek())
         .feature("is_minor_edit", contextFactory.isMinorEdit())
         .feature("comment_length", contextFactory.commentLength())
-        .feature("is_comment_deleted", contextFactory.isCommentDeleted())
         .feature("is_previous_same_contributor", contextDeltaFactory.isPreviousSameContributor())
         .feature("time_since_last_article_edit", contextDeltaFactory.timeSinceLastArticleEdit())
         .feature("size_change", contextDeltaFactory.sizeChange())

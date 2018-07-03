@@ -4,24 +4,19 @@ import com.esotericsoftware.kryo.Kryo;
 import features.FeatureCollector;
 import features.content.ContentFeatures;
 import features.context.ContextFeatures;
+import features.future.FutureFeatures;
 import features.output.Output;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import model.FeatureContext;
 import model.PageRevision;
 import parser.PageParser;
 import parser.PagePathFinder;
 import parser.RevisionTagParser;
-import wikixmlsplit.datastructures.MyRevisionType;
-
-import static java.util.Arrays.asList;
 
 @Slf4j
 public class Main {
@@ -42,7 +37,8 @@ public class Main {
 
       try (val output = Output.csv(arguments.getOutputPath())) {
         val pack = ContextFeatures.get().getFeatures()
-            .combineWith(ContentFeatures.get().getFeatures());
+            .combineWith(ContentFeatures.get().getFeatures())
+            .combineWith(FutureFeatures.get().getFeatures());
 
         val collector = new FeatureCollector(pack, output);
 
@@ -51,7 +47,8 @@ public class Main {
           val page = pageParser.parse(path);
           log.debug(page.getTitle());
 
-          collector.accept(revisionTags.get(pageRevision), BigInteger.valueOf(pageRevision.getRevisionId()), page);
+          collector.accept(revisionTags.get(pageRevision),
+              BigInteger.valueOf(pageRevision.getRevisionId()), page);
 
         }
       }

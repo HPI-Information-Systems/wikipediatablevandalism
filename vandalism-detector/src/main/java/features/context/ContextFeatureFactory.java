@@ -15,10 +15,6 @@ class ContextFeatureFactory {
     return (revision, ignored) -> revision.getContributor().getUsername() == null;
   }
 
-  Feature isContributorDeleted() {
-    return (revision, ignored) -> revision.getContributor().getDeleted() != null;
-  }
-
   /**
    * @return the seconds since midnight
    */
@@ -55,7 +51,5 @@ class ContextFeatureFactory {
     };
   }
 
-  Feature isCommentDeleted() {
-    return (revision, ignored) -> revision.getComment() != null && revision.getComment().getDeleted() != null;
-  }
+
 }
