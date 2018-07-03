@@ -1,45 +1,16 @@
 package matching;
 
 import com.google.common.base.Preconditions;
-import java.math.BigInteger;
 import java.util.List;
-import lombok.Builder;
-import lombok.Singular;
-import lombok.Value;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.lang3.tuple.Pair;
 import wikixmlsplit.api.Entry;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyRevisionType;
-import wikixmlsplit.renderer.wikitable.WikiTable;
 
 @Slf4j
 public class MatchService {
-
-  @Value
-  @Builder
-  public static class Result {
-
-    @Singular
-    private List<Match> matches;
-
-    @Singular
-    private List<WikiTable> removedTables;
-
-    @Singular
-    private List<WikiTable> addedTables;
-  }
-
-  @Value
-  @Builder
-  public static class Match {
-
-    private BigInteger previousRevision;
-    private WikiTable previousTable;
-    private BigInteger currentRevision;
-    private WikiTable currentTable;
-  }
 
   public Result getMatchingTable(final Matching matching, final MyRevisionType revision) {
     val entries = matching.getEntries();
@@ -62,7 +33,6 @@ public class MatchService {
           continue;
         }
       }
-
 
       val prevAndCurrent = scanEntries(entry, revision);
 
