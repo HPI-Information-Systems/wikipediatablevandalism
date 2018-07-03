@@ -2,6 +2,7 @@ package features;
 
 import static java.util.Objects.requireNonNull;
 
+import com.google.common.base.Preconditions;
 import features.output.Output;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,8 @@ class FeatureSink {
   }
 
   void accept(final List<Tag> tags, final Map<String, Object> values) {
+    Preconditions.checkState(!tags.isEmpty(), "Empty tags");
+
     final List<Object> toWrite = new ArrayList<>(values.size() + 1);
     for (final String name : pack.getNames()) {
       val value = values.get(name);
@@ -38,8 +41,12 @@ class FeatureSink {
       toWrite.add(value);
     }
 
+    val tagIterator = tags.iterator();
+    toWrite.add(tagIterator.next());
     val lastIndex = toWrite.size() - 1;
-    for (val tag : tags) {
+
+    while(tagIterator.hasNext()) {
+      val tag = tagIterator.next();
       toWrite.set(lastIndex, tag.getTagId());
       output.accept(toWrite);
     }
