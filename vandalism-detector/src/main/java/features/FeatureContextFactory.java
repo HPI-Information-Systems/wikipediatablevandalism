@@ -25,7 +25,7 @@ public class FeatureContextFactory {
   }
 
   private List<MyRevisionType> previousRevisions(final MyPageType page, final int revisionIndex) {
-    val n = 1;
+    val n = 1; // TODO
     return page.getRevisions().subList(revisionIndex - n, revisionIndex);
   }
 

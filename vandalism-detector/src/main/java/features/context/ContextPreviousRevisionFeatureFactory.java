@@ -1,20 +1,23 @@
 package features.context;
 
 import features.Feature;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import lombok.val;
 
 /**
  * Create all features connected to the context of the previous and the actual revision.
  */
-class ContextDeltaFeatureFactory {
+class ContextPreviousRevisionFeatureFactory {
 
   Feature timeSinceLastArticleEdit() {
     return (revision, featureContext) -> {
       val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
       if (previousRevision != null) {
-        val revisionTotalTime = Utils.totalTime(revision.getTimestamp());
-        val previousRevisionTotalTime = Utils.totalTime(previousRevision.getTimestamp());
-        return revisionTotalTime - previousRevisionTotalTime;
+        val revisionTime = revision.getDate().toInstant();
+        val previousRevisionTime = previousRevision.getDate().toInstant();
+        return Duration.between(previousRevisionTime, revisionTime)
+            .get(ChronoUnit.MINUTES); // TODO maybe seconds
       }
       return -1;
     };

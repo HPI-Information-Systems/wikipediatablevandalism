@@ -14,7 +14,9 @@ public class ContextFeatures {
 
   private ContextFeatures() {
     val contextFactory = new ContextFeatureFactory();
-    val contextDeltaFactory = new ContextDeltaFeatureFactory();
+    val contextFutureFactory = new ContextFutureFeatureFactory();
+    val contextPreviousRevision = new ContextPreviousRevisionFeatureFactory();
+    val contextPreviousRevisions = new ContextPreviousRevisionsFeatureFactory();
 
     features = FeaturePack.builder()
         .feature("is_contributor_anonymous", contextFactory.isContributorAnonymous())
@@ -22,10 +24,16 @@ public class ContextFeatures {
         .feature("day_of_week", contextFactory.dayOfWeek())
         .feature("is_minor_edit", contextFactory.isMinorEdit())
         .feature("comment_length", contextFactory.commentLength())
-        .feature("is_previous_same_contributor", contextDeltaFactory.isPreviousSameContributor())
-        .feature("time_since_last_article_edit", contextDeltaFactory.timeSinceLastArticleEdit())
-        .feature("size_change", contextDeltaFactory.sizeChange())
-        .feature("size_ratio", contextDeltaFactory.sizeRatio())
+        .feature("is_bot", contextFactory.isBot())
+        //.feature("is_comment_deleted", contextFutureFactory.isCommentDeleted())
+        //.feature("is_contributor_deleted", contextFutureFactory.isContributorDeleted())
+        .feature("is_previous_same_contributor",
+            contextPreviousRevision.isPreviousSameContributor())
+        .feature("time_since_last_article_edit", contextPreviousRevision.timeSinceLastArticleEdit())
+        .feature("size_change", contextPreviousRevision.sizeChange())
+        .feature("size_ratio", contextPreviousRevision.sizeRatio())
+        .feature("time_since_last_article_edit_by_same_contributor",
+            contextPreviousRevisions.timeSinceLastArticleEditBySameContributor())
         .build();
   }
 

@@ -12,7 +12,7 @@ import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
- * Time since the last edit was made by the same contributor on the same revision.
+ * Time since the last edit was made by the same contributor on the same page.
  */
 @RequiredArgsConstructor
 class TimeSinceLastArticleEdit implements Feature {
