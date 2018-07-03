@@ -2,7 +2,6 @@ package features.context;
 
 import com.google.common.base.Preconditions;
 import features.Feature;
-import java.time.Duration;
 import java.time.temporal.TemporalUnit;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +47,6 @@ class TimeSinceLastArticleEdit implements Feature {
     val past = previous.getDate().toInstant();
     val upcoming = next.getDate().toInstant();
     Preconditions.checkState(past.isBefore(upcoming), "Time delta should compare past to upcoming");
-    return Duration.between(past, upcoming).get(unit);
+    return unit.between(past, upcoming);
   }
 }
