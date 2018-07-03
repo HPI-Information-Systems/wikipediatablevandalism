@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
@@ -15,6 +16,7 @@ import org.apache.commons.csv.CSVPrinter;
 /**
  * Feature persistence based on Apache Commons CSV.
  */
+@Slf4j
 @RequiredArgsConstructor
 class CsvOutput implements Output {
 
@@ -24,6 +26,8 @@ class CsvOutput implements Output {
 
   @Override
   public void setup(final List<String> header) {
+    log.info("Writing to {}", outputPath.toAbsolutePath());
+
     try {
       final String[] headerArray = header.toArray(new String[header.size()]);
       val writer = Files.newBufferedWriter(outputPath);
