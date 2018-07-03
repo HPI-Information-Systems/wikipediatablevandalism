@@ -17,7 +17,9 @@ configurations {
 
 dependencies {
     // Wiki
-    implementation 'de.hpi.naumann:wikixmlsplit:0.0.1-SNAPSHOT'
+    implementation('de.hpi.naumann:wikixmlsplit:0.0.1-SNAPSHOT') {
+        exclude group: 'log4j', module: 'log4j'
+    }
 
     // Csv
     implementation 'org.apache.commons:commons-csv:1.5'
@@ -26,7 +28,10 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.11.0'
     apt 'org.projectlombok:lombok:1.18.0'
 
-    implementation "com.beust:jcommander:1.71"
+    implementation 'com.beust:jcommander:1.71'
+    implementation 'org.apache.commons:commons-lang3:3.7'
+
+    runtimeOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.0'
 
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
