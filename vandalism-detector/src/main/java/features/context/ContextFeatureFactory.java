@@ -3,10 +3,6 @@ package features.context;
 import static features.context.Utils.valid;
 
 import features.Feature;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 import lombok.val;
@@ -55,19 +51,14 @@ class ContextFeatureFactory {
   }
 
   Feature isBot() {
-    try {
-      val botlist = Files
-          .readAllLines(Paths.get(getClass().getClassLoader().getResource("botlist.txt").toURI()));
-      return (revision, ignored) -> {
-        if (!Utils.isAnonymous(revision.getContributor())) {
-          return botlist.contains(revision.getContributor().getUsername());
-        } else {
-          return false;
-        }
-      };
-    } catch (IOException | URISyntaxException e) {
-      throw new RuntimeException(e);
-    }
-  }
+    val botList = BotList.read();
+    return (revision, ignored) -> {
 
+      if (Utils.isAnonymous(revision.getContributor())) {
+        return false;
+      }
+
+      return botList.contains(revision.getContributor().getUsername());
+    };
+  }
 }

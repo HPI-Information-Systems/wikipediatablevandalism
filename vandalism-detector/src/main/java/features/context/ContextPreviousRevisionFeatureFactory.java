@@ -2,7 +2,6 @@ package features.context;
 
 import features.Feature;
 import java.time.Duration;
-import java.time.temporal.ChronoUnit;
 import lombok.val;
 
 /**
@@ -17,7 +16,7 @@ class ContextPreviousRevisionFeatureFactory {
         val revisionTime = revision.getDate().toInstant();
         val previousRevisionTime = previousRevision.getDate().toInstant();
         return Duration.between(previousRevisionTime, revisionTime)
-            .get(ChronoUnit.MINUTES); // TODO maybe seconds
+            .toMinutes(); // TODO maybe seconds
       }
       return -1;
     };
