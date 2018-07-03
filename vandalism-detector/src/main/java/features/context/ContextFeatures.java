@@ -13,16 +13,21 @@ public class ContextFeatures {
   private final FeaturePack features;
 
   private ContextFeatures() {
-    val factory = new ContextFeatureFactory();
+    val contextFactory = new ContextFeatureFactory();
+    val contextDeltaFactory = new ContextDeltaFeatureFactory();
 
     features = FeaturePack.builder()
-        .feature("anonymous", factory.isAnonymous())
-        .feature("user_deleted", factory.isContributorDeleted())
-        .feature("created_time_of_day", factory.createdTimeOfDay())
-        .feature("created_day_of_week", factory.createdDayOfWeek())
-        .feature("is_minor_edit", factory.isMinorEdit())
-        .feature("comment_length", factory.commentLength())
-        .feature("comment_deleted", factory.isCommentDeleted())
+        .feature("is_contributor_anonymous", contextFactory.isContributorAnonymous())
+        .feature("is_contributor_deleted", contextFactory.isContributorDeleted())
+        .feature("time_of_day", contextFactory.timeOfDay())
+        .feature("day_of_week", contextFactory.dayOfWeek())
+        .feature("is_minor_edit", contextFactory.isMinorEdit())
+        .feature("comment_length", contextFactory.commentLength())
+        .feature("is_comment_deleted", contextFactory.isCommentDeleted())
+        .feature("is_previous_same_contributor", contextDeltaFactory.isPreviousSameContributor())
+        .feature("time_since_last_article_edit", contextDeltaFactory.timeSinceLastArticleEdit())
+        .feature("size_change", contextDeltaFactory.sizeChange())
+        .feature("size_ratio", contextDeltaFactory.sizeRatio())
         .build();
   }
 

@@ -4,6 +4,7 @@ import features.output.Output;
 import java.util.HashMap;
 import java.util.List;
 import lombok.val;
+import model.FeatureContext;
 import model.Tag;
 import wikixmlsplit.datastructures.MyRevisionType;
 
@@ -21,10 +22,10 @@ public class FeatureCollector {
     sink.setup();
   }
 
-  public void accept(final List<Tag> tags, final MyRevisionType revisionType) {
+  public void accept(final List<Tag> tags, final MyRevisionType revisionType, final FeatureContext featureContext) {
     val values = new HashMap<String, Object>();
     pack.forEachFeature((name, feature) -> {
-      values.put(name, feature.getValue(revisionType));
+      values.put(name, feature.getValue(revisionType, featureContext));
     });
 
     sink.accept(tags, values);

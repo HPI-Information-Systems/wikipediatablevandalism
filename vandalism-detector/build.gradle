@@ -17,7 +17,7 @@ configurations {
 
 dependencies {
     // Wiki
-    implementation 'de.hpi.naumann:wikixmlsplit:0.0.2-SNAPSHOT'
+    implementation 'de.hpi.naumann:wikixmlsplit:0.0.1-SNAPSHOT'
 
     // Csv
     implementation 'org.apache.commons:commons-csv:1.5'

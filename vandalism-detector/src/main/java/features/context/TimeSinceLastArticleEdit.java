@@ -1,23 +1,27 @@
 package features.context;
 
 import com.google.common.base.Preconditions;
-import features.DeltaFeature;
+import features.Feature;
 import java.time.Duration;
 import java.time.temporal.TemporalUnit;
-import java.util.List;
 import java.util.function.Predicate;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import model.FeatureContext;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
+/**
+ * Time since the last edit was made by the same contributor on the same revision.
+ */
 @RequiredArgsConstructor
-class TimeSinceLastArticle implements DeltaFeature {
+class TimeSinceLastArticleEdit implements Feature {
 
   private final TemporalUnit unit;
 
   @Override
-  public Object getValue(final List<MyRevisionType> precursors, final MyRevisionType revision) {
+  public Object getValue(final MyRevisionType revision, FeatureContext featureContext) {
+    val precursors = featureContext.getPreviousRevisions();
     val sameContributor = getContributorFilter(revision.getContributor());
     val previousContribution = precursors.stream()
         .filter(precursor -> sameContributor.test(precursor.getContributor()))

@@ -6,26 +6,25 @@ import features.Feature;
 import java.time.LocalDate;
 import java.util.concurrent.TimeUnit;
 import lombok.val;
-import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
- * Create all features connected to the context of the editing user.
+ * Create all features connected to the context of the actual revision.
  */
 class ContextFeatureFactory {
 
-  Feature isAnonymous() {
-    return revision -> revision.getContributor().getUsername() == null;
+  Feature isContributorAnonymous() {
+    return (revision, ignored) -> revision.getContributor().getUsername() == null;
   }
 
   Feature isContributorDeleted() {
-    return revision -> revision.getContributor().getDeleted() != null;
+    return (revision, ignored) -> revision.getContributor().getDeleted() != null;
   }
 
   /**
    * @return the seconds since midnight
    */
-  Feature createdTimeOfDay() {
-    return revision -> {
+  Feature timeOfDay() {
+    return (revision, ignored) -> {
       val ts = revision.getTimestamp();
       val seconds = valid(ts.getSecond());
       val minutes = TimeUnit.SECONDS.convert(valid(ts.getMinute()), TimeUnit.MINUTES);
@@ -34,8 +33,8 @@ class ContextFeatureFactory {
     };
   }
 
-  Feature createdDayOfWeek() {
-    return revision -> {
+  Feature dayOfWeek() {
+    return (revision, ignored) -> {
       val ts = revision.getTimestamp();
       val day = valid(ts.getDay());
       val month = valid(ts.getMonth());
@@ -45,11 +44,11 @@ class ContextFeatureFactory {
   }
 
   Feature isMinorEdit() {
-    return MyRevisionType::isMinor;
+    return (revision, ignored) -> revision.isMinor();
   }
 
   Feature commentLength() {
-    return revision -> {
+    return (revision, ignored) -> {
       val comment = revision.getComment();
 
       if (comment == null || comment.getValue() == null) {
@@ -61,6 +60,6 @@ class ContextFeatureFactory {
   }
 
   Feature isCommentDeleted() {
-    return revision -> revision.getComment() != null && revision.getComment().getDeleted() != null;
+    return (revision, ignored) -> revision.getComment() != null && revision.getComment().getDeleted() != null;
   }
 }

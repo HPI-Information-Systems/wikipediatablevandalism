@@ -7,14 +7,19 @@ import features.output.Output;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
+import model.FeatureContext;
 import model.PageRevision;
 import parser.PageParser;
 import parser.PagePathFinder;
 import parser.RevisionTagParser;
+import wikixmlsplit.datastructures.MyRevisionType;
+
+import static java.util.Arrays.asList;
 
 @Log4j2
 public class Main {
@@ -37,16 +42,26 @@ public class Main {
         val pack = ContextFeatures.get().getFeatures();
         val collector = new FeatureCollector(pack, output);
 
-        for (PageRevision pageRevision : revisionTags.keySet()) {
+        //for (PageRevision pageRevision : revisionTags.keySet()) {
+        for (PageRevision pageRevision : asList(PageRevision.of(26595776, 538781827))) {
           val path = pagePaths.get(pageRevision.getPageId());
           val page = pageParser.parse(path);
 
-          val revision = page.getRevisions().stream()
-              .filter(r -> r.getId().equals(BigInteger.valueOf(pageRevision.getRevisionId())))
-              .findFirst()
-              .orElseThrow(IllegalArgumentException::new);
+          val revisionIDs = page.getRevisions()
+              .stream()
+              .map(MyRevisionType::getId)
+              .collect(Collectors.toList());
 
-          collector.accept(revisionTags.get(pageRevision), revision);
+          val revisionIndex = Collections
+              .binarySearch(revisionIDs, BigInteger.valueOf(pageRevision.getRevisionId()));
+          val revision = page.getRevisions().get(revisionIndex);
+
+          //get previous n revisions
+          val n = 1;
+          val previousRevisions = page.getRevisions().subList(revisionIndex - n, revisionIndex);
+
+          val featureContext = FeatureContext.with(previousRevisions);
+          collector.accept(revisionTags.get(pageRevision), revision, featureContext);
 
           log.debug(page.getTitle());
         }

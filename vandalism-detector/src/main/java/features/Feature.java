@@ -1,12 +1,13 @@
 package features;
 
+import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
- * Features which operate on a single input revision.
+ * all Features which operate on the context of the revision.
  */
 @FunctionalInterface
 public interface Feature {
 
-  Object getValue(MyRevisionType revision);
+  Object getValue(MyRevisionType revision, FeatureContext context);
 }
