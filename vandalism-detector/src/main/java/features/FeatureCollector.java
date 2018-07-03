@@ -1,5 +1,7 @@
 package features;
 
+import static util.PerformanceUtil.runMeasured;
+
 import features.output.Output;
 import java.math.BigInteger;
 import java.util.Collections;
@@ -7,7 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.val;
-import model.FeatureContext;
 import model.Tag;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
@@ -40,8 +41,8 @@ public class FeatureCollector {
     val values = new HashMap<String, Object>();
     val context = contextFactory.create(page, revisionIndex);
 
-    pack.forEachFeature((name, feature) -> {
-      values.put(name, feature.getValue(revision, context));
+    runMeasured("Feature computation", () -> {
+      pack.forEachFeature((name, feature) -> values.put(name, feature.getValue(revision, context)));
     });
 
     sink.accept(tags, values);

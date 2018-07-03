@@ -1,9 +1,8 @@
 package features;
 
-import java.math.BigInteger;
-import java.util.Collections;
+import static util.PerformanceUtil.runMeasured;
+
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.val;
 import model.FeatureContext;
 import wikixmlsplit.api.Matching;
@@ -30,6 +29,6 @@ public class FeatureContextFactory {
   }
 
   private Matching getMatching(final MyPageType page) {
-    return matcher.performMatching(page);
+    return runMeasured("Page matching", () -> matcher.performMatching(page));
   }
 }
