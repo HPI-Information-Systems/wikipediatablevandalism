@@ -41,8 +41,7 @@ public class MatchService {
     private WikiTable currentTable;
   }
 
-  public Result getMatchingTable(final Matching matching, final MyRevisionType revision,
-      final List<MyRevisionType> revisions) {
+  public Result getMatchingTable(final Matching matching, final MyRevisionType revision) {
     val entries = matching.getEntries();
     val result = Result.builder();
 

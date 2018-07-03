@@ -27,14 +27,7 @@ public class TableGeometry implements Feature {
   }
 
   private double computeSizeChange(final MyRevisionType revision, final FeatureContext context) {
-    // Think more.
-    // In the context of deletions, this feature does not make much sense.
-    // Most probably the single table of the page is gone. It yields score 0, since it is not part
-    // of the result of match service. Actually a value like
-    // getDimension(unmatchedTableOfPreviousRevision) * -1
-    // seems more appropriate
-    val results = matchService
-        .getMatchingTable(context.getMatching(), revision, context.getPreviousRevisions());
+    val results = matchService.getMatchingTable(context.getMatching(), revision);
 
     // Matches
     final List<Double> sizeChanges = new ArrayList<>(results.getMatches().size());
