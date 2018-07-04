@@ -7,8 +7,6 @@ import lombok.val;
 import matching.row.RowMatch;
 import matching.row.RowMatchService;
 import matching.table.TableMatch;
-import matching.table.TableMatchResult;
-import matching.table.TableMatchService;
 import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 
@@ -17,13 +15,11 @@ class RankChange implements Feature {
 
   private static final double SIMILARITY_THRESHOLD = 0.25;
 
-  private final TableMatchService matchService;
   private final RowMatchService rowMatchService;
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext context) {
-    final TableMatchResult matches = matchService.getMatchingTable(context.getMatching(), revision);
-    final TableMatch change = ContentUtil.selectChange(matches);
+    final TableMatch change = context.getRelevantMatch();
 
     if (change == null) {
       // All tables identical - no rank change

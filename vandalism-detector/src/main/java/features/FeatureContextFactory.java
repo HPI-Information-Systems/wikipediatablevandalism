@@ -3,7 +3,11 @@ package features;
 import static util.PerformanceUtil.runMeasured;
 
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import matching.table.TableMatch;
+import matching.table.TableMatchResult;
+import matching.table.TableMatchService;
 import model.FeatureContext;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.api.Settings;
@@ -11,15 +15,22 @@ import wikixmlsplit.api.TableMatcher;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-public class FeatureContextFactory {
+@Slf4j
+class FeatureContextFactory {
 
   private final TableMatcher matcher = new TableMatcher(Settings.ofDefault());
+  private final TableMatchService matchService = new TableMatchService();
 
-  public FeatureContext create(final MyPageType page, final int revisionIndex) {
+  FeatureContext create(final MyPageType page, final int revisionIndex) {
+    val revision = page.getRevisions().get(revisionIndex);
+    val matching = getMatching(page);
+    val tableMatchResult = matchService.getMatchingTable(matching, revision);
+
     return FeatureContext.builder()
         .page(page)
         .previousRevisions(previousRevisions(page, revisionIndex))
-        .matching(getMatching(page))
+        .result(tableMatchResult)
+        .relevantMatch(selectMatch(tableMatchResult))
         .build();
   }
 
@@ -30,5 +41,17 @@ public class FeatureContextFactory {
 
   private Matching getMatching(final MyPageType page) {
     return runMeasured("Page matching", () -> matcher.performMatching(page));
+  }
+
+  private TableMatch selectMatch(final TableMatchResult matches) {
+    for (final TableMatch m : matches.getMatches()) {
+      if (!m.getPreviousTable().equals(m.getCurrentTable())) {
+        // TODO consider similarity < 1
+        return m;
+      }
+    }
+
+    log.warn("All matched tables identical");
+    return null;
   }
 }

@@ -2,6 +2,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.esotericsoftware.kryo.Kryo;
 import features.FeatureCollector;
+import features.basic.BasicFeatures;
 import features.content.ContentFeatures;
 import features.context.ContextFeatures;
 import features.future.FutureFeatures;
@@ -36,7 +37,8 @@ public class Main {
       val pageParser = new PageParser(new Kryo());
 
       try (val output = Output.csv(arguments.getOutputPath())) {
-        val pack = ContextFeatures.get().getFeatures()
+        val pack = BasicFeatures.get().getFeatures()
+            .combineWith(ContextFeatures.get().getFeatures())
             .combineWith(ContentFeatures.get().getFeatures())
             .combineWith(FutureFeatures.get().getFeatures());
 

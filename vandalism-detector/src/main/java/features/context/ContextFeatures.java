@@ -14,7 +14,6 @@ public class ContextFeatures {
 
   private ContextFeatures() {
     val contextFactory = new ContextFeatureFactory();
-    val contextFutureFactory = new ContextFutureFeatureFactory();
     val contextPreviousRevision = new ContextPreviousRevisionFeatureFactory();
     val contextPreviousRevisions = new ContextPreviousRevisionsFeatureFactory();
 
@@ -25,8 +24,6 @@ public class ContextFeatures {
         .feature("is_minor_edit", contextFactory.isMinorEdit())
         .feature("comment_length", contextFactory.commentLength())
         .feature("is_bot", contextFactory.isBot())
-        //.feature("is_comment_deleted", contextFutureFactory.isCommentDeleted())
-        //.feature("is_contributor_deleted", contextFutureFactory.isContributorDeleted())
         .feature("is_previous_same_contributor",
             contextPreviousRevision.isPreviousSameContributor())
         .feature("time_since_last_article_edit", contextPreviousRevision.timeSinceLastArticleEdit())

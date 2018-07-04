@@ -6,7 +6,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.val;
 import matching.table.TableMatch;
-import matching.table.TableMatchService;
 import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
@@ -32,11 +31,9 @@ class TableGeometry implements Feature {
     double apply(WikiTable table);
   }
 
-  private final TableMatchService matchService;
   private final ValueFunction valueFunction;
 
-  TableGeometry(final TableMatchService matchService, final Measure measure) {
-    this.matchService = matchService;
+  TableGeometry(final Measure measure) {
     valueFunction = measure.getF();
   }
 
@@ -52,7 +49,7 @@ class TableGeometry implements Feature {
   }
 
   private double computeSizeChange(final MyRevisionType revision, final FeatureContext context) {
-    val results = matchService.getMatchingTable(context.getMatching(), revision);
+    val results = context.getResult();
 
     // Matches
     final List<Double> sizeChanges = new ArrayList<>(results.getMatches().size());

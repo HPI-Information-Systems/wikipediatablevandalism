@@ -1,21 +1,21 @@
 package model;
 
+import java.util.List;
 import lombok.Builder;
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import wikixmlsplit.api.Matching;
+import matching.table.TableMatch;
+import matching.table.TableMatchResult;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
-
-import java.util.List;
 
 @Value
 @Builder
 @RequiredArgsConstructor(staticName = "with")
 public class FeatureContext {
 
-    private final MyPageType page;
-    private final List<MyRevisionType> previousRevisions;
-    private final Matching matching;
+  private final MyPageType page;
+  private final List<MyRevisionType> previousRevisions;
+  private final TableMatchResult result;
+  private final TableMatch relevantMatch;
 }

@@ -7,24 +7,19 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import matching.table.TableMatch;
-import matching.table.TableMatchService;
 import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
-@RequiredArgsConstructor
 class SharedCellRatio implements Feature {
 
-  private final TableMatchService matchService;
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext context) {
-    val matches = matchService.getMatchingTable(context.getMatching(), revision);
     final List<Double> values = new ArrayList<>();
-    for (val match : matches.getMatches()) {
+    for (val match : context.getResult().getMatches()) {
       values.add(processMatch(match));
     }
 
