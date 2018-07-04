@@ -1,4 +1,4 @@
-package matching;
+package matching.table;
 
 import java.util.List;
 import lombok.Builder;
@@ -8,10 +8,10 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
 
 @Value
 @Builder
-public class Result {
+public class TableMatchResult {
 
   @Singular
-  private List<Match> matches;
+  private List<TableMatch> matches;
 
   @Singular
   private List<WikiTable> removedTables;

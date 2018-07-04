@@ -1,4 +1,4 @@
-package matching;
+package matching.table;
 
 import com.google.common.base.Preconditions;
 import java.util.List;
@@ -10,11 +10,11 @@ import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 @Slf4j
-public class MatchService {
+public class TableMatchService {
 
-  public Result getMatchingTable(final Matching matching, final MyRevisionType revision) {
+  public TableMatchResult getMatchingTable(final Matching matching, final MyRevisionType revision) {
     val entries = matching.getEntries();
-    val result = Result.builder();
+    val result = TableMatchResult.builder();
 
     for (int tableIndex = 0; tableIndex < entries.size(); ++tableIndex) {
       val entry = entries.get(tableIndex);
@@ -45,7 +45,7 @@ public class MatchService {
       } else if (prevAndCurrent.getLeft() == null) {
         result.addedTable(prevAndCurrent.getRight().getTable());
       } else {
-        result.match(Match.builder()
+        result.match(TableMatch.builder()
             .previousRevision(prevAndCurrent.getLeft().getRevisionId())
             .previousTable(prevAndCurrent.getLeft().getTable())
             .currentRevision(prevAndCurrent.getRight().getRevisionId())

@@ -2,7 +2,8 @@ package features.content;
 
 import features.FeaturePack;
 import lombok.val;
-import matching.MatchService;
+import matching.table.TableMatchService;
+import matching.row.RowMatchService;
 
 public class ContentFeatures {
 
@@ -11,12 +12,14 @@ public class ContentFeatures {
   private final FeaturePack features;
 
   private ContentFeatures() {
-    val factory = new ContentFeatureFactory(new MatchService());
+    val factory = new ContentFeatureFactory(new TableMatchService(), new RowMatchService());
 
     features = FeaturePack.builder()
         .feature("cellCountChange", factory.cellCount())
         .feature("rowCountChange", factory.rowCount())
         .feature("columnCountChange", factory.columnCount())
+        .feature("sharedCellRatio", factory.sharedCellRatio())
+        .feature("isRankChange", factory.rankChange())
         .build();
   }
 

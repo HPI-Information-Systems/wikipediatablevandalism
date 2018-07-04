@@ -1,4 +1,4 @@
-package matching;
+package matching.table;
 
 import java.math.BigInteger;
 import lombok.Builder;
@@ -7,7 +7,7 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
 
 @Value
 @Builder
-public class Match {
+public class TableMatch {
 
   private BigInteger previousRevision;
   private WikiTable previousTable;

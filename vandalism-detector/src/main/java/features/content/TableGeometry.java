@@ -5,16 +5,16 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.val;
-import matching.Match;
-import matching.MatchService;
+import matching.table.TableMatch;
+import matching.table.TableMatchService;
 import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
-public class TableGeometry implements Feature {
+class TableGeometry implements Feature {
 
   @Getter
-  public enum Measure {
+  enum Measure {
     Columns(table -> table.getColumns().size()),
     Rows(table -> table.getRows().size()),
     Product(table -> table.getRows().size() * table.getColumns().size());
@@ -32,10 +32,10 @@ public class TableGeometry implements Feature {
     double apply(WikiTable table);
   }
 
-  private final MatchService matchService;
+  private final TableMatchService matchService;
   private final ValueFunction valueFunction;
 
-  TableGeometry(final MatchService matchService, final Measure measure) {
+  TableGeometry(final TableMatchService matchService, final Measure measure) {
     this.matchService = matchService;
     valueFunction = measure.getF();
   }
@@ -77,7 +77,7 @@ public class TableGeometry implements Feature {
     return result;
   }
 
-  private double getSizeChange(final Match match) {
+  private double getSizeChange(final TableMatch match) {
     val d1 = valueFunction.apply(match.getPreviousTable());
     val d2 = valueFunction.apply(match.getCurrentTable());
     return d2 - d1;
