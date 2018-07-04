@@ -4,7 +4,6 @@ import static features.context.Utils.valid;
 
 import features.Feature;
 import java.time.LocalDate;
-import java.util.concurrent.TimeUnit;
 import lombok.val;
 
 /**
@@ -20,8 +19,10 @@ class ContextFeatureFactory {
    * @return the hours since midnight
    */
   Feature timeOfDay() {
-    return (revision, ignored) -> TimeUnit.HOURS
-        .convert(revision.getDate().getTime(), TimeUnit.MILLISECONDS);
+    return (revision, ignored) -> {
+      val ts = revision.getTimestamp();
+      return valid(ts.getHour());
+    };
   }
 
   Feature dayOfWeek() {
@@ -58,7 +59,7 @@ class ContextFeatureFactory {
         return false;
       }
 
-      return botList.contains(revision.getContributor().getUsername());
+      return botList.stream().anyMatch(str -> str.equals(revision.getContributor().getUsername()));
     };
   }
 }

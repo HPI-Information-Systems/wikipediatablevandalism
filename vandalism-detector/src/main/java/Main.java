@@ -22,7 +22,7 @@ import parser.RevisionTagParser;
 @Slf4j
 public class Main {
 
-  public void importDataSet(final Arguments arguments) {
+  private void importDataSet(final Arguments arguments) {
     try {
       val revisionTagPath = getClass().getResource("mini_deleted_sample.csv").getPath();
       val revisionTagParser = new RevisionTagParser();

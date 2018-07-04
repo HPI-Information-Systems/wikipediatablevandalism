@@ -1,5 +1,6 @@
 package features.context;
 
+import com.google.common.base.Preconditions;
 import features.Feature;
 import java.time.Duration;
 import lombok.val;
@@ -15,8 +16,10 @@ class ContextPreviousRevisionFeatureFactory {
       if (previousRevision != null) {
         val revisionTime = revision.getDate().toInstant();
         val previousRevisionTime = previousRevision.getDate().toInstant();
+        Preconditions.checkState(previousRevisionTime.isBefore(revisionTime),
+            "previousRevisionTime should be before revisionTime");
         return Duration.between(previousRevisionTime, revisionTime)
-            .toMinutes(); // TODO maybe seconds
+            .toMinutes(); // TODO maybe use getSeconds() instead
       }
       return -1;
     };
@@ -52,7 +55,7 @@ class ContextPreviousRevisionFeatureFactory {
     };
   }
 
-  Feature sizeChange() {
+  Feature sizeChange() { // better than sizeRation -> what is when revisionParsedLength = 0
     return (revision, featureContext) -> {
       val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
       if (previousRevision != null) {
