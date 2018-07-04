@@ -13,9 +13,11 @@ public class BasicFeatures {
     val factory = new BasicFeatureFactory();
 
     features = FeaturePack.builder()
-        .feature("currentRowCount", factory.rowCount())
-        .feature("currentColumnCount", factory.columnCount())
-        .feature("currentCellCount", factory.cellCount())
+        .feature("currentRowCount", factory::rowCount)
+        .feature("currentColumnCount", factory::columnCount)
+        .feature("currentCellCount", factory::cellCount)
+        .feature("unmatchedTableRatio", factory::unmatchedTables)
+        .feature("unmatchedRowRatio", factory::unmatchedRows)
         .build();
   }
 

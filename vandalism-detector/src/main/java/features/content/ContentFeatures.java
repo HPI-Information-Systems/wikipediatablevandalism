@@ -2,7 +2,6 @@ package features.content;
 
 import features.FeaturePack;
 import lombok.val;
-import matching.row.RowMatchService;
 
 public class ContentFeatures {
 
@@ -11,7 +10,7 @@ public class ContentFeatures {
   private final FeaturePack features;
 
   private ContentFeatures() {
-    val factory = new ContentFeatureFactory(new RowMatchService());
+    val factory = new ContentFeatureFactory();
 
     features = FeaturePack.builder()
         .feature("cellCountChange", factory.cellCount())

@@ -5,17 +5,12 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import matching.row.RowMatch;
-import matching.row.RowMatchService;
 import matching.table.TableMatch;
 import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 @RequiredArgsConstructor
 class RankChange implements Feature {
-
-  private static final double SIMILARITY_THRESHOLD = 0.25;
-
-  private final RowMatchService rowMatchService;
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext context) {
@@ -30,11 +25,9 @@ class RankChange implements Feature {
     // (1) all rows of previous need to have a very similar row in current table
     // (2) the rows of previous table do not appear in the same order
     // TODO reconsider - the row matching is not necessarily injective!
-    final List<RowMatch> matchedRows = rowMatchService
-        .matchRows(change.getPreviousTable(), change.getCurrentTable())
-        .getMatches();
+    final List<RowMatch> matchedRows = context.getRowMatchResult().getMatches();
 
-    val allMatched = matchedRows.stream().allMatch(this::isExceedingThreshold);
+    val allMatched = matchedRows.size() == change.getCurrentTable().getRows().size();
     if (!allMatched) {
       return false;
     }
@@ -48,9 +41,5 @@ class RankChange implements Feature {
     }
 
     return false;
-  }
-
-  private boolean isExceedingThreshold(final RowMatch rowMatch) {
-    return rowMatch.getSimilarity() > SIMILARITY_THRESHOLD;
   }
 }

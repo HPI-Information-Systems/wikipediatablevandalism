@@ -5,6 +5,8 @@ import static util.PerformanceUtil.runMeasured;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
+import matching.row.RowMatchResult;
+import matching.row.RowMatchService;
 import matching.table.TableMatch;
 import matching.table.TableMatchResult;
 import matching.table.TableMatchService;
@@ -20,17 +22,20 @@ class FeatureContextFactory {
 
   private final TableMatcher matcher = new TableMatcher(Settings.ofDefault());
   private final TableMatchService matchService = new TableMatchService();
+  private final RowMatchService rowMatchService = new RowMatchService();
 
   FeatureContext create(final MyPageType page, final int revisionIndex) {
     val revision = page.getRevisions().get(revisionIndex);
     val matching = getMatching(page);
     val tableMatchResult = matchService.getMatchingTable(matching, revision);
+    val selectedMatch = selectMatch(tableMatchResult);
 
     return FeatureContext.builder()
         .page(page)
         .previousRevisions(previousRevisions(page, revisionIndex))
         .result(tableMatchResult)
-        .relevantMatch(selectMatch(tableMatchResult))
+        .relevantMatch(selectedMatch)
+        .rowMatchResult(getRowMatching(selectedMatch))
         .build();
   }
 
@@ -53,5 +58,10 @@ class FeatureContextFactory {
 
     log.warn("All matched tables identical");
     return null;
+  }
+
+  private RowMatchResult getRowMatching(final TableMatch match) {
+    return match == null ? null :
+        rowMatchService.matchRows(match.getPreviousTable(), match.getCurrentTable());
   }
 }

@@ -3,12 +3,9 @@ package features.content;
 import features.Feature;
 import features.content.TableGeometry.Measure;
 import lombok.RequiredArgsConstructor;
-import matching.row.RowMatchService;
 
 @RequiredArgsConstructor
 public class ContentFeatureFactory {
-
-  private final RowMatchService rowMatchService;
 
   Feature cellCount() {
     return new TableGeometry(Measure.Product);
@@ -27,7 +24,7 @@ public class ContentFeatureFactory {
   }
 
   Feature rankChange() {
-    return new RankChange(rowMatchService);
+    return new RankChange();
   }
 
 }

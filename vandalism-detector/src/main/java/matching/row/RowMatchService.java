@@ -12,6 +12,8 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class RowMatchService {
 
+  private static final double SIMILARITY_THRESHOLD = 0.25;
+
   private final BagOfWordsSimiliarty similarity;
 
   public RowMatchService() {
@@ -23,7 +25,7 @@ public class RowMatchService {
 
     for (final Row row : previous.getRows()) {
       final RowMatch match = getBestMatch(row, current.getRows());
-      if (match != null) {
+      if (match != null && match.getSimilarity() >= SIMILARITY_THRESHOLD) {
         result.match(match);
       }
     }
