@@ -7,6 +7,7 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -42,15 +43,14 @@ class CsvOutput implements Output {
     requireNonNull(printer, "call setup() first");
 
     try {
-      for (val item : record) {
-        if (item instanceof Boolean) {
-          val intValue = ((boolean) item) ? 1 : 0;
-          printer.print(intValue);
-        } else {
-          printer.print(item);
+      val mappedRecord = record.stream().map(value -> {
+        if (value instanceof Boolean) {
+          return (boolean) value ? 1 : 0;
         }
-      }
-      printer.println();
+        return value;
+      }).collect(Collectors.toList());
+      printer.printRecord(mappedRecord);
+      printer.flush();
     } catch (final IOException e) {
       throw new UncheckedIOException(e);
     }
