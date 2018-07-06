@@ -31,24 +31,22 @@ class FeatureSink {
     output.setup(header);
   }
 
-  void accept(final List<Tag> tags, final Map<String, Object> values) {
+  void accept(final List<Tag> tags, final Map<String, Object> featureMapping) {
     Preconditions.checkState(!tags.isEmpty(), "Empty tags");
 
-    final List<Object> toWrite = new ArrayList<>(values.size() + 1);
+    final List<Object> featureValues = new ArrayList<>(featureMapping.size());
     for (final String name : pack.getNames()) {
-      val value = values.get(name);
-      requireNonNull(value, () -> String.format("Feature %s has no value in %s", name, values));
-      toWrite.add(value);
+      val value = featureMapping.get(name);
+      requireNonNull(value, () -> String.format("Feature %s has no value in %s", name, featureMapping));
+      featureValues.add(value);
     }
 
-    val tagIterator = tags.iterator();
-    toWrite.add(tagIterator.next());
-    val lastIndex = toWrite.size() - 1;
 
-    while(tagIterator.hasNext()) {
-      val tag = tagIterator.next();
-      toWrite.set(lastIndex, tag.getTagId());
-      output.accept(toWrite);
+    for (Tag tag: tags) {
+      List<Object> record = new ArrayList<>(featureValues.size() + 1);
+      record.addAll(featureValues);
+      record.add(tag.getTagId());
+      output.accept(record);
     }
   }
 }
