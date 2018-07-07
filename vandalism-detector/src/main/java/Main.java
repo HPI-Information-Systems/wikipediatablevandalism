@@ -8,20 +8,14 @@ import features.output.Output;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.stream.Collectors;
 import lombok.Getter;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import model.FeatureContext;
 import model.PageRevision;
 import parser.PageParser;
 import parser.PagePathFinder;
 import parser.RevisionTagParser;
-import wikixmlsplit.datastructures.MyRevisionType;
-
-import static java.util.Arrays.asList;
 
 @Slf4j
 public class Main {
