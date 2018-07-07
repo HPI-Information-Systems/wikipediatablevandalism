@@ -1,9 +1,6 @@
 package features;
 
-import java.math.BigInteger;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.val;
 import model.FeatureContext;
 import wikixmlsplit.api.Matching;
@@ -14,13 +11,11 @@ import wikixmlsplit.datastructures.MyRevisionType;
 
 public class FeatureContextFactory {
 
-  private final TableMatcher matcher = new TableMatcher(Settings.ofDefault());
-
   public FeatureContext create(final MyPageType page, final int revisionIndex) {
     return FeatureContext.builder()
         .page(page)
         .previousRevisions(previousRevisions(page, revisionIndex))
-        .matching(getMatching(page))
+        .matching(getMatching(page, revisionIndex))
         .build();
   }
 
@@ -29,7 +24,8 @@ public class FeatureContextFactory {
     return page.getRevisions().subList(revisionIndex - n, revisionIndex);
   }
 
-  private Matching getMatching(final MyPageType page) {
-    return matcher.performMatching(page);
+  private Matching getMatching(final MyPageType page, final int revisionIndex) {
+    val matcher = new TableMatcher(Settings.ofDefault());
+    return matcher.performMatching(page, revisionIndex);
   }
 }
