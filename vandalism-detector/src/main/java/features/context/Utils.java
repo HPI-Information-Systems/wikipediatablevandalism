@@ -47,4 +47,14 @@ class Utils {
     }
     return null;
   }
+
+  static boolean isSameContributor(MyRevisionType revision1, MyRevisionType revision2) {
+    return (Utils.isAnonymous(revision1.getContributor()) &&
+        Utils.isAnonymous(revision2.getContributor()) &&
+        revision1.getContributor().getIp().equals(revision2.getContributor().getIp()))
+        ||
+        (!Utils.isAnonymous(revision1.getContributor()) &&
+        !Utils.isAnonymous(revision2.getContributor()) &&
+        revision1.getContributor().getId().equals(revision2.getContributor().getId()));
+  }
 }

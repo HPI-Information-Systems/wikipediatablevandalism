@@ -41,7 +41,8 @@ public class FeatureCollector {
     val values = new HashMap<String, Object>();
     val featureContext = contextFactory.create(page, revisionIndex);
 
-    runMeasured("Feature computation", () -> pack.forEachFeature((name, feature) -> values.put(name, feature.getValue(revision, featureContext))));
+    runMeasured("Feature computation", () -> pack.forEachFeature(
+        (name, feature) -> values.put(name, feature.getValue(revision, featureContext))));
 
     sink.accept(tags, values);
   }

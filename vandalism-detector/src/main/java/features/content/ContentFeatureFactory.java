@@ -3,10 +3,11 @@ package features.content;
 import features.Feature;
 import features.content.TableGeometry.Measure;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import matching.row.RowMatchService;
 
 @RequiredArgsConstructor
-public class ContentFeatureFactory {
+class ContentFeatureFactory {
 
   private final RowMatchService rowMatchService;
 
@@ -28,6 +29,13 @@ public class ContentFeatureFactory {
 
   Feature rankChange() {
     return new RankChange(rowMatchService);
+  }
+
+  Feature ratioOffNumericalCharsToAllChars() {
+    return (revision, ignored) -> {
+      val parsed = revision.getParsed();
+      return true;
+    };
   }
 
 }

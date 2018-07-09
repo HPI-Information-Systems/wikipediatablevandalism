@@ -9,5 +9,5 @@ import wikixmlsplit.datastructures.MyRevisionType;
 @FunctionalInterface
 public interface Feature {
 
-  Object getValue(MyRevisionType revision, FeatureContext context);
+  Object getValue(MyRevisionType revision, FeatureContext featureContext);
 }
