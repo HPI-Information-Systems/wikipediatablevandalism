@@ -8,22 +8,22 @@ import lombok.val;
 class BasicFeatureFactory {
 
   Feature rowCount() {
-    return (revision, context) -> {
-      val match = context.getRelevantMatch();
+    return (revision, featureContext) -> {
+      val match = featureContext.getRelevantMatch();
       return match == null ? -1 : match.getCurrentTable().getRows().size();
     };
   }
 
   Feature columnCount() {
-    return (revision, context) -> {
-      val match = context.getRelevantMatch();
+    return (revision, featureContext) -> {
+      val match = featureContext.getRelevantMatch();
       return match == null ? -1 : match.getCurrentTable().getColumns().size();
     };
   }
 
   Feature cellCount() {
-    return (revision, context) -> {
-      val match = context.getRelevantMatch();
+    return (revision, featureContext) -> {
+      val match = featureContext.getRelevantMatch();
       if (match == null) {
         return -1;
       }

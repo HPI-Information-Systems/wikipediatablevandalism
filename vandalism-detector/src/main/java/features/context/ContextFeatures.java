@@ -31,6 +31,11 @@ public class ContextFeatures {
         .feature("sizeRatio", contextPreviousRevision.sizeRatio())
         .feature("timeSinceLastArticleEditBySameContributor",
             contextPreviousRevisions.timeSinceLastArticleEditBySameContributor())
+        .feature("isRevert", contextPreviousRevisions.isRevert())
+        .feature("ratioOffAllEditsToContributorEdits",
+            contextPreviousRevisions.ratioOffAllEditsToContributorEdits())
+        .feature("wasContributorRevertedBeforeInThatArticle",
+            contextPreviousRevisions.wasContributorRevertedBeforeInThatArticle())
         .build();
   }
 

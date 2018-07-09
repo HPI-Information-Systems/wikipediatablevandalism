@@ -5,11 +5,11 @@ import features.Feature;
 class FutureFeatureFactory {
 
   Feature isCommentDeleted() {
-    return (revision, context) -> revision.getComment() != null
+    return (revision, featureContext) -> revision.getComment() != null
         && revision.getComment().getDeleted() != null;
   }
 
   Feature isContributorDeleted() {
-    return (revision, context) -> revision.getContributor().getDeleted() != null;
+    return (revision, featureContext) -> revision.getContributor().getDeleted() != null;
   }
 }
