@@ -3,7 +3,6 @@ package features.content;
 import features.Feature;
 import features.content.TableGeometry.Measure;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import matching.row.RowMatchService;
 
 @RequiredArgsConstructor
@@ -31,10 +30,19 @@ class ContentFeatureFactory {
     return new RankChange(rowMatchService);
   }
 
-  Feature ratioOffNumericalCharsToAllChars() {
+  Feature ratioOfNumericalCharsToAllChars() {
     return (revision, ignored) -> {
-      val parsed = revision.getParsed();
-      return true;
+      String  tableContents = Utils.getTableContents(revision.getParsed());
+      if (tableContents.length() == 0) {
+        return 0;
+      }
+      float numericalCount = 0;
+      for (char c : tableContents.toCharArray()) {
+        if (!Character.isDigit(c)) {
+          ++numericalCount;
+        }
+      }
+      return numericalCount / (float) tableContents.length();
     };
   }
 

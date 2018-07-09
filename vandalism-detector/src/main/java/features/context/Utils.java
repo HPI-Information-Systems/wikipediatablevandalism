@@ -28,27 +28,24 @@ class Utils {
   }
 
   static int parsedLength(List<String> parsed) {
-    if (parsed != null) {
-      int totalLength = 0;
-      for (String string : parsed) {
-        totalLength += string.length();
-      }
-      return totalLength;
-    } else {
+    if (parsed == null) {
       return 0;
     }
+    int totalLength = 0;
+    for (String string : parsed) {
+      totalLength += string.length();
+    }
+    return totalLength;
   }
 
   static MyRevisionType getPreviousRevision(List<MyRevisionType> previousRevisions) {
-    if (previousRevisions != null) {
-      if (previousRevisions.size() > 0) {
-        return previousRevisions.get(0);
-      }
+    if (previousRevisions == null || previousRevisions.size() == 0) {
+      return null;
     }
-    return null;
+    return previousRevisions.get(0);
   }
 
-  static boolean isSameContributor(MyRevisionType revision1, MyRevisionType revision2) {
+  static boolean hasSameContributor(MyRevisionType revision1, MyRevisionType revision2) {
     return (Utils.isAnonymous(revision1.getContributor()) &&
         Utils.isAnonymous(revision2.getContributor()) &&
         revision1.getContributor().getIp().equals(revision2.getContributor().getIp()))
