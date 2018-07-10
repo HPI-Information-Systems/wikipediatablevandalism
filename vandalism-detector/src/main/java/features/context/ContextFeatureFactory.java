@@ -1,10 +1,9 @@
 package features.context;
 
-import static features.context.Utils.valid;
-
 import features.Feature;
 import java.time.LocalDate;
 import lombok.val;
+import util.BasicUtils;
 
 /**
  * Create all features connected to the context of the actual revision.
@@ -21,16 +20,16 @@ class ContextFeatureFactory {
   Feature timeOfDay() {
     return (revision, ignored) -> {
       val ts = revision.getTimestamp();
-      return valid(ts.getHour());
+      return BasicUtils.valid(ts.getHour());
     };
   }
 
   Feature dayOfWeek() {
     return (revision, ignored) -> {
       val ts = revision.getTimestamp();
-      val day = valid(ts.getDay());
-      val month = valid(ts.getMonth());
-      val year = valid(ts.getYear());
+      val day = BasicUtils.valid(ts.getDay());
+      val month = BasicUtils.valid(ts.getMonth());
+      val year = BasicUtils.valid(ts.getYear());
       return LocalDate.of(year, month, day).getDayOfWeek().getValue();
     };
   }
@@ -55,7 +54,7 @@ class ContextFeatureFactory {
     val botList = BotList.read();
     return (revision, ignored) -> {
 
-      if (Utils.isAnonymous(revision.getContributor())) {
+      if (BasicUtils.isAnonymous(revision.getContributor())) {
         return false;
       }
 

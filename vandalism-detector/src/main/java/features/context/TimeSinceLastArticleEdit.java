@@ -7,6 +7,7 @@ import java.util.function.Predicate;
 import lombok.val;
 import model.FeatureContext;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
+import util.BasicUtils;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
@@ -25,7 +26,7 @@ class TimeSinceLastArticleEdit implements Feature {
   }
 
   private Predicate<ContributorType> getContributorFilter(final ContributorType toCompare) {
-    if (Utils.isAnonymous(toCompare)) {
+    if (BasicUtils.isAnonymous(toCompare)) {
       return sameIpAs(toCompare);
     }
     return sameNameAs(toCompare);

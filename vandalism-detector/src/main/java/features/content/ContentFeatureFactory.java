@@ -1,10 +1,14 @@
 package features.content;
 
+import com.google.common.collect.Multisets;
 import features.Feature;
 import features.content.TableGeometry.Measure;
-import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
+import util.BasicUtils;
+import util.TableContentExtractor;
+import util.WordsExtractor;
+import util.ZipUtil;
 
 @RequiredArgsConstructor
 class ContentFeatureFactory {
@@ -37,10 +41,9 @@ class ContentFeatureFactory {
     return new OffensiveWordsInTable();
   }
 
-  // NO MATCHING FEATURES -> TODO own class?
   Feature ratioOfNumericalCharsToAllChars() {
     return (revision, ignored) -> {
-      val tableContents = Utils.getContent(revision);
+      val tableContents = TableContentExtractor.getContent(revision);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -56,7 +59,7 @@ class ContentFeatureFactory {
 
   Feature ratioOfAlphanumericCharsToAllChars() {
     return (revision, ignored) -> {
-      val tableContents = Utils.getContent(revision);
+      val tableContents = TableContentExtractor.getContent(revision);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -72,7 +75,7 @@ class ContentFeatureFactory {
 
   Feature ratioOfUppercaseCharsToAllChars() {
     return (revision, ignored) -> {
-      val tableContents = Utils.getContent(revision);
+      val tableContents = TableContentExtractor.getContent(revision);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -88,7 +91,7 @@ class ContentFeatureFactory {
 
   Feature ratioOfUppercaseCharsToLowercaseChars() {
     return (revision, ignored) -> {
-      val tableContents = Utils.getContent(revision);
+      val tableContents = TableContentExtractor.getContent(revision);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -107,7 +110,7 @@ class ContentFeatureFactory {
 
   Feature lengthOfLongestConsecutiveSequenceOfSingleChar() {
     return (revision, ignored) -> {
-      val tableContents = Utils.getContent(revision);
+      val tableContents = TableContentExtractor.getContent(revision);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -138,7 +141,7 @@ class ContentFeatureFactory {
 
   Feature lengthOfLongestToken() {
     return (revision, ignored) -> {
-      val tableContents = Utils.getContent(revision);
+      val tableContents = TableContentExtractor.getContent(revision);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -163,44 +166,53 @@ class ContentFeatureFactory {
 
   Feature previousLength() {
     return (ignored, featureContext) -> {
-      val previousRevision = features.context.Utils
+      val previousRevision = BasicUtils
           .getPreviousRevision(featureContext.getPreviousRevisions());
       if (previousRevision == null) {
         return 0;
       }
-      return Utils.getContent(previousRevision).length();
+      return TableContentExtractor.getContent(previousRevision).length();
     };
   }
 
-  Feature averageRelativeFrequencyOfWords() {
-    return (revision, ignored) -> {
-      val tableContents = Utils.getContent(revision);
-      if (tableContents.length() == 0) {
+  Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with deletion corpus
+    return (revision, featureContext) -> {
+      val previousRevision = BasicUtils
+          .getPreviousRevision(featureContext.getPreviousRevisions());
+      if (previousRevision == null) {
         return 0;
       }
-
-      // calculate occurences of each word
-      val wordOccurenceMap = new HashMap<String, Integer>();
-      for (String word : tableContents.split("\\s+")) { // split at whitespace
-        if (wordOccurenceMap.containsKey(word)) {
-          wordOccurenceMap.put(word, wordOccurenceMap.get(word)+1);
-        } else {
-          wordOccurenceMap.put(word, 1);
-        }
+      val actualTableContents = TableContentExtractor.getContent(revision);
+      if (actualTableContents.length() == 0) {
+        return 0;
       }
-
+      val previousTableContents = TableContentExtractor.getContent(previousRevision);
+      if (previousTableContents.length() == 0) {
+        return 0;
+      }
+      val actualWordOccurence = WordsExtractor.extractWords(actualTableContents);
+      val previousWordOccurence = WordsExtractor.extractWords(previousTableContents);
+      val addedWordOccurence = Multisets.difference(actualWordOccurence, previousWordOccurence);
+      if (addedWordOccurence.isEmpty()) {
+        return 0;
+      }
       // calculate sum of all occured words
       float sumWordOccurence = 0;
-      for (Integer value: wordOccurenceMap.values()) {
-        sumWordOccurence += value;
+      for (val word : addedWordOccurence.entrySet()) {
+        sumWordOccurence += word.getCount();
       }
-      return sumWordOccurence / (float) wordOccurenceMap.size(); // calculate average occurence of a word
+      return sumWordOccurence / (float) addedWordOccurence
+          .size(); // calculate average occurence of a word
     };
   }
 
   Feature LZWCompressionRate() {
     return (revision, ignored) -> {
-      return null;
+      val tableContents = TableContentExtractor.getContent(revision);
+      if (tableContents.length() == 0) {
+        return 0;
+      }
+      return ZipUtil.getCompressionRatio(tableContents);
     };
   }
 

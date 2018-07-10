@@ -4,6 +4,7 @@ import com.google.common.base.Preconditions;
 import features.Feature;
 import java.time.Duration;
 import lombok.val;
+import util.BasicUtils;
 
 /**
  * Create all features connected to the context of the previous and the actual revision.
@@ -12,7 +13,7 @@ class ContextPreviousRevisionFeatureFactory {
 
   Feature timeSinceLastArticleEdit() {
     return (revision, featureContext) -> {
-      val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
+      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
       if (previousRevision == null) {
         return -1;
       }
@@ -27,22 +28,22 @@ class ContextPreviousRevisionFeatureFactory {
 
   Feature hasPreviousSameContributor() {
     return (revision, featureContext) -> {
-      val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
+      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
       if (previousRevision == null) {
         return false;
       }
-      return Utils.hasSameContributor(revision, previousRevision);
+      return BasicUtils.hasSameContributor(revision, previousRevision);
     };
   }
 
   Feature sizeChange() { //TODO better parsing? -> put in ContentFeatures?
     return (revision, featureContext) -> {
-      val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
+      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
       int previousRevisionParsedLength = 0;
       if (previousRevision != null) {
-        previousRevisionParsedLength = Utils.parsedLength(previousRevision.getParsed());
+        previousRevisionParsedLength = BasicUtils.parsedLength(previousRevision.getParsed());
       }
-      return Utils.parsedLength(revision.getParsed()) - previousRevisionParsedLength;
+      return BasicUtils.parsedLength(revision.getParsed()) - previousRevisionParsedLength;
     };
   }
 

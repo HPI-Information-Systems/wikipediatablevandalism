@@ -4,6 +4,7 @@ import features.Feature;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.val;
+import util.BasicUtils;
 
 class ContextPreviousRevisionsFeatureFactory {
 
@@ -28,7 +29,7 @@ class ContextPreviousRevisionsFeatureFactory {
     return (revision, featureContext) -> {
       float sameContributor = 1;
       for (val previousRevision : featureContext.getPreviousRevisions()) {
-        if (Utils.hasSameContributor(revision, previousRevision)) {
+        if (BasicUtils.hasSameContributor(revision, previousRevision)) {
           ++sameContributor;
         }
       }
@@ -62,7 +63,7 @@ class ContextPreviousRevisionsFeatureFactory {
             // search for contributor between i and i+1 ; start at 'get(i)+1' because you want to search just between
             for (int j = revertedRevisionsIndexes.get(i) + 1;
                 j < revertedRevisionsIndexes.get(i + 1); ++j) {
-              if (Utils.hasSameContributor(allRevisions.get(j), revision)) {
+              if (BasicUtils.hasSameContributor(allRevisions.get(j), revision)) {
                 ++revertedRevisionCount;
               }
             }

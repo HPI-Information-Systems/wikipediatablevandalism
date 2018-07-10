@@ -1,4 +1,4 @@
-package features.content;
+package util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -8,9 +8,9 @@ import lombok.var;
 import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-class Utils {
+public class TableContentExtractor {
 
-  static String getContent(MyRevisionType revision) {
+  public static String getContent(MyRevisionType revision) {
     var contentString = getCommentContent(revision.getComment());
     contentString += getTableContents(revision.getParsed());
     return contentString;
@@ -30,7 +30,7 @@ class Utils {
     val tableContents = new StringBuilder();
     for (val parsed : parsedList) {
       val jsonObject = new JsonParser().parse(parsed).getAsJsonObject();
-      tableContents.append(Utils.getTableContent(jsonObject));
+      tableContents.append(getTableContent(jsonObject));
       tableContents.append("\n");
     }
     return tableContents.toString();
