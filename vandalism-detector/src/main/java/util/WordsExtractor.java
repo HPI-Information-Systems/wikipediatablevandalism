@@ -28,6 +28,13 @@ public class WordsExtractor {
     return HashMultiset.create(normalizedWords);
   }
 
+  public static Multiset<String> extractWords(final String text) {
+    val normalizedWords = wordsOf(text)
+        .map(WordsExtractor::normalize)
+        .collect(toList());
+    return HashMultiset.create(normalizedWords);
+  }
+
   private static Stream<String> wordsOf(final String value) {
     return WHITESPACE.splitAsStream(value);
   }

@@ -27,9 +27,17 @@ class ContentFeatureFactory {
     return new RankChange();
   }
 
+  Feature offensiveWordsInComment() {
+    return new OffensiveWordsInComment();
+  }
+
+  Feature offensiveWordsInTable() {
+    return new OffensiveWordsInTable();
+  }
+
   Feature ratioOfNumericalCharsToAllChars() {
     return (revision, ignored) -> {
-      String  tableContents = Utils.getTableContents(revision.getParsed());
+      String tableContents = Utils.getTableContents(revision.getParsed());
       if (tableContents.length() == 0) {
         return 0;
       }

@@ -19,6 +19,8 @@ public class ContentFeatures {
         .feature("sharedCellRatio", factory.sharedCellRatio())
         .feature("isRankChange", factory.rankChange())
         .feature("ratioOfNumericalCharsToAllChars", factory.ratioOfNumericalCharsToAllChars())
+        .feature("offensiveWordCountInTables", factory.offensiveWordsInTable())
+        .feature("offensiveWordCountInComment", factory.offensiveWordsInComment())
         .build();
   }
 
