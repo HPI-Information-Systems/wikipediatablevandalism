@@ -2,9 +2,8 @@ package features.context;
 
 import com.google.common.base.Preconditions;
 import features.Feature;
-import java.time.temporal.TemporalUnit;
+import java.time.Duration;
 import java.util.function.Predicate;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import model.FeatureContext;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
@@ -13,10 +12,7 @@ import wikixmlsplit.datastructures.MyRevisionType;
 /**
  * Time since the last edit was made by the same contributor on the same page.
  */
-@RequiredArgsConstructor
 class TimeSinceLastArticleEdit implements Feature {
-
-  private final TemporalUnit unit;
 
   @Override
   public Object getValue(final MyRevisionType revision, FeatureContext featureContext) {
@@ -47,6 +43,6 @@ class TimeSinceLastArticleEdit implements Feature {
     val past = previous.getDate().toInstant();
     val upcoming = next.getDate().toInstant();
     Preconditions.checkState(past.isBefore(upcoming), "Time delta should compare past to upcoming");
-    return unit.between(past, upcoming);
+    return Duration.between(past, upcoming).toMinutes(); //TODO maybe use getSeconds() instead
   }
 }

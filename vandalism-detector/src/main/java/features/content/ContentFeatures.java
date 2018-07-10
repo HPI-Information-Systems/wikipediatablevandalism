@@ -18,6 +18,7 @@ public class ContentFeatures {
         .feature("columnCountChange", factory.columnCount())
         .feature("sharedCellRatio", factory.sharedCellRatio())
         .feature("isRankChange", factory.rankChange())
+        .feature("ratioOfNumericalCharsToAllChars", factory.ratioOfNumericalCharsToAllChars())
         .build();
   }
 

@@ -2,6 +2,7 @@ package features;
 
 import static util.PerformanceUtil.runMeasured;
 
+import com.google.common.collect.Lists;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
@@ -40,8 +41,8 @@ class FeatureContextFactory {
   }
 
   private List<MyRevisionType> previousRevisions(final MyPageType page, final int revisionIndex) {
-    val n = 1; // TODO
-    return page.getRevisions().subList(revisionIndex - n, revisionIndex);
+    val n = revisionIndex; // TODO currently all previousRevisions
+    return Lists.reverse(page.getRevisions().subList(revisionIndex - n, revisionIndex)); // reverse list -> index = 0 is the previous revision, index = 1 is the one before, etc.;
   }
 
   private Matching getMatching(final MyPageType page) {

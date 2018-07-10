@@ -5,7 +5,7 @@ import features.content.TableGeometry.Measure;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class ContentFeatureFactory {
+class ContentFeatureFactory {
 
   Feature cellCount() {
     return new TableGeometry(Measure.Product);
@@ -25,6 +25,22 @@ public class ContentFeatureFactory {
 
   Feature rankChange() {
     return new RankChange();
+  }
+
+  Feature ratioOfNumericalCharsToAllChars() {
+    return (revision, ignored) -> {
+      String  tableContents = Utils.getTableContents(revision.getParsed());
+      if (tableContents.length() == 0) {
+        return 0;
+      }
+      float numericalCount = 0;
+      for (char c : tableContents.toCharArray()) {
+        if (!Character.isDigit(c)) {
+          ++numericalCount;
+        }
+      }
+      return numericalCount / (float) tableContents.length();
+    };
   }
 
 }
