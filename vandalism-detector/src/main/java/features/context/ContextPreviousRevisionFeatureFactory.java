@@ -25,7 +25,7 @@ class ContextPreviousRevisionFeatureFactory {
     };
   }
 
-  Feature isPreviousSameContributor() {
+  Feature hasPreviousSameContributor() {
     return (revision, featureContext) -> {
       val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
       if (previousRevision == null) {
@@ -35,19 +35,19 @@ class ContextPreviousRevisionFeatureFactory {
     };
   }
 
+  /*
   Feature sizeRatio() {
     return (revision, featureContext) -> {
       val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
-      if (previousRevision == null) {
+      if (previousRevision == null || Utils.parsedLength(previousRevision.getParsed()) == 0) {
         return 0;
       }
-      val revisionParsedLength = Utils.parsedLength(revision.getParsed());
-      val previousRevisionParsedLength = Utils.parsedLength(previousRevision.getParsed());
-      return (float) revisionParsedLength / (float) previousRevisionParsedLength;
+      return (float) Utils.parsedLength(revision.getParsed()) / (float) Utils.parsedLength(previousRevision.getParsed());
     };
   }
+  */
 
-  Feature sizeChange() { // better than sizeRation -> what is when revisionParsedLength = 0 TODO better parsing? -> put in ContentFeatures?
+  Feature sizeChange() { //TODO better parsing? -> put in ContentFeatures?
     return (revision, featureContext) -> {
       val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
       int previousRevisionParsedLength = 0;

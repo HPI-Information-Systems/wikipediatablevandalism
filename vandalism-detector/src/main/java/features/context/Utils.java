@@ -6,7 +6,7 @@ import javax.xml.datatype.DatatypeConstants;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-class Utils {
+public class Utils {
 
   /**
    * Check if return values of {@link javax.xml.datatype.XMLGregorianCalendar} are valid, else
@@ -37,7 +37,7 @@ class Utils {
     return totalLength;
   }
 
-  static MyRevisionType getPreviousRevision(List<MyRevisionType> previousRevisions) {
+  public static MyRevisionType getPreviousRevision(List<MyRevisionType> previousRevisions) {
     if (previousRevisions == null || previousRevisions.size() == 0) {
       return null;
     }

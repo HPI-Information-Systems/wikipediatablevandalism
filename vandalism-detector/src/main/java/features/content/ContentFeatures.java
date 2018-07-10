@@ -19,6 +19,12 @@ public class ContentFeatures {
         .feature("sharedCellRatio", factory.sharedCellRatio())
         .feature("isRankChange", factory.rankChange())
         .feature("ratioOfNumericalCharsToAllChars", factory.ratioOfNumericalCharsToAllChars())
+        .feature("ratioOfAlphanumericCharsToAllChars", factory.ratioOfAlphanumericCharsToAllChars())
+        .feature("ratioOfUppercaseCharsToAllChars", factory.ratioOfUppercaseCharsToAllChars())
+        .feature("ratioOfUppercaseCharsToLowercaseChars", factory.ratioOfUppercaseCharsToLowercaseChars())
+        .feature("lengthOfLongestConsecutiveSequenceOfSingleChar", factory.lengthOfLongestConsecutiveSequenceOfSingleChar())
+        .feature("lengthOfLongestToken", factory.lengthOfLongestToken())
+        .feature("previousLength", factory.previousLength())
         .feature("offensiveWordCountInTables", factory.offensiveWordsInTable())
         .feature("offensiveWordCountInComment", factory.offensiveWordsInComment())
         .build();

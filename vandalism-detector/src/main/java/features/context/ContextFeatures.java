@@ -24,11 +24,10 @@ public class ContextFeatures {
         .feature("isMinorEdit", contextFactory.isMinorEdit())
         .feature("commentLength", contextFactory.commentLength())
         .feature("isBot", contextFactory.isBot())
-        .feature("isPreviousSameContributor",
-            contextPreviousRevision.isPreviousSameContributor())
+        .feature("hasPreviousSameContributor",
+            contextPreviousRevision.hasPreviousSameContributor())
         .feature("timeSinceLastArticleEdit", contextPreviousRevision.timeSinceLastArticleEdit())
         .feature("sizeChange", contextPreviousRevision.sizeChange())
-        .feature("sizeRatio", contextPreviousRevision.sizeRatio())
         .feature("timeSinceLastArticleEditBySameContributor",
             contextPreviousRevisions.timeSinceLastArticleEditBySameContributor())
         .feature("revertCount", contextPreviousRevisions.revertCount())

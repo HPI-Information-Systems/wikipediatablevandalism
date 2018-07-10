@@ -4,10 +4,29 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import java.util.List;
 import lombok.val;
+import lombok.var;
+import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
+import wikixmlsplit.datastructures.MyRevisionType;
 
 class Utils {
 
-  static String getTableContents(List<String> parsedList) {
+  static String getContent(MyRevisionType revision) {
+    var contentString = getCommentContent(revision.getComment());
+    contentString += getTableContents(revision.getParsed());
+    return contentString;
+  }
+
+  private static String getCommentContent(CommentType comment) {
+    if (comment == null || comment.getValue() == null) {
+      return "";
+    }
+    return comment.getValue();
+  }
+
+  private static String getTableContents(List<String> parsedList) {
+    if (parsedList == null) {
+      return "";
+    }
     val tableContents = new StringBuilder();
     for (val parsed: parsedList) {
       val jsonObject = new JsonParser().parse(parsed).getAsJsonObject();
