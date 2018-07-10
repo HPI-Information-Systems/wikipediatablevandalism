@@ -1,10 +1,9 @@
 package features.context;
 
 import java.util.List;
+import java.util.Objects;
 import javax.xml.datatype.DatatypeConstants;
-
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
-
 import wikixmlsplit.datastructures.MyRevisionType;
 
 class Utils {
@@ -46,12 +45,11 @@ class Utils {
   }
 
   static boolean hasSameContributor(MyRevisionType revision1, MyRevisionType revision2) {
-    return (Utils.isAnonymous(revision1.getContributor()) &&
-        Utils.isAnonymous(revision2.getContributor()) &&
-        revision1.getContributor().getIp().equals(revision2.getContributor().getIp()))
-        ||
-        (!Utils.isAnonymous(revision1.getContributor()) &&
-        !Utils.isAnonymous(revision2.getContributor()) &&
-        revision1.getContributor().getId().equals(revision2.getContributor().getId()));
+    if (Utils.isAnonymous(revision1.getContributor()) &&
+        Utils.isAnonymous(revision2.getContributor())) {
+      return Objects.equals(revision1.getContributor().getIp(), revision2.getContributor().getIp());
+    }
+
+    return Objects.equals(revision1.getContributor().getId(), revision2.getContributor().getId());
   }
 }
