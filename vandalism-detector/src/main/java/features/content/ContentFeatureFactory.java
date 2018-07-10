@@ -2,9 +2,9 @@ package features.content;
 
 import features.Feature;
 import features.content.TableGeometry.Measure;
+import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import matching.row.RowMatchService;
 
 @RequiredArgsConstructor
 class ContentFeatureFactory {
@@ -128,7 +128,8 @@ class ContentFeatureFactory {
           ++actualConsecutiveSingleCharCount;
         }
       }
-      if (actualConsecutiveSingleCharCount > longestConsecutiveSingleCharCount) { // last consecutiveSingleCharSequence could be longest
+      if (actualConsecutiveSingleCharCount
+          > longestConsecutiveSingleCharCount) { // last consecutiveSingleCharSequence could be longest
         longestConsecutiveSingleCharCount = actualConsecutiveSingleCharCount;
       }
       return longestConsecutiveSingleCharCount;
@@ -162,7 +163,8 @@ class ContentFeatureFactory {
 
   Feature previousLength() {
     return (ignored, featureContext) -> {
-      val previousRevision = features.context.Utils.getPreviousRevision(featureContext.getPreviousRevisions());
+      val previousRevision = features.context.Utils
+          .getPreviousRevision(featureContext.getPreviousRevisions());
       if (previousRevision == null) {
         return 0;
       }
@@ -170,7 +172,39 @@ class ContentFeatureFactory {
     };
   }
 
+  Feature averageRelativeFrequencyOfWords() {
+    return (revision, ignored) -> {
+      val tableContents = Utils.getContent(revision);
+      if (tableContents.length() == 0) {
+        return 0;
+      }
+
+      // calculate occurences of each word
+      val wordOccurenceMap = new HashMap<String, Integer>();
+      for (String word : tableContents.split("\\s+")) { // split at whitespace
+        if (wordOccurenceMap.containsKey(word)) {
+          wordOccurenceMap.put(word, wordOccurenceMap.get(word)+1);
+        } else {
+          wordOccurenceMap.put(word, 1);
+        }
+      }
+
+      // calculate sum of all occured words
+      float sumWordOccurence = 0;
+      for (Integer value: wordOccurenceMap.values()) {
+        sumWordOccurence += value;
+      }
+      return sumWordOccurence / (float) wordOccurenceMap.size(); // calculate average occurence of a word
+    };
+  }
+
   Feature LZWCompressionRate() {
+    return (revision, ignored) -> {
+      return null;
+    };
+  }
+
+  Feature KLDOfCharDistribution() {
     return (revision, ignored) -> {
       return null;
     };

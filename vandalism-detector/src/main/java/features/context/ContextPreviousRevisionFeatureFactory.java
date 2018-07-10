@@ -35,18 +35,6 @@ class ContextPreviousRevisionFeatureFactory {
     };
   }
 
-  /*
-  Feature sizeRatio() {
-    return (revision, featureContext) -> {
-      val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());
-      if (previousRevision == null || Utils.parsedLength(previousRevision.getParsed()) == 0) {
-        return 0;
-      }
-      return (float) Utils.parsedLength(revision.getParsed()) / (float) Utils.parsedLength(previousRevision.getParsed());
-    };
-  }
-  */
-
   Feature sizeChange() { //TODO better parsing? -> put in ContentFeatures?
     return (revision, featureContext) -> {
       val previousRevision = Utils.getPreviousRevision(featureContext.getPreviousRevisions());

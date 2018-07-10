@@ -36,7 +36,7 @@ class ContextPreviousRevisionsFeatureFactory {
     };
   }
 
-  Feature wasContributorRevertedBeforeInThatArticle() {
+  Feature contributorRevertedBeforeInThatArticleCount() {
     return (revision, featureContext) -> {
       int revertedRevisionCount = 0;
       List<String> searchedBefore = new ArrayList<>();

@@ -33,8 +33,8 @@ public class ContextFeatures {
         .feature("revertCount", contextPreviousRevisions.revertCount())
         .feature("ratioOffAllEditsToContributorEdits",
             contextPreviousRevisions.ratioOffAllEditsToContributorEdits())
-        .feature("wasContributorRevertedBeforeInThatArticle",
-            contextPreviousRevisions.wasContributorRevertedBeforeInThatArticle())
+        .feature("contributorRevertedBeforeInThatArticleCount",
+            contextPreviousRevisions.contributorRevertedBeforeInThatArticleCount())
         .build();
   }
 

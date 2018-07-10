@@ -21,12 +21,15 @@ public class ContentFeatures {
         .feature("ratioOfNumericalCharsToAllChars", factory.ratioOfNumericalCharsToAllChars())
         .feature("ratioOfAlphanumericCharsToAllChars", factory.ratioOfAlphanumericCharsToAllChars())
         .feature("ratioOfUppercaseCharsToAllChars", factory.ratioOfUppercaseCharsToAllChars())
-        .feature("ratioOfUppercaseCharsToLowercaseChars", factory.ratioOfUppercaseCharsToLowercaseChars())
-        .feature("lengthOfLongestConsecutiveSequenceOfSingleChar", factory.lengthOfLongestConsecutiveSequenceOfSingleChar())
+        .feature("ratioOfUppercaseCharsToLowercaseChars",
+            factory.ratioOfUppercaseCharsToLowercaseChars())
+        .feature("lengthOfLongestConsecutiveSequenceOfSingleChar",
+            factory.lengthOfLongestConsecutiveSequenceOfSingleChar())
         .feature("lengthOfLongestToken", factory.lengthOfLongestToken())
         .feature("previousLength", factory.previousLength())
         .feature("offensiveWordCountInTables", factory.offensiveWordsInTable())
         .feature("offensiveWordCountInComment", factory.offensiveWordsInComment())
+        .feature("averageRelativeFrequencyOfWords", factory.averageRelativeFrequencyOfWords())
         .build();
   }
 

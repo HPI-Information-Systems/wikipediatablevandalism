@@ -28,7 +28,7 @@ class Utils {
       return "";
     }
     val tableContents = new StringBuilder();
-    for (val parsed: parsedList) {
+    for (val parsed : parsedList) {
       val jsonObject = new JsonParser().parse(parsed).getAsJsonObject();
       tableContents.append(Utils.getTableContent(jsonObject));
       tableContents.append("\n");
