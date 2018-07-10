@@ -23,7 +23,7 @@ class FeatureContextFactory {
 
   FeatureContext create(final MyPageType page, final int revisionIndex) {
     val revision = page.getRevisions().get(revisionIndex);
-    val matching = getMatching(page);
+    val matching = getMatching(page, revisionIndex);
     val tableMatchResult = getTableMatching(revision, matching);
     val selectedMatch = selectMatch(tableMatchResult);
 
@@ -42,9 +42,9 @@ class FeatureContextFactory {
         revisionIndex)); // reverse list -> index = 0 is the previous revision, index = 1 is the one before, etc.;
   }
 
-  private Matching getMatching(final MyPageType page) {
+  private Matching getMatching(final MyPageType page, final int revisionIndex) {
     val matcher = new TableMatcher(Settings.ofDefault());
-    return runMeasured("Page matching", () -> matcher.performMatching(page));
+    return runMeasured("Page matching", () -> matcher.performMatching(page, revisionIndex));
   }
 
   private TableMatch selectMatch(final TableMatchResult matches) {
