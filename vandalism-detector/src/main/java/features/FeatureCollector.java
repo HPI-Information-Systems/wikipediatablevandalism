@@ -12,6 +12,7 @@ import lombok.val;
 import model.Tag;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
+import wikixmlsplit.renderer.wikitable.WikiTable;
 
 /**
  * Compute features for a given revision and forward the results to the sink.
@@ -45,5 +46,7 @@ public class FeatureCollector {
         (name, feature) -> values.put(name, feature.getValue(revision, featureContext))));
 
     sink.accept(tags, values);
+
+    WikiTable.resetBagOfWordsCache();
   }
 }
