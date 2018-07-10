@@ -24,7 +24,7 @@ public class Main {
 
   private void importDataSet(final Arguments arguments) {
     try {
-      val revisionTagPath = getClass().getResource("mini_deleted_sample.csv").getPath();
+      val revisionTagPath = getRevisionTagPath(arguments);
       val revisionTagParser = new RevisionTagParser();
       val revisionTags = revisionTagParser.load(revisionTagPath);
       val pagePathFinder = new PagePathFinder(arguments.getRevisionPath());
@@ -57,7 +57,13 @@ public class Main {
     } catch (IOException e) {
       log.error("Error from shutting down output", e);
     }
+  }
 
+  private String getRevisionTagPath(final Arguments args) {
+    if (args.getRevisionTagPath() == null) {
+      return getClass().getResource("mini_deleted_sample.csv").getPath();
+    }
+    return args.getRevisionTagPath().toString();
   }
 
   public static void main(String[] args) {
@@ -72,10 +78,13 @@ public class Main {
   @Getter
   public static class Arguments {
 
-    @Parameter(names = {"--revision-path"})
+    @Parameter(names = "--tags")
+    Path revisionTagPath;
+
+    @Parameter(names = "--revision-path")
     Path revisionPath;
 
-    @Parameter(names = {"--output"})
+    @Parameter(names = "--output")
     Path outputPath;
   }
 }
