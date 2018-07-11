@@ -7,8 +7,10 @@ import java.net.URL;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import lombok.Getter;
+import lombok.ToString;
 
 @Getter
+@ToString
 public class Arguments {
 
   static final int INVALID_TAG_ID = -1;

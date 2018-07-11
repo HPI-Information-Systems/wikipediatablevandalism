@@ -27,6 +27,10 @@ class RankChange implements Feature {
     // TODO reconsider - the row matching is not necessarily injective!
     final List<RowMatch> matchedRows = context.getRowMatchResult().getMatches();
 
+    if (matchedRows.isEmpty()) {
+      return false;
+    }
+
     val allMatched = matchedRows.size() == change.getCurrentTable().getRows().size();
     if (!allMatched) {
       return false;

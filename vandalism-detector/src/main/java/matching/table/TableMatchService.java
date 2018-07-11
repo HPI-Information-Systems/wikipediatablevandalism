@@ -72,8 +72,7 @@ public class TableMatchService {
         }
 
         if (previous == null) {
-          throw new IllegalArgumentException(
-              "Revision " + revision.getId() + " does not seem to have a predecessor");
+          log.error("Revision {} does not seem to have a predecessor", revision.getId());
         }
 
         return Pair.of(previous, current);

@@ -68,11 +68,19 @@ public class Main {
         observations.stream().collect(groupingBy(t -> t.getPageRevision().getPageId()));
     final Map<Integer, Path> pageIdToPath = findPages(observations);
 
+    int processed = 0;
+    final int total = pageToObservations.size();
     for (val entry : pageToObservations.entrySet()) {
-      log.trace("Processing page {}", entry.getKey());
       val page = loadPage(pageIdToPath, entry.getKey());
+      logProgress(page, processed, total);
       processPage(collector, page, entry.getValue());
+      ++processed;
     }
+  }
+
+  private void logProgress(final MyPageType page, final int processed, final int total) {
+    final double percent = (double) processed / total * 100;
+    log.info("Processing page {} ({} / {}, {}%)", page.getTitle(), processed, total, percent);
   }
 
   private void runPack(final FeaturePack pack) {
@@ -94,6 +102,8 @@ public class Main {
     val arguments = new Arguments();
     val jcommander = JCommander.newBuilder().addObject(arguments).build();
     jcommander.parse(args);
+
+    log.trace("Arguments: {}", arguments);
 
     if (arguments.isHelp()) {
       jcommander.usage();

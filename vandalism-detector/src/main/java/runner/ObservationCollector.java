@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import model.RevisionTag;
 import parser.RevisionTagParser;
 
+@Slf4j
 @RequiredArgsConstructor
 public class ObservationCollector {
 
@@ -17,6 +19,7 @@ public class ObservationCollector {
   public List<RevisionTag> collectObservations() {
     try {
       val parser = new RevisionTagParser();
+      log.info("Reading observations from {}", arguments.getRevisionTagPath());
       final List<RevisionTag> observations = parser.load(arguments.getRevisionTagPath());
       return filter(observations);
     } catch (final IOException e) {
@@ -33,6 +36,7 @@ public class ObservationCollector {
 
     // Partition observations into two buckets: (not) containing the tag of interest
     // Then limit tagged observations to N, plus N random counter-instances
+    log.debug("Concentrating on tag '{}' (plus some counter-examples)", arguments.getTagId());
     final List<RevisionTag> tagged = new ArrayList<>();
     final List<RevisionTag> other = new ArrayList<>();
     for (val revisionTag : observations) {
@@ -44,18 +48,24 @@ public class ObservationCollector {
     }
 
     limitObservations(tagged);
-    tagged.addAll(randomObservations(other, tagged.size()));
+    val additionalObservations = randomObservations(other, tagged.size());
+    tagged.addAll(additionalObservations);
+    log.debug("Added {} additional observations, total {}",
+        additionalObservations.size(), tagged.size());
     return tagged;
   }
 
   private void limitObservations(final List<RevisionTag> observations) {
     if (arguments.getObservationLimit() == Arguments.NO_LIMIT ||
         observations.size() <= arguments.getObservationLimit()) {
+
+      log.debug("Considering all observations ({})", observations.size());
       return;
     }
 
-    observations
-        .removeAll(observations.subList(arguments.getObservationLimit(), observations.size()));
+    val toRemove = observations.subList(arguments.getObservationLimit(), observations.size());
+    observations.removeAll(toRemove);
+    log.debug("Removed {} observations, retained {} of them", toRemove.size(), observations.size());
   }
 
   private List<RevisionTag> randomObservations(final List<RevisionTag> observations,
