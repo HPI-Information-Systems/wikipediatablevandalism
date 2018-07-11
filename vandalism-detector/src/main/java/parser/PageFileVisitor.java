@@ -4,8 +4,8 @@ import java.nio.file.FileVisitResult;
 import java.nio.file.Path;
 import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.extern.log4j.Log4j2;
 import lombok.val;
@@ -13,10 +13,10 @@ import lombok.val;
 @Log4j2
 public class PageFileVisitor extends SimpleFileVisitor<Path> {
 
-  private List<Integer> pageIds;
+  private Collection<Integer> pageIds;
   private Map<Integer, Path> parsedPages;
 
-  public PageFileVisitor(List<Integer> pageIds) {
+  public PageFileVisitor(Collection<Integer> pageIds) {
     this.pageIds = pageIds;
     this.parsedPages = new HashMap<>();
   }

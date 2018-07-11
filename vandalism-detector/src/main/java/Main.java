@@ -1,78 +1,117 @@
+import static java.util.Objects.requireNonNull;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toSet;
+
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.esotericsoftware.kryo.Kryo;
 import features.FeatureCollector;
+import features.FeaturePack;
 import features.basic.BasicFeatures;
 import features.content.ContentFeatures;
 import features.context.ContextFeatures;
 import features.future.FutureFeatures;
 import features.output.Output;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.nio.file.Path;
-import java.util.stream.Collectors;
+import java.nio.file.Paths;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import model.PageRevision;
+import model.RevisionTag;
 import parser.PageParser;
 import parser.PagePathFinder;
 import parser.RevisionTagParser;
+import wikixmlsplit.datastructures.MyPageType;
 
 @Slf4j
 public class Main {
 
-  private void importDataSet(final Arguments arguments) {
+  private final Arguments arguments;
+  private final PagePathFinder finder;
+  private final PageParser parser;
+
+  private Main(final Arguments arguments) {
+    this.arguments = arguments;
+    finder = new PagePathFinder(arguments.getRevisionPath());
+    parser = new PageParser(new Kryo());
+  }
+
+  private List<RevisionTag> collectObservations() {
     try {
-      val revisionTagPath = getRevisionTagPath(arguments);
-      val revisionTagParser = new RevisionTagParser();
-      val revisionTags = revisionTagParser.load(revisionTagPath);
-      val pagePathFinder = new PagePathFinder(arguments.getRevisionPath());
-      val pageIds = revisionTags.keySet()
-          .stream()
-          .map(PageRevision::getPageId)
-          .distinct()
-          .collect(Collectors.toList());
-      val pagePaths = pagePathFinder.findAll(pageIds);
-      val pageParser = new PageParser(new Kryo());
-
-      try (val output = Output.csv(arguments.getOutputPath())) {
-        val pack = BasicFeatures.get().getFeatures()
-            .combineWith(ContextFeatures.get().getFeatures())
-            .combineWith(ContentFeatures.get().getFeatures())
-            .combineWith(FutureFeatures.get().getFeatures());
-
-        val collector = new FeatureCollector(pack, output);
-
-        for (PageRevision pageRevision : revisionTags.keySet()) {
-          val path = pagePaths.get(pageRevision.getPageId());
-          val page = pageParser.parse(path);
-          log.debug(page.getTitle());
-
-          collector.accept(revisionTags.get(pageRevision),
-              BigInteger.valueOf(pageRevision.getRevisionId()), page);
-
-        }
-      }
-    } catch (IOException e) {
-      log.error("Error from shutting down output", e);
+      val parser = new RevisionTagParser();
+      return parser.load(arguments.getRevisionTagPath());
+    } catch (final IOException e) {
+      throw new RuntimeException(e);
     }
   }
 
-  private String getRevisionTagPath(final Arguments args) {
-    if (args.getRevisionTagPath() == null) {
-      return getClass().getResource("mini_deleted_sample.csv").getPath();
-    }
-    return args.getRevisionTagPath().toString();
+  private Map<Integer, Path> findPages(final List<RevisionTag> observations) {
+    val pageIds = observations.stream().map(r -> r.getPageRevision().getPageId()).collect(toSet());
+    return finder.findAll(pageIds);
   }
 
-  public static void main(String[] args) {
+  private MyPageType loadPage(final Map<Integer, Path> pageIdToPath, final int pageId) {
+    val pagePath = requireNonNull(pageIdToPath.get(pageId), "Page file of " + pageId + "not found");
+    return parser.parse(pagePath);
+  }
+
+  private void processPage(final FeatureCollector collector, final MyPageType page,
+      final Collection<RevisionTag> observations) {
+
+    final Map<Integer, List<RevisionTag>> tagsPerRevision = observations.stream()
+        .collect(groupingBy(rt -> rt.getPageRevision().getRevisionId()));
+
+    for (val entry : tagsPerRevision.entrySet()) {
+      val revisionId = entry.getKey();
+      log.trace("Processing revision {} of page {}", revisionId, page.getId());
+      collector.accept(page, entry.getValue());
+    }
+  }
+
+  private void run(final FeatureCollector collector) {
+    final List<RevisionTag> observations = collectObservations();
+    final Map<Integer, List<RevisionTag>> pageToObservations =
+        observations.stream().collect(groupingBy(t -> t.getPageRevision().getPageId()));
+    final Map<Integer, Path> pageIdToPath = findPages(observations);
+
+    for (val entry : pageToObservations.entrySet()) {
+      log.trace("Processing page {}", entry.getKey());
+      val page = loadPage(pageIdToPath, entry.getKey());
+      processPage(collector, page, entry.getValue());
+    }
+  }
+
+  private void runPack(final FeaturePack pack) {
+    try (val output = Output.csv(arguments.getOutputPath())) {
+      val collector = new FeatureCollector(pack, output);
+      run(collector);
+    }
+  }
+
+  private static FeaturePack getDefaultFeaturePack() {
+    return BasicFeatures.get().getFeatures()
+        .combineWith(ContextFeatures.get().getFeatures())
+        .combineWith(ContentFeatures.get().getFeatures())
+        .combineWith(FutureFeatures.get().getFeatures());
+  }
+
+
+  public static void main(final String[] args) {
     val arguments = new Arguments();
     val jcommander = JCommander.newBuilder().addObject(arguments).build();
     jcommander.parse(args);
 
-    Main main = new Main();
-    main.importDataSet(arguments);
+    if (arguments.isHelp()) {
+      jcommander.usage();
+      return;
+    }
+
+    Main main = new Main(arguments);
+    main.runPack(getDefaultFeaturePack());
   }
 
   @Getter
