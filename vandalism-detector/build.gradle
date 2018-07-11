@@ -48,3 +48,7 @@ test {
         events 'started'
     }
 }
+
+compileTestJava {
+    options.annotationProcessorPath = configurations.apt
+}
