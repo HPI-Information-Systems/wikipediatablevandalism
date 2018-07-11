@@ -10,20 +10,20 @@ import wikixmlsplit.datastructures.MyRevisionType;
 
 public class TableContentExtractor {
 
-  public static String getContent(MyRevisionType revision) {
+  public static String getContent(final MyRevisionType revision) {
     var contentString = getCommentContent(revision.getComment());
     contentString += getTableContents(revision.getParsed());
     return contentString;
   }
 
-  private static String getCommentContent(CommentType comment) {
+  private static String getCommentContent(final CommentType comment) {
     if (comment == null || comment.getValue() == null) {
       return "";
     }
     return comment.getValue();
   }
 
-  private static String getTableContents(List<String> parsedList) {
+  private static String getTableContents(final List<String> parsedList) {
     if (parsedList == null) {
       return "";
     }
@@ -36,7 +36,7 @@ public class TableContentExtractor {
     return tableContents.toString();
   }
 
-  private static String getTableContent(JsonObject jsonObject) {
+  private static String getTableContent(final JsonObject jsonObject) {
     val tableContent = new StringBuilder();
     if (jsonObject.has("body") && jsonObject.get("body").isJsonObject()) {
       tableContent.append(getTableContent(jsonObject.get("body").getAsJsonObject()));

@@ -29,8 +29,9 @@ public class ContentFeatures {
         .feature("previousLength", factory.previousLength())
         .feature("offensiveWordCountInTables", factory.offensiveWordsInTable())
         .feature("offensiveWordCountInComment", factory.offensiveWordsInComment())
-        .feature("averageRelativeFrequencyOfWords", factory.averageRelativeFrequencyOfNewAddedWords())
+        .feature("averageRelativeFrequencyOfNewAddedWords", factory.averageRelativeFrequencyOfNewAddedWords())
         .feature("LZWCompressionRate", factory.LZWCompressionRate())
+        .feature("KLDOfCharDistribution", factory.KLDOfCharDistribution())
         .build();
   }
 

@@ -10,6 +10,7 @@ import lombok.val;
 
 class BotList {
 
+  // extracted from https://en.wikipedia.org/w/index.php?title=Special:ListUsers/bot&offset=&limit=500&group=bot
   private static final String FILENAME = "botlist.txt";
 
   static Set<String> read() {

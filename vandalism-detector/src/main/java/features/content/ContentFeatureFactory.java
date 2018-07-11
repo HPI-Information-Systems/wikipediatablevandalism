@@ -6,6 +6,7 @@ import features.content.TableGeometry.Measure;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
 import util.BasicUtils;
+import util.KLDUtil;
 import util.TableContentExtractor;
 import util.WordsExtractor;
 import util.ZipUtil;
@@ -116,24 +117,24 @@ class ContentFeatureFactory {
       }
       char charBefore = ' ';
       int longestConsecutiveSingleCharCount = 0;
-      int actualConsecutiveSingleCharCount = 0;
+      int currentConsecutiveSingleCharCount = 0;
       for (val c : tableContents.toCharArray()) {
         if (Character.isWhitespace(c)) {
           continue;
         }
         if (charBefore != c) {
-          if (actualConsecutiveSingleCharCount > longestConsecutiveSingleCharCount) {
-            longestConsecutiveSingleCharCount = actualConsecutiveSingleCharCount;
+          if (currentConsecutiveSingleCharCount > longestConsecutiveSingleCharCount) {
+            longestConsecutiveSingleCharCount = currentConsecutiveSingleCharCount;
           }
-          actualConsecutiveSingleCharCount = 1;
+          currentConsecutiveSingleCharCount = 1;
           charBefore = c;
         } else {
-          ++actualConsecutiveSingleCharCount;
+          ++currentConsecutiveSingleCharCount;
         }
       }
-      if (actualConsecutiveSingleCharCount
+      if (currentConsecutiveSingleCharCount
           > longestConsecutiveSingleCharCount) { // last consecutiveSingleCharSequence could be longest
-        longestConsecutiveSingleCharCount = actualConsecutiveSingleCharCount;
+        longestConsecutiveSingleCharCount = currentConsecutiveSingleCharCount;
       }
       return longestConsecutiveSingleCharCount;
     };
@@ -146,19 +147,19 @@ class ContentFeatureFactory {
         return 0;
       }
       int longestTokenCount = 0;
-      int actualTokenCount = 0;
+      int currentTokenCount = 0;
       for (val c : tableContents.toCharArray()) {
         if (Character.isWhitespace(c)) {
-          if (actualTokenCount > longestTokenCount) {
-            longestTokenCount = actualTokenCount;
+          if (currentTokenCount > longestTokenCount) {
+            longestTokenCount = currentTokenCount;
           }
-          actualTokenCount = 0;
+          currentTokenCount = 0;
         } else {
-          ++actualTokenCount;
+          ++currentTokenCount;
         }
       }
-      if (actualTokenCount > longestTokenCount) { // last token could be longest
-        longestTokenCount = actualTokenCount;
+      if (currentTokenCount > longestTokenCount) { // last token could be longest
+        longestTokenCount = currentTokenCount;
       }
       return longestTokenCount;
     };
@@ -182,27 +183,21 @@ class ContentFeatureFactory {
       if (previousRevision == null) {
         return 0;
       }
-      val actualTableContents = TableContentExtractor.getContent(revision);
-      if (actualTableContents.length() == 0) {
+      val currentTableContents = TableContentExtractor.getContent(revision);
+      if (currentTableContents.length() == 0) {
         return 0;
       }
       val previousTableContents = TableContentExtractor.getContent(previousRevision);
       if (previousTableContents.length() == 0) {
         return 0;
       }
-      val actualWordOccurence = WordsExtractor.extractWords(actualTableContents);
-      val previousWordOccurence = WordsExtractor.extractWords(previousTableContents);
-      val addedWordOccurence = Multisets.difference(actualWordOccurence, previousWordOccurence);
-      if (addedWordOccurence.isEmpty()) {
+      val currentWordOccurrence = WordsExtractor.extractWords(currentTableContents);
+      val previousWordOccurrence = WordsExtractor.extractWords(previousTableContents);
+      val addedWordOccurrence = Multisets.difference(currentWordOccurrence, previousWordOccurrence);
+      if (addedWordOccurrence.isEmpty()) {
         return 0;
       }
-      // calculate sum of all occured words
-      float sumWordOccurence = 0;
-      for (val word : addedWordOccurence.entrySet()) {
-        sumWordOccurence += word.getCount();
-      }
-      return sumWordOccurence / (float) addedWordOccurence
-          .size(); // calculate average occurence of a word
+      return (float) addedWordOccurrence.size() / addedWordOccurrence.elementSet().size(); // calculate average occurrence of a word
     };
   }
 
@@ -217,8 +212,21 @@ class ContentFeatureFactory {
   }
 
   Feature KLDOfCharDistribution() {
-    return (revision, ignored) -> {
-      return null;
+    return (revision, featureContext) -> {
+      val previousRevision = BasicUtils
+          .getPreviousRevision(featureContext.getPreviousRevisions());
+      if (previousRevision == null) {
+        return -1;
+      }
+      val currentTableContents = TableContentExtractor.getContent(revision);
+      if (currentTableContents.length() == 0) {
+        return -1;
+      }
+      val previousTableContents = TableContentExtractor.getContent(previousRevision);
+      if (previousTableContents.length() == 0) {
+        return -1;
+      }
+      return KLDUtil.calculateKLDOfAddedChars(previousTableContents, currentTableContents);
     };
   }
 

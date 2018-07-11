@@ -26,7 +26,7 @@ public class BasicUtils {
     return contributor.getUsername() == null;
   }
 
-  public static int parsedLength(List<String> parsed) {
+  public static int parsedLength(final List<String> parsed) {
     if (parsed == null) {
       return 0;
     }
@@ -37,14 +37,14 @@ public class BasicUtils {
     return totalLength;
   }
 
-  public static MyRevisionType getPreviousRevision(List<MyRevisionType> previousRevisions) {
-    if (previousRevisions == null || previousRevisions.size() == 0) {
+  public static MyRevisionType getPreviousRevision(final List<MyRevisionType> previousRevisions) {
+    if (previousRevisions == null || previousRevisions.size() < 2) { // == 0
       return null;
     }
-    return previousRevisions.get(0);
+    return previousRevisions.get(1); // 0
   }
 
-  public static boolean hasSameContributor(MyRevisionType revision1, MyRevisionType revision2) {
+  public static boolean hasSameContributor(final MyRevisionType revision1, final MyRevisionType revision2) {
     if (isAnonymous(revision1.getContributor()) &&
         isAnonymous(revision2.getContributor())) {
       return Objects.equals(revision1.getContributor().getIp(), revision2.getContributor().getIp());
