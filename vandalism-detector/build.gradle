@@ -41,3 +41,10 @@ dependencies {
 compileJava {
     options.annotationProcessorPath = configurations.apt
 }
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events 'started'
+    }
+}
