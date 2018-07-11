@@ -3,7 +3,6 @@ import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toSet;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
 import com.esotericsoftware.kryo.Kryo;
 import features.FeatureCollector;
 import features.FeaturePack;
@@ -12,19 +11,17 @@ import features.content.ContentFeatures;
 import features.context.ContextFeatures;
 import features.future.FutureFeatures;
 import features.output.Output;
-import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import model.RevisionTag;
 import parser.PageParser;
 import parser.PagePathFinder;
-import parser.RevisionTagParser;
+import runner.Arguments;
+import runner.ObservationCollector;
 import wikixmlsplit.datastructures.MyPageType;
 
 @Slf4j
@@ -33,20 +30,13 @@ public class Main {
   private final Arguments arguments;
   private final PagePathFinder finder;
   private final PageParser parser;
+  private final ObservationCollector observationCollector;
 
   private Main(final Arguments arguments) {
     this.arguments = arguments;
     finder = new PagePathFinder(arguments.getRevisionPath());
     parser = new PageParser(new Kryo());
-  }
-
-  private List<RevisionTag> collectObservations() {
-    try {
-      val parser = new RevisionTagParser();
-      return parser.load(arguments.getRevisionTagPath());
-    } catch (final IOException e) {
-      throw new RuntimeException(e);
-    }
+    observationCollector = new ObservationCollector(arguments);
   }
 
   private Map<Integer, Path> findPages(final List<RevisionTag> observations) {
@@ -73,7 +63,7 @@ public class Main {
   }
 
   private void run(final FeatureCollector collector) {
-    final List<RevisionTag> observations = collectObservations();
+    final List<RevisionTag> observations = observationCollector.collectObservations();
     final Map<Integer, List<RevisionTag>> pageToObservations =
         observations.stream().collect(groupingBy(t -> t.getPageRevision().getPageId()));
     final Map<Integer, Path> pageIdToPath = findPages(observations);
@@ -114,16 +104,4 @@ public class Main {
     main.runPack(getDefaultFeaturePack());
   }
 
-  @Getter
-  public static class Arguments {
-
-    @Parameter(names = "--tags")
-    Path revisionTagPath;
-
-    @Parameter(names = "--revision-path")
-    Path revisionPath;
-
-    @Parameter(names = "--output")
-    Path outputPath;
-  }
 }
