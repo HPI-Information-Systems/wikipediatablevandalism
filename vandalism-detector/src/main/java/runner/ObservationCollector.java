@@ -64,8 +64,9 @@ public class ObservationCollector {
     }
 
     val toRemove = observations.subList(arguments.getObservationLimit(), observations.size());
-    observations.removeAll(toRemove);
-    log.debug("Removed {} observations, retained {} of them", toRemove.size(), observations.size());
+    val removed = toRemove.size();
+    toRemove.clear();
+    log.debug("Removed {} observations, retained {} of them", removed, observations.size());
   }
 
   private List<RevisionTag> randomObservations(final List<RevisionTag> observations,
