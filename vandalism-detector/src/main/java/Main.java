@@ -12,7 +12,7 @@ import features.context.ContextFeatures;
 import features.future.FutureFeatures;
 import features.output.Output;
 import java.nio.file.Path;
-import java.util.Collection;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +26,9 @@ import wikixmlsplit.datastructures.MyPageType;
 
 @Slf4j
 public class Main {
+
+  private static final DecimalFormat PERCENT = new DecimalFormat("0.00 %");
+
 
   private final Arguments arguments;
   private final PagePathFinder finder;
@@ -49,19 +52,6 @@ public class Main {
     return parser.parse(pagePath);
   }
 
-  private void processPage(final FeatureCollector collector, final MyPageType page,
-      final Collection<RevisionTag> observations) {
-
-    final Map<Integer, List<RevisionTag>> tagsPerRevision = observations.stream()
-        .collect(groupingBy(rt -> rt.getPageRevision().getRevisionId()));
-
-    for (val entry : tagsPerRevision.entrySet()) {
-      val revisionId = entry.getKey();
-      log.trace("Processing revision {} of page {}", revisionId, page.getId());
-      collector.accept(page, entry.getValue());
-    }
-  }
-
   private void run(final FeatureCollector collector) {
     final List<RevisionTag> observations = observationCollector.collectObservations();
     final Map<Integer, List<RevisionTag>> pageToObservations =
@@ -73,14 +63,15 @@ public class Main {
     for (val entry : pageToObservations.entrySet()) {
       val page = loadPage(pageIdToPath, entry.getKey());
       logProgress(page, processed, total);
-      processPage(collector, page, entry.getValue());
+      collector.accept(page, entry.getValue());
       ++processed;
     }
   }
 
   private void logProgress(final MyPageType page, final int processed, final int total) {
-    final double percent = (double) processed / total * 100;
-    log.info("Processing page {} ({} / {}, {}%)", page.getTitle(), processed, total, percent);
+    final double percent = (double) processed / total;
+    log.info("Processing page {} ({} / {}, {})",
+        page.getTitle(), processed, total, PERCENT.format(percent));
   }
 
   private void runPack(final FeaturePack pack) {

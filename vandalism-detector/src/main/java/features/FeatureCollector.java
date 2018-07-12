@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import matching.persistence.MatchingFacade;
 import model.RevisionTag;
@@ -23,6 +24,7 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
 /**
  * Compute features for a given revision and forward the results to the sink.
  */
+@Slf4j
 public class FeatureCollector {
 
   private final FeaturePack pack;
@@ -58,6 +60,9 @@ public class FeatureCollector {
 
   private void accept(final List<Tag> tags, final MyPageType page, final MyRevisionType revision,
       final Matching matching) {
+
+    log.debug("Processing revision {} of page {} ({} {})",
+        revision.getId(), page.getId(), tags.size(), tags.size() == 1 ? "tag" : "tags");
 
     val values = new HashMap<String, Object>();
     val featureContext = contextFactory.create(page, revision, matching);
