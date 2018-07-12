@@ -3,6 +3,7 @@ package matching.table;
 import java.util.List;
 import java.util.Objects;
 import lombok.Value;
+import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import wikixmlsplit.api.Entry;
 import wikixmlsplit.datastructures.MyRevisionType;
@@ -11,6 +12,7 @@ import wikixmlsplit.datastructures.MyRevisionType;
  * Given a particular cluster and revision, find the previous revision and identify the type of
  * change made to this cluster's table.
  */
+@Slf4j
 class TableTransitionScanner {
 
   ScanResult scanEntries(final List<Entry> entries, final MyRevisionType revision) {
@@ -35,8 +37,8 @@ class TableTransitionScanner {
       previous = current;
     }
 
-    throw new IllegalStateException(
-        "Revision " + revision.getId() + " not found in cluster history");
+    log.error("Revision {} not found in cluster history", revision.getId());
+    return ScanResult.absent();
   }
 
   enum ScanResultType {
