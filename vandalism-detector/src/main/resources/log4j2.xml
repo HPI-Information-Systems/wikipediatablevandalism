@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
-    <Appenders>
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-25c{1.} - %msg%n"/>
-        </Console>
-    </Appenders>
-    <Loggers>
-        <Root level="DEBUG" additivity="false">
-            <AppenderRef ref="console"/>
-        </Root>
-    </Loggers>
+  <Properties>
+    <Property name="pattern">[%-5level] %d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-25c{1.} - %msg%n
+    </Property>
+  </Properties>
+  <Appenders>
+    <Console name="console" target="SYSTEM_OUT">
+      <PatternLayout pattern="${pattern}"/>
+    </Console>
+    <File name="logfile" fileName="feature-computation.log" append="false">
+      <PatternLayout pattern="${pattern}"/>
+    </File>
+  </Appenders>
+  <Loggers>
+    <Root level="DEBUG" additivity="false">
+      <AppenderRef ref="console"/>
+      <AppenderRef ref="logfile"/>
+    </Root>
+  </Loggers>
 </Configuration>
