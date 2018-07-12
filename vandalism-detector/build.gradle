@@ -21,7 +21,7 @@ dependencies {
         exclude group: 'log4j', module: 'log4j'
     }
 
-    // Csv
+    implementation 'de.javakaffee:kryo-serializers:0.42'
     implementation 'org.apache.commons:commons-csv:1.5'
 
     // Logging

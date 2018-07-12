@@ -85,7 +85,7 @@ public class Main {
 
   private void runPack(final FeaturePack pack) {
     try (val output = Output.csv(arguments.getOutputPath())) {
-      val collector = new FeatureCollector(pack, output);
+      val collector = new FeatureCollector(arguments, pack, output);
       run(collector);
     }
   }

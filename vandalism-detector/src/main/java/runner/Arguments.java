@@ -31,6 +31,9 @@ public class Arguments {
   @Parameter(names = "--only-tag", description = "Inspect only observation with given tag ID (N instances) plus N counter-instances")
   int tagId = INVALID_TAG_ID;
 
+  @Parameter(names = "--matching-path", description = "Path to matching persistence")
+  Path matchingPath;
+
   @Parameter(names = {"-h", "--help"}, help = true)
   boolean help;
 

@@ -1,92 +1,108 @@
 package matching.table;
 
-import com.google.common.base.Preconditions;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
-import org.apache.commons.lang3.tuple.Pair;
+import matching.table.TableMatchResult.TableMatchResultBuilder;
+import matching.table.TableTransitionScanner.ScanResult;
 import wikixmlsplit.api.Entry;
 import wikixmlsplit.api.Matching;
+import wikixmlsplit.api.TableParser;
 import wikixmlsplit.datastructures.MyRevisionType;
+import wikixmlsplit.renderer.wikitable.WikiTable;
 
+/**
+ * Given a set of table clusters, identify table additions, removals and modifications from the
+ * previous to the current revision.
+ */
 @Slf4j
 public class TableMatchService {
 
-  public TableMatchResult getMatchingTable(final Matching matching, final MyRevisionType revision) {
-    val entries = matching.getEntries();
+  private final TableParser tableHelper = TableParser.instance();
+  private final TableTransitionScanner scanner = new TableTransitionScanner();
+
+  public TableMatchResult getMatchingTable(final Matching matching, final MyRevisionType revision,
+      final MyRevisionType previousRevision) {
+
+    if (previousRevision == null) {
+      return allTablesAdded(revision);
+    }
+
+    val clusters = matching.getEntries();
     val result = TableMatchResult.builder();
-
-    for (int tableIndex = 0; tableIndex < entries.size(); ++tableIndex) {
-      val entry = entries.get(tableIndex);
-
-      Preconditions.checkState(!entry.isEmpty(), "Table history cannot be empty");
-      val first = entry.get(0);
-      if (revision.getId().compareTo(first.getRevisionId()) < 0) {
-        // Entire table history starts after our revision
+    for (final List<Entry> cluster : clusters) {
+      if (skipCluster(revision, cluster)) {
         continue;
       }
 
-      if (entry.size() > 1) {
-        val last = entry.get(entry.size() - 1);
-        if (last.getRevisionId().compareTo(revision.getId()) < 0) {
-          // Entire table history ends before our revision
-          continue;
-        }
-      }
-
-      val prevAndCurrent = scanEntries(entry, revision);
-
-      if (prevAndCurrent == null) {
-        continue; // FIXME
-      }
-
-      if (prevAndCurrent.getRight() == null) {
-        result.removedTable(prevAndCurrent.getLeft().getTable());
-      } else if (prevAndCurrent.getLeft() == null) {
-        result.addedTable(prevAndCurrent.getRight().getTable());
-      } else {
-        result.match(TableMatch.builder()
-            .previousRevision(prevAndCurrent.getLeft().getRevisionId())
-            .previousTable(prevAndCurrent.getLeft().getTable())
-            .currentRevision(prevAndCurrent.getRight().getRevisionId())
-            .currentTable(prevAndCurrent.getRight().getTable())
-            .build());
-      }
+      final ScanResult scanResult = scanner.scanEntries(cluster, revision);
+      addToResult(result, scanResult, revision, previousRevision);
     }
 
     return result.build();
   }
 
-  private Pair<Entry, Entry> scanEntries(final List<Entry> entries, final MyRevisionType revision) {
-    Entry previous = null;
-
-    for (int index = 0; index < entries.size(); ++index) {
-      val current = entries.get(index);
-
-      if (current.getRevisionId().equals(revision.getId())) {
-
-        if (!current.isActive()) {
-          log.trace("Table {} was not active in revision {}", current.getTable().caption,
-              revision.getId());
-          return Pair.of(previous, null);
-        }
-
-        if (previous == null) {
-          log.error("Revision {} does not seem to have a predecessor", revision.getId());
-        }
-
-        return Pair.of(previous, current);
-      }
-
-      previous = current;
+  private boolean skipCluster(final MyRevisionType revision, final List<Entry> cluster) {
+    val first = cluster.get(0);
+    if (revision.getId().compareTo(first.getRevisionId()) < 0) {
+      // Entire table history starts after current revision
+      return true;
     }
 
-    if (entries.isEmpty()) {
-      log.warn("Empty entries list for revision {}", revision.getId());
-      throw new IllegalStateException("Empty entries for revision " + revision.getId());
-    } else {
-      return null;
-      //throw new IllegalStateException(String.format("No record for table %s in revision %s", entries.get(0).getTable().caption, revision.getId()));
+    if (cluster.size() > 1) {
+      val last = cluster.get(cluster.size() - 1);
+      // Entire table history may end before current revision
+      return last.getRevisionId().compareTo(revision.getId()) < 0;
     }
+
+    return false;
+  }
+
+  private TableMatchResult allTablesAdded(final MyRevisionType revision) {
+    log.debug("All tables of revision {} were added", revision.getId());
+    final List<WikiTable> tables = tableHelper.parseTables(revision, true); // FIXME
+    return TableMatchResult.builder().addedTables(tables).build();
+  }
+
+  private WikiTable getTable(final MyRevisionType revision, final Entry entry) {
+    final List<WikiTable> tables = tableHelper.parseTables(revision, true);  // FIXME
+    return tables.get(entry.getPosition());
+  }
+
+  private void addToResult(final TableMatchResultBuilder result, final ScanResult scanResult,
+      final MyRevisionType revision, final MyRevisionType previousRevision) {
+
+    switch (scanResult.getType()) {
+      case ADDED:
+        result.addedTable(getTable(revision, scanResult.getCurrent()));
+        break;
+
+      case REMOVED:
+        result.removedTable(getTable(previousRevision, scanResult.getPrevious()));
+        break;
+
+      case ACTIVE:
+        result.match(toMatch(scanResult, revision, previousRevision));
+        break;
+
+      case ABSENT:
+        log.debug("Table was absent between revisions {} and {}",
+            previousRevision.getId(), revision.getId());
+        break;
+
+      default:
+        throw new IllegalArgumentException(scanResult.getType().name());
+    }
+  }
+
+  private TableMatch toMatch(final ScanResult result, final MyRevisionType currentRevision,
+      final MyRevisionType previousRevision) {
+
+    return TableMatch.builder()
+        .currentRevision(currentRevision.getId())
+        .currentTable(getTable(currentRevision, result.getCurrent()))
+        .previousRevision(previousRevision.getId())
+        .previousTable(getTable(previousRevision, result.getPrevious()))
+        .build();
   }
 }

@@ -12,6 +12,7 @@ import matching.table.TableMatch;
 import matching.table.TableMatchResult;
 import matching.table.TableMatchService;
 import model.FeatureContext;
+import util.PageUtil;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
@@ -21,7 +22,7 @@ class FeatureContextFactory {
 
   FeatureContext create(final MyPageType page, final MyRevisionType revision,
       final Matching matching) {
-    val tableMatchResult = getTableMatching(revision, matching);
+    val tableMatchResult = getTableMatching(page, revision, matching);
     val selectedMatch = selectMatch(tableMatchResult);
 
     return FeatureContext.builder()
@@ -54,10 +55,11 @@ class FeatureContextFactory {
     return null;
   }
 
-  private TableMatchResult getTableMatching(final MyRevisionType revision,
+  private TableMatchResult getTableMatching(final MyPageType page, final MyRevisionType revision,
       final Matching matching) {
     val tableMatchService = new TableMatchService();
-    return tableMatchService.getMatchingTable(matching, revision);
+    val previousRevision = PageUtil.findPreviousRevision(page, revision);
+    return tableMatchService.getMatchingTable(matching, revision, previousRevision);
   }
 
   private RowMatchResult getRowMatching(final TableMatch match) {

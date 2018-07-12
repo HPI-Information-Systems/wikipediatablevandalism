@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.val;
+import matching.persistence.MatchingFacade;
 import model.RevisionTag;
 import model.Tag;
+import runner.Arguments;
 import util.PageUtil;
 import wikixmlsplit.api.Matching;
-import wikixmlsplit.api.Settings;
-import wikixmlsplit.api.TableMatcher;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
@@ -28,8 +28,10 @@ public class FeatureCollector {
   private final FeaturePack pack;
   private final FeatureSink sink;
   private final FeatureContextFactory contextFactory;
+  private final MatchingFacade matchingFacade;
 
-  public FeatureCollector(final FeaturePack pack, final Output output) {
+  public FeatureCollector(final Arguments arguments, final FeaturePack pack, final Output output) {
+    this.matchingFacade = new MatchingFacade(arguments);
     this.pack = pack;
     sink = new FeatureSink(pack, output);
     sink.setup();
@@ -42,7 +44,7 @@ public class FeatureCollector {
         .collect(groupingBy(r -> r.getPageRevision().getRevisionId()));
 
     val maxRevisionId = Collections.max(groupByRevision.keySet());
-    val matching = getMatching(page, maxRevisionId);
+    val matching = matchingFacade.obtainMatching(page, maxRevisionId);
 
     for (val revisionIdWithTags : groupByRevision.entrySet()) {
       final List<Tag> tags = revisionIdWithTags.getValue().stream().map(RevisionTag::getTag)
@@ -52,12 +54,6 @@ public class FeatureCollector {
     }
 
     WikiTable.resetBagOfWordsCache();
-  }
-
-  private Matching getMatching(final MyPageType page, final int maxRevisionId) {
-    val matcher = new TableMatcher(Settings.ofDefault());
-    val revisionIndex = PageUtil.getRevisionIndex(page, maxRevisionId);
-    return runMeasured("Page matching", () -> matcher.performMatching(page, revisionIndex));
   }
 
   private void accept(final List<Tag> tags, final MyPageType page, final MyRevisionType revision,

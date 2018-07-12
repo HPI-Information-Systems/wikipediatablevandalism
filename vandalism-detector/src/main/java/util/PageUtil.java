@@ -12,6 +12,17 @@ import wikixmlsplit.datastructures.MyRevisionType;
 
 public class PageUtil {
 
+  public static MyRevisionType findPreviousRevision(final MyPageType page,
+      final MyRevisionType revision) {
+
+    val index = getRevisionIndex(page, revision.getId());
+    if (index == 0) {
+      return null;
+    }
+
+    return page.getRevisions().get(index - 1);
+  }
+
   public static MyRevisionType findRevision(final MyPageType page, final int revisionId) {
     val index = getRevisionIndex(page, revisionId);
     return page.getRevisions().get(index);

@@ -6,6 +6,9 @@ import lombok.Singular;
 import lombok.Value;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
+/**
+ * Represent the changes between two revisions with instances of {@link WikiTable}.
+ */
 @Value
 @Builder
 public class TableMatchResult {
