@@ -3,6 +3,7 @@ package features.context;
 import com.google.common.base.Preconditions;
 import features.Feature;
 import java.time.Duration;
+import java.util.Objects;
 import java.util.function.Predicate;
 import lombok.val;
 import model.FeatureContext;
@@ -33,11 +34,11 @@ class TimeSinceLastArticleEdit implements Feature {
   }
 
   private Predicate<ContributorType> sameIpAs(final ContributorType toCompare) {
-    return contributor -> toCompare.getIp().equals(contributor.getIp());
+    return contributor -> Objects.equals(toCompare.getIp(), contributor.getIp());
   }
 
   private Predicate<ContributorType> sameNameAs(final ContributorType toCompare) {
-    return contributor -> toCompare.getUsername().equals(contributor.getUsername());
+    return contributor -> Objects.equals(toCompare.getUsername(), contributor.getUsername());
   }
 
   private long timeDelta(final MyRevisionType previous, final MyRevisionType next) {

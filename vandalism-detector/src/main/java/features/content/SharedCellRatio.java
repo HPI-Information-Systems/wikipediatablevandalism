@@ -32,6 +32,11 @@ class SharedCellRatio implements Feature {
 
   private double processMatch(final TableMatch match) {
     val currentCellValues = getCellValues(match.getCurrentTable());
+
+    if (currentCellValues.isEmpty()) {
+      return 1d;
+    }
+
     val previousCellValues = getCellValues(match.getPreviousTable());
     val sharedValues = Sets.intersection(currentCellValues, previousCellValues);
     return (double) sharedValues.size() / currentCellValues.size();

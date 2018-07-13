@@ -46,6 +46,11 @@ class BasicFeatureFactory {
 
     final double matchedRowCount = context.getRowMatchResult().getMatches().size();
     final double totalRowCount = context.getRelevantMatch().getCurrentTable().getRows().size();
+
+    if (totalRowCount == 0) {
+      return 0;
+    }
+
     return (totalRowCount - matchedRowCount) / totalRowCount;
   }
 }
