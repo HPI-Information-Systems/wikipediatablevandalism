@@ -1,4 +1,4 @@
-package features.content;
+package util;
 
 import com.google.common.collect.ImmutableSet;
 import java.io.IOException;
@@ -9,18 +9,13 @@ import java.util.HashSet;
 import java.util.Set;
 import lombok.val;
 
-class OffensiveWordList {
+public class WordListUtil {
 
-  // Downloaded from http://www.cs.cmu.edu/~biglou/resources/
-  private static final String FILENAME = "bad-words.txt";
-
-  private static Set<String> words = read();
-
-  private static Set<String> read() {
+  public static Set<String> read(final String filename) {
     try {
-      val url = OffensiveWordList.class.getClassLoader().getResource(FILENAME);
+      val url = WordListUtil.class.getClassLoader().getResource(filename);
       if (url == null) {
-        throw new IllegalArgumentException(FILENAME + " does not exist");
+        throw new IllegalArgumentException(filename + " does not exist");
       }
 
       final Set<String> words = new HashSet<>(Files.readAllLines(Paths.get(url.toURI())));
@@ -29,9 +24,5 @@ class OffensiveWordList {
     } catch (final IOException | URISyntaxException e) {
       throw new RuntimeException(e);
     }
-  }
-
-  static Set<String> getWords() {
-    return words;
   }
 }

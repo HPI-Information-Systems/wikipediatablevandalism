@@ -10,6 +10,7 @@ import features.basic.BasicFeatures;
 import features.content.ContentFeatures;
 import features.context.ContextFeatures;
 import features.future.FutureFeatures;
+import features.language.LanguageFeatures;
 import features.output.Output;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
@@ -85,6 +86,7 @@ public class Main {
     return BasicFeatures.get().getFeatures()
         .combineWith(ContextFeatures.get().getFeatures())
         .combineWith(ContentFeatures.get().getFeatures())
+        .combineWith(LanguageFeatures.get().getFeatures())
         .combineWith(FutureFeatures.get().getFeatures());
   }
 

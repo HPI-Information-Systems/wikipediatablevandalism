@@ -34,14 +34,6 @@ class ContentFeatureFactory {
     return new RankChange();
   }
 
-  Feature offensiveWordsInComment() {
-    return new OffensiveWordsInComment();
-  }
-
-  Feature offensiveWordsInTable() {
-    return new OffensiveWordsInTable();
-  }
-
   Feature ratioOfNumericalCharsToAllChars() {
     return (revision, ignored) -> {
       val tableContents = TableContentExtractor.getContent(revision);
@@ -202,7 +194,8 @@ class ContentFeatureFactory {
       if (addedWordOccurrence.isEmpty()) {
         return 0;
       }
-      return (float) addedWordOccurrence.size() / addedWordOccurrence.elementSet().size(); // calculate average occurrence of a word
+      return (float) addedWordOccurrence.size() / addedWordOccurrence.elementSet()
+          .size(); // calculate average occurrence of a word
     };
   }
 

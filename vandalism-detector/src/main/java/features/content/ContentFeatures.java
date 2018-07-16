@@ -27,9 +27,8 @@ public class ContentFeatures {
             factory.lengthOfLongestConsecutiveSequenceOfSingleChar())
         .feature("lengthOfLongestToken", factory.lengthOfLongestToken())
         .feature("previousLength", factory.previousLength())
-        .feature("offensiveWordCountInTables", factory.offensiveWordsInTable())
-        .feature("offensiveWordCountInComment", factory.offensiveWordsInComment())
-        .feature("averageRelativeFrequencyOfNewAddedWords", factory.averageRelativeFrequencyOfNewAddedWords())
+        .feature("averageRelativeFrequencyOfNewAddedWords",
+            factory.averageRelativeFrequencyOfNewAddedWords())
         .feature("LZWCompressionRate", factory.LZWCompressionRate())
         .feature("KLDOfCharDistribution", factory.KLDOfCharDistribution())
         .build();

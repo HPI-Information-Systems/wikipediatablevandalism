@@ -1,4 +1,4 @@
-package features.content;
+package features.language;
 
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
