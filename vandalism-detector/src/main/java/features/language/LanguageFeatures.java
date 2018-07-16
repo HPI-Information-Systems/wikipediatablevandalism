@@ -15,6 +15,7 @@ public class LanguageFeatures {
     features = FeaturePack.builder()
         .feature("offensiveWordCountInTables", factory.offensiveWordsInTable())
         .feature("offensiveWordCountInComment", factory.offensiveWordsInComment())
+        .feature("addedNonDictionaryWordCount", factory.addedNonDictionaryWordCount())
         .build();
   }
 

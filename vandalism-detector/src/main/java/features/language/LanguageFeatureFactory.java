@@ -12,4 +12,8 @@ class LanguageFeatureFactory {
     return new OffensiveWordsInTable();
   }
 
+  Feature addedNonDictionaryWordCount() {
+    return new AddedNonDictionaryWords();
+  }
+
 }

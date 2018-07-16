@@ -9,6 +9,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import lombok.val;
 import wikixmlsplit.renderer.wikitable.Cell;
+import wikixmlsplit.renderer.wikitable.WikiTable;
 
 /**
  * Java port of key_discovery.data.column.matching.TobiasMatchinStrategy#extractWords
@@ -17,6 +18,13 @@ public class WordsExtractor {
 
   private static final Pattern WHITESPACE = Pattern.compile("\\s+");
   private static final Pattern NON_ALPHANUMERIC = Pattern.compile("[^\\p{L}\\p{M} 0-9]");
+
+  public static Multiset<String> extractWords(final WikiTable table) {
+    final List<Cell> cells = table.getRows().stream()
+        .flatMap(row -> row.getValues().stream())
+        .collect(toList());
+    return extractWords(cells);
+  }
 
   public static Multiset<String> extractWords(final List<Cell> cells) {
     val normalizedWords = cells.stream()
