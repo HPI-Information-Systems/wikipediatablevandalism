@@ -70,6 +70,6 @@ public class FeatureCollector {
     runMeasured("Feature computation", () -> pack.forEachFeature(
         (name, feature) -> values.put(name, feature.getValue(revision, featureContext))));
 
-    sink.accept(tags, values);
+    sink.accept(revision, tags, values);
   }
 }
