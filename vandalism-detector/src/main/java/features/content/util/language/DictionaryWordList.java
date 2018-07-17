@@ -1,4 +1,4 @@
-package features.language;
+package features.content.util.language;
 
 import java.util.Set;
 import util.WordListUtil;
@@ -17,4 +17,5 @@ class DictionaryWordList {
   static Set<String> getWords() {
     return WORDS;
   }
+
 }

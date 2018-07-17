@@ -1,4 +1,4 @@
-package features.context;
+package features.context.util;
 
 import com.google.common.base.Preconditions;
 import features.Feature;
@@ -14,9 +14,10 @@ import wikixmlsplit.datastructures.MyRevisionType;
 /**
  * Time since the last edit was made by the same contributor on the same page.
  */
-class TimeSinceLastArticleEdit implements Feature {
+public class TimeSinceLastArticleEditBySameContributor implements Feature {
 
   @Override
+  @SuppressWarnings("all")
   public Object getValue(final MyRevisionType revision, FeatureContext featureContext) {
     val precursors = featureContext.getPreviousRevisions();
     val sameContributor = getContributorFilter(revision.getContributor());

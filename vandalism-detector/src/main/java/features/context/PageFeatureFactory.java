@@ -1,15 +1,46 @@
 package features.context;
 
+import com.google.common.base.Preconditions;
 import features.Feature;
+import features.context.util.TimeSinceLastArticleEditBySameContributor;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.val;
 import util.BasicUtils;
 
-class ContextPreviousRevisionsFeatureFactory {
+/**
+ * Create all features based on the metadata connected to the whole page (future and past)
+ */
+class PageFeatureFactory {
+
+  Feature timeSinceLastArticleEdit() {
+    return (revision, featureContext) -> {
+      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+      if (previousRevision == null) {
+        return -1;
+      }
+      val revisionTime = revision.getDate().toInstant();
+      val previousRevisionTime = previousRevision.getDate().toInstant();
+      Preconditions.checkState(previousRevisionTime.isBefore(revisionTime),
+          "previousRevisionTime should be before revisionTime");
+      return Duration.between(previousRevisionTime, revisionTime)
+          .toMinutes(); // TODO maybe use getSeconds() instead
+    };
+  }
+
+  Feature hasPreviousSameContributor() {
+    return (revision, featureContext) -> {
+      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+      if (previousRevision == null) {
+        return false;
+      }
+      return BasicUtils.hasSameContributor(revision, previousRevision);
+    };
+  }
 
   Feature timeSinceLastArticleEditBySameContributor() {
-    return (revision, featureContext) -> new TimeSinceLastArticleEdit()
+    return (revision, featureContext) -> new TimeSinceLastArticleEditBySameContributor()
         .getValue(revision, featureContext);
   }
 

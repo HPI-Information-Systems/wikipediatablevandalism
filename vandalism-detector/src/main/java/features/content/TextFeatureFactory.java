@@ -2,37 +2,12 @@ package features.content;
 
 import com.google.common.collect.Multisets;
 import features.Feature;
-import features.content.TableGeometry.Measure;
-import lombok.RequiredArgsConstructor;
 import lombok.val;
 import util.BasicUtils;
-import util.KLDUtil;
-import util.TableContentExtractor;
+import features.content.util.TableContentExtractor;
 import util.WordsExtractor;
-import util.ZipUtil;
 
-@RequiredArgsConstructor
-class ContentFeatureFactory {
-
-  Feature cellCount() {
-    return new TableGeometry(Measure.Product);
-  }
-
-  Feature columnCount() {
-    return new TableGeometry(Measure.Columns);
-  }
-
-  Feature rowCount() {
-    return new TableGeometry(Measure.Rows);
-  }
-
-  Feature sharedCellRatio() {
-    return new SharedCellRatio();
-  }
-
-  Feature rankChange() {
-    return new RankChange();
-  }
+class TextFeatureFactory {
 
   Feature ratioOfNumericalCharsToAllChars() {
     return (revision, ignored) -> {
@@ -162,17 +137,6 @@ class ContentFeatureFactory {
     };
   }
 
-  Feature previousLength() {
-    return (ignored, featureContext) -> {
-      val previousRevision = BasicUtils
-          .getPreviousRevision(featureContext.getPreviousRevisions());
-      if (previousRevision == null) {
-        return 0;
-      }
-      return TableContentExtractor.getContent(previousRevision).length();
-    };
-  }
-
   Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with created corpus
     return (revision, featureContext) -> {
       val previousRevision = BasicUtils
@@ -196,35 +160,6 @@ class ContentFeatureFactory {
       }
       return (float) addedWordOccurrence.size() / addedWordOccurrence.elementSet()
           .size(); // calculate average occurrence of a word
-    };
-  }
-
-  Feature LZWCompressionRate() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
-      if (tableContents.length() == 0) {
-        return 0;
-      }
-      return ZipUtil.getCompressionRatio(tableContents);
-    };
-  }
-
-  Feature KLDOfCharDistribution() {
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils
-          .getPreviousRevision(featureContext.getPreviousRevisions());
-      if (previousRevision == null) {
-        return 0;
-      }
-      val currentTableContents = TableContentExtractor.getContent(revision);
-      if (currentTableContents.length() == 0) {
-        return 0;
-      }
-      val previousTableContents = TableContentExtractor.getContent(previousRevision);
-      if (previousTableContents.length() == 0) {
-        return 0;
-      }
-      return KLDUtil.calculateKLDOfAddedChars(previousTableContents, currentTableContents);
     };
   }
 

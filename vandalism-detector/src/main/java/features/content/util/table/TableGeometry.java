@@ -1,4 +1,4 @@
-package features.content;
+package features.content.util.table;
 
 import features.Feature;
 import java.util.ArrayList;
@@ -10,10 +10,10 @@ import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
-class TableGeometry implements Feature {
+public class TableGeometry implements Feature {
 
   @Getter
-  enum Measure {
+  public enum Measure {
     Columns(table -> table.getColumns().size()),
     Rows(table -> table.getRows().size()),
     Product(table -> table.getRows().size() * table.getColumns().size());
@@ -33,7 +33,7 @@ class TableGeometry implements Feature {
 
   private final ValueFunction valueFunction;
 
-  TableGeometry(final Measure measure) {
+  public TableGeometry(final Measure measure) {
     valueFunction = measure.getF();
   }
 

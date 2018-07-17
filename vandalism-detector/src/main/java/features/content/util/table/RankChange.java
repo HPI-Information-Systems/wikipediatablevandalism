@@ -1,4 +1,4 @@
-package features.content;
+package features.content.util.table;
 
 import features.Feature;
 import java.util.List;
@@ -10,7 +10,7 @@ import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 @RequiredArgsConstructor
-class RankChange implements Feature {
+public class RankChange implements Feature {
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext context) {

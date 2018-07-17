@@ -1,6 +1,9 @@
-package features.language;
+package features.content;
 
 import features.Feature;
+import features.content.util.language.AddedNonDictionaryWords;
+import features.content.util.language.OffensiveWordsInComment;
+import features.content.util.language.OffensiveWordsInTable;
 
 class LanguageFeatureFactory {
 

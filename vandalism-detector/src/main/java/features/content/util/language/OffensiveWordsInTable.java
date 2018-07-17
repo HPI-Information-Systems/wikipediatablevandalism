@@ -1,20 +1,20 @@
-package features.language;
+package features.content.util.language;
 
 import static java.util.stream.Collectors.toList;
 
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 import features.Feature;
+import util.WordsExtractor;
 import java.util.List;
 import java.util.Set;
 import matching.table.TableMatch;
 import model.FeatureContext;
-import util.WordsExtractor;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.Cell;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
-class OffensiveWordsInTable implements Feature {
+public class OffensiveWordsInTable implements Feature {
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {

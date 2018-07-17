@@ -1,4 +1,4 @@
-package util;
+package features.content.util;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;

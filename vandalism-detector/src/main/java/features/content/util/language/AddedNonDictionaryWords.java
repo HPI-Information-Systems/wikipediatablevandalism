@@ -1,4 +1,4 @@
-package features.language;
+package features.content.util.language;
 
 import com.google.common.collect.Sets;
 import features.Feature;
@@ -11,7 +11,7 @@ import util.WordsExtractor;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
-class AddedNonDictionaryWords implements Feature {
+public class AddedNonDictionaryWords implements Feature {
 
 
   @Override

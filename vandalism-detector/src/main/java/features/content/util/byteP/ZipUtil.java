@@ -1,4 +1,4 @@
-package util;
+package features.content.util.byteP;
 
 import com.google.common.annotations.VisibleForTesting;
 import java.io.ByteArrayOutputStream;

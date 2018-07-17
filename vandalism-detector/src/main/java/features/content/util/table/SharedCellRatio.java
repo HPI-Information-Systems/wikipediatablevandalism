@@ -1,4 +1,4 @@
-package features.content;
+package features.content.util.table;
 
 import com.google.common.collect.Sets;
 import com.google.common.math.Stats;
@@ -13,7 +13,7 @@ import model.FeatureContext;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
-class SharedCellRatio implements Feature {
+public class SharedCellRatio implements Feature {
 
 
   @Override

@@ -1,13 +1,14 @@
-package util;
+package features.content.util.byteP;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import features.content.util.byteP.KLDUtil;
 import lombok.val;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-public class KLDUtilTest {
+class KLDUtilTest {
 
   private String basicString;
   private String addSensefullString;
