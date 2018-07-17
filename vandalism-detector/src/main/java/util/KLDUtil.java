@@ -19,36 +19,34 @@ public class KLDUtil {
     val addedCharDistributionMultiSet = Multisets
         .difference(currentCharDistributionMultiSet, beforeCharDistributionMultiSet);
     return calculateKLD(beforeCharDistributionMultiSet, addedCharDistributionMultiSet);
+    //return calculateKLD(beforeCharDistributionMultiSet, currentCharDistributionMultiSet);
+    // TODO evaluate added vs. before OR current vs. before ?
   }
 
   /*
-      P(c) = probability of character in beforeCharDistributionMultiSet
-      Q(c) = probability of character in addedCharDistributionMultiSet
-      KLD = sum for all chars c in beforeCharDistributionMultiSet -> P(c) * log2 (P(c) / Q(c))
+      PTc) = probability of character in charDistributionMultiSetTest
+      PQ(c) = probability of character in charDistributionMultiSetBasic
+      KLD = sum for all chars c in charDistributionMultiSetTest -> PT(c) * log2 (PT(c) / QT(c))
    */
-  private static Double calculateKLD(final Multiset<Character> beforeCharDistributionMultiSet,
-      final Multiset<Character> addedCharDistributionMultiSet) {
+  private static Double calculateKLD(final Multiset<Character> charDistributionMultiSetBasic,
+      final Multiset<Character> charDistributionMultiSetTest) {
     Double result = 0.0;
-    for (val c : addedCharDistributionMultiSet) {
-      Double p =
-          (double) addedCharDistributionMultiSet.count(c) / addedCharDistributionMultiSet.size();
-      Double q = Double.MIN_VALUE;
-      if (beforeCharDistributionMultiSet.contains(c)) {
-        p = (double) beforeCharDistributionMultiSet.count(c) / beforeCharDistributionMultiSet
+    for (val c : charDistributionMultiSetTest.elementSet()) {
+      Double pt =
+          (double) charDistributionMultiSetTest.count(c) / charDistributionMultiSetTest.size();
+      Double qt = Double.MIN_VALUE; // when char not contained in basic, assume minimal possible probability
+      if (charDistributionMultiSetBasic.contains(c)) {
+        qt = (double) charDistributionMultiSetBasic.count(c) / charDistributionMultiSetBasic
             .size();
       }
-      Double pDivQ = p / q;
-      if (pDivQ == Double.POSITIVE_INFINITY) {
-        pDivQ = Double.MAX_VALUE;
+      Double ptDivQt = pt / qt;
+      if (ptDivQt == Double.POSITIVE_INFINITY) {
+        ptDivQt = Double.MAX_VALUE;
       }
-      if (pDivQ == Double.NEGATIVE_INFINITY) {
-        pDivQ = -Double.MAX_VALUE;
+      if (ptDivQt == Double.NEGATIVE_INFINITY) {
+        ptDivQt = -Double.MAX_VALUE;
       }
-      Double log1 = Math.log(pDivQ);
-      Double log2 = log1 / Math.log(2);
-      Double res = p * log2;
-      result += res;
-      // result a= p * (Math.log(p / q) / Math.log(2)); // log2 because of bit representation
+      result += pt * (Math.log(ptDivQt) / Math.log(2)); // log2 because of bit representation
     }
     return result;
   }

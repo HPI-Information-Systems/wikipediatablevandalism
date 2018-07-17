@@ -173,7 +173,7 @@ class ContentFeatureFactory {
     };
   }
 
-  Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with deletion corpus
+  Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with created corpus
     return (revision, featureContext) -> {
       val previousRevision = BasicUtils
           .getPreviousRevision(featureContext.getPreviousRevisions());
@@ -214,15 +214,15 @@ class ContentFeatureFactory {
       val previousRevision = BasicUtils
           .getPreviousRevision(featureContext.getPreviousRevisions());
       if (previousRevision == null) {
-        return -1;
+        return 0;
       }
       val currentTableContents = TableContentExtractor.getContent(revision);
       if (currentTableContents.length() == 0) {
-        return -1;
+        return 0;
       }
       val previousTableContents = TableContentExtractor.getContent(previousRevision);
       if (previousTableContents.length() == 0) {
-        return -1;
+        return 0;
       }
       return KLDUtil.calculateKLDOfAddedChars(previousTableContents, currentTableContents);
     };
