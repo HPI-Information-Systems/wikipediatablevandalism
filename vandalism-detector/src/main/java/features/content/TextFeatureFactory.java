@@ -1,7 +1,10 @@
 package features.content;
 
 import com.google.common.collect.Multisets;
+import com.google.common.math.Stats;
 import features.Feature;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.val;
 import util.BasicUtils;
 import features.content.util.TableContentExtractor;
@@ -137,7 +140,7 @@ class TextFeatureFactory {
     };
   }
 
-  Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with created corpus
+  Feature averageRelativeFrequencyOfNewAddedWords() {
     return (revision, featureContext) -> {
       val previousRevision = BasicUtils
           .getPreviousRevision(featureContext.getPreviousRevisions());
@@ -158,8 +161,13 @@ class TextFeatureFactory {
       if (addedWordOccurrence.isEmpty()) {
         return 0;
       }
-      return (float) addedWordOccurrence.size() / addedWordOccurrence.elementSet()
-          .size(); // calculate average occurrence of a word
+
+      List<Double> addedWordFrequency = new ArrayList<>();
+      for (val addedWord : addedWordOccurrence.elementSet()) {
+        addedWordFrequency.add((double) previousWordOccurrence.count(addedWord) / previousWordOccurrence.size());
+      }
+
+      return Stats.meanOf(addedWordFrequency);
     };
   }
 
