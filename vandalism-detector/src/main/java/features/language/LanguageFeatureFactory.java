@@ -12,8 +12,12 @@ class LanguageFeatureFactory {
     return new OffensiveWordsInTable();
   }
 
-  Feature pronounsInComment() {
-    return new PronounsInComment();
+  Feature personalPronounsInComment() {
+    return new PersonalPronounsInComment();
+  }
+
+  Feature personalPronounsInTable() {
+    return new PersonalPronounsInTable();
   }
 
   Feature addedNonDictionaryWordCount() {
