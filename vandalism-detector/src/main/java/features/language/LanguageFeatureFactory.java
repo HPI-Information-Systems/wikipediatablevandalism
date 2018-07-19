@@ -12,8 +12,8 @@ class LanguageFeatureFactory {
     return new OffensiveWordsInTable();
   }
 
-  Feature personalPronounsInComment() {
-    return new PronounFrequencyInComment();
+  Feature commentPersonalPronounFrequency() {
+    return new CommentPronounFrequency();
   }
 
   Feature tablePersonalPronounFrequency() {

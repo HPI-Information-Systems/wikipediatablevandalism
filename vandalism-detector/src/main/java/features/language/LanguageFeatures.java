@@ -16,7 +16,7 @@ public class LanguageFeatures {
         .feature("offensiveWordCountInTables", factory.offensiveWordsInTable())
         .feature("offensiveWordCountInComment", factory.offensiveWordsInComment())
         .feature("addedNonDictionaryWordCount", factory.addedNonDictionaryWordCount())
-        .feature("personalPronounsInComment", factory.personalPronounsInComment())
+        .feature("personalPronounFrequencyInComment", factory.commentPersonalPronounFrequency())
         .feature("personalPronounFrequencyInTable", factory.tablePersonalPronounFrequency())
         .feature("personalPronounImpactInTable", factory.tablePersonalPronounImpact())
         .build();

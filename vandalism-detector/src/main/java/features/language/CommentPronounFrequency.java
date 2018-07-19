@@ -10,21 +10,20 @@ import org.apache.commons.lang3.StringUtils;
 import util.WordsExtractor;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-public class PronounFrequencyInComment implements Feature {
+/**
+ * Number of added 1. & 2. personal pronouns relative to the size of the comment.
+ */
+public class CommentPronounFrequency implements Feature {
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
-    if (revision.getComment() == null) {
+    if (revision.getComment() == null || StringUtils.isEmpty(revision.getComment().getValue())) {
       return 0;
     }
 
     val comment = revision.getComment().getValue();
-    if (StringUtils.isEmpty(comment)) {
-      return 0;
-    }
-
     final Multiset<String> words = WordsExtractor.extractWords(comment);
-    final Set<String> common = Sets.intersection(words.elementSet(), PronounWordList.getWords());
-    return common.size();
+    final Set<String> pronouns = Sets.intersection(words.elementSet(), PronounWordList.getWords());
+    return words.size() > 0 ? pronouns.size() / words.size() : 0;
   }
 }
