@@ -19,6 +19,13 @@ public class WordsExtractor {
   private static final Pattern WHITESPACE = Pattern.compile("\\s+");
   private static final Pattern NON_ALPHANUMERIC = Pattern.compile("[^\\p{L}\\p{M} 0-9]");
 
+  public static Multiset<String> diffWords(final WikiTable previousTable, final WikiTable table) {
+    Multiset<String> previousWords = extractWords(previousTable);
+    Multiset<String> words = extractWords(table);
+    words.removeAll(previousWords);
+    return words;
+  }
+
   public static Multiset<String> extractWords(final WikiTable table) {
     final List<Cell> cells = table.getRows().stream()
         .flatMap(row -> row.getValues().stream())
@@ -39,6 +46,7 @@ public class WordsExtractor {
   public static Multiset<String> extractWords(final String text) {
     val normalizedWords = wordsOf(text)
         .map(WordsExtractor::normalize)
+        .filter(s -> !s.isEmpty())
         .collect(toList());
     return HashMultiset.create(normalizedWords);
   }
