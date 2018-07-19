@@ -16,8 +16,12 @@ class LanguageFeatureFactory {
     return new PronounFrequencyInComment();
   }
 
-  Feature personalPronounsInTable() {
+  Feature tablePersonalPronounFrequency() {
     return new TablePronounFrequency();
+  }
+
+  Feature tablePersonalPronounImpact() {
+    return new TablePronounImpact();
   }
 
   Feature addedNonDictionaryWordCount() {

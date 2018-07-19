@@ -10,7 +10,7 @@ import org.apache.commons.lang3.StringUtils;
 import util.WordsExtractor;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-public class PersonalPronounsInComment implements Feature {
+public class PronounFrequencyInComment implements Feature {
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
