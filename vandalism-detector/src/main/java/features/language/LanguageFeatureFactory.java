@@ -7,39 +7,39 @@ import features.language.wordlists.PronounWordList;
 
 class LanguageFeatureFactory {
 
-  Feature commentPersonalPronounFrequency() {
+  Feature personalPronounFrequencyInComment() {
     return new CommentWordFrequency(PronounWordList.getWords());
   }
 
-  Feature commentNonDictionaryWordFrequency() {
-    return new CommentWordFrequency(DictionaryWordList.getWords(), false);
-  }
-
-  Feature commentOffensiveWordFrequency() {
-    return new CommentWordFrequency(OffensiveWordList.getWords());
-  }
-
-  Feature tablePersonalPronounFrequency() {
+  Feature personalPronounFrequencyInTable() {
     return new TableWordFrequency(PronounWordList.getWords());
   }
 
-  Feature tablePersonalPronounImpact() {
+  Feature personalPronounImpactInTable() {
     return new TableWordImpact(PronounWordList.getWords());
   }
 
-  Feature tableOffensiveWordFrequency() {
+  Feature offensiveWordFrequencyInComment() {
+    return new CommentWordFrequency(OffensiveWordList.getWords());
+  }
+
+  Feature offensiveWordFrequencyInTables() {
     return new TableWordFrequency(OffensiveWordList.getWords());
   }
 
-  Feature tableOffensiveWordImpact() {
+  Feature offensiveWordImpactInTables() {
     return new TableWordImpact(OffensiveWordList.getWords());
   }
 
-  Feature tableNonDictionaryWordFrequency() {
+  Feature nonDictionaryWordFrequencyInComment() {
+    return new CommentWordFrequency(DictionaryWordList.getWords(), false);
+  }
+
+  Feature nonDictionaryWordFrequencyInTable() {
     return new TableWordFrequency(DictionaryWordList.getWords(), false);
   }
 
-  Feature tableNonDictionaryWordImpact() {
+  Feature nonDictionaryWordImpactInTable() {
     return new TableWordImpact(DictionaryWordList.getWords(), false);
   }
 }

@@ -13,15 +13,15 @@ public class LanguageFeatures {
     val factory = new LanguageFeatureFactory();
 
     features = FeaturePack.builder()
-        .feature("offensiveWordFrequencyInTables", factory.tableOffensiveWordFrequency())
-        .feature("offensiveWordImpactInTables", factory.tableOffensiveWordImpact())
-        .feature("offensiveWordFrequencyInComment", factory.commentOffensiveWordFrequency())
-        .feature("personalPronounFrequencyInComment", factory.commentPersonalPronounFrequency())
-        .feature("personalPronounFrequencyInTable", factory.tablePersonalPronounFrequency())
-        .feature("personalPronounImpactInTable", factory.tablePersonalPronounImpact())
-        .feature("nonDictionaryWordFrequencyInTable", factory.tableNonDictionaryWordFrequency())
-        .feature("nonDictionaryWordImpactInTable", factory.tableNonDictionaryWordImpact())
-        .feature("nonDictionaryWordFrequencyInComment", factory.commentNonDictionaryWordFrequency())
+        .feature("offensiveWordFrequencyInTables", factory.offensiveWordFrequencyInTables())
+        .feature("offensiveWordImpactInTables", factory.offensiveWordImpactInTables())
+        .feature("offensiveWordFrequencyInComment", factory.offensiveWordFrequencyInComment())
+        .feature("personalPronounFrequencyInComment", factory.personalPronounFrequencyInComment())
+        .feature("personalPronounFrequencyInTable", factory.personalPronounFrequencyInTable())
+        .feature("personalPronounImpactInTable", factory.personalPronounImpactInTable())
+        .feature("nonDictionaryWordFrequencyInTable", factory.nonDictionaryWordFrequencyInTable())
+        .feature("nonDictionaryWordImpactInTable", factory.nonDictionaryWordImpactInTable())
+        .feature("nonDictionaryWordFrequencyInComment", factory.nonDictionaryWordFrequencyInComment())
         .build();
   }
 
