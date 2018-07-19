@@ -13,11 +13,11 @@ class LanguageFeatureFactory {
   }
 
   Feature personalPronounsInComment() {
-    return new PersonalPronounsInComment();
+    return new PronounFrequencyInComment();
   }
 
   Feature personalPronounsInTable() {
-    return new PersonalPronounsInTable();
+    return new TablePronounFrequency();
   }
 
   Feature addedNonDictionaryWordCount() {

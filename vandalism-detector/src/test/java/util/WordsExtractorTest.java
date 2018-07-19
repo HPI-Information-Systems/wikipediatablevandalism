@@ -10,6 +10,24 @@ class WordsExtractorTest {
 
   @Test
   void diffReturnsWordsIntroducedInNewRevision() {
+    val previousText = "| Kathmandu || Kathmandu || 414.264 ||  671.846 ||  4,7 || 807.300";
+    val text = "| purple|| Kathmandu || 414.264 ||  671.846 ||  4,7 || 807.300";
+    val diff = WordsExtractor.diffWords(previousText, text);
+
+    assertThat(diff).containsExactlyInAnyOrder("purple");
+  }
+
+  @Test
+  void diffReturnsWordsFromNewRevisionIfPreviousIsEmpty() {
+    val previousText = "";
+    val text = "| purple|| Kathmandu || 414.264 ||  671.846 ||  4,7 || 807.300";
+    val diff = WordsExtractor.diffWords(previousText, text);
+
+    assertThat(diff).containsExactlyInAnyOrder("purple", "kathmandu", "414264", "671846", "47", "807300");
+  }
+
+  @Test
+  void diffReturnsWordsInTableIntroducedInNewRevision() {
     val previousTable = MockTables.NEPAL_13809326_Table_0;
     val table = MockTables.NEPAL_13809566_Table_0;
     val diff = WordsExtractor.diffWords(previousTable, table);
@@ -18,7 +36,7 @@ class WordsExtractorTest {
   }
 
   @Test
-  void diffReturnsNoWordsWhenComparingTheSameRevision() {
+  void diffReturnsNoWordsInTableWhenComparingTheSameRevision() {
     val table = MockTables.NEPAL_13809326_Table_0;
     val sameTable = MockTables.NEPAL_13809326_Table_0;
     val diff = WordsExtractor.diffWords(table, sameTable);

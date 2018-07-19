@@ -26,6 +26,13 @@ public class WordsExtractor {
     return words;
   }
 
+  public static Multiset<String> diffWords(final String previousText, final String text) {
+    Multiset<String> previousWords = extractWords(previousText);
+    Multiset<String> words = extractWords(text);
+    words.removeAll(previousWords);
+    return words;
+  }
+
   public static Multiset<String> extractWords(final WikiTable table) {
     final List<Cell> cells = table.getRows().stream()
         .flatMap(row -> row.getValues().stream())
