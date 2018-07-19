@@ -2,8 +2,9 @@ package features.language;
 
 import features.Feature;
 import features.language.wordlists.DictionaryWordList;
-import features.language.wordlists.OffensiveWordList;
+import features.language.wordlists.VulgarWordList;
 import features.language.wordlists.PronounWordList;
+import features.language.wordlists.SexualWordList;
 
 class LanguageFeatureFactory {
 
@@ -19,16 +20,28 @@ class LanguageFeatureFactory {
     return new TableWordImpact(PronounWordList.getWords());
   }
 
-  Feature offensiveWordFrequencyInComment() {
-    return new CommentWordFrequency(OffensiveWordList.getWords());
+  Feature vulgarWordFrequencyInComment() {
+    return new CommentWordFrequency(VulgarWordList.getWords());
   }
 
-  Feature offensiveWordFrequencyInTables() {
-    return new TableWordFrequency(OffensiveWordList.getWords());
+  Feature vulgarWordFrequencyInTables() {
+    return new TableWordFrequency(VulgarWordList.getWords());
   }
 
-  Feature offensiveWordImpactInTables() {
-    return new TableWordImpact(OffensiveWordList.getWords());
+  Feature vulgarWordImpactInTables() {
+    return new TableWordImpact(VulgarWordList.getWords());
+  }
+
+  Feature sexualWordFrequencyInComment() {
+    return new CommentWordFrequency(SexualWordList.getWords());
+  }
+
+  Feature sexualWordFrequencyInTables() {
+    return new TableWordFrequency(SexualWordList.getWords());
+  }
+
+  Feature sexualWordImpactInTables() {
+    return new TableWordImpact(SexualWordList.getWords());
   }
 
   Feature nonDictionaryWordFrequencyInComment() {

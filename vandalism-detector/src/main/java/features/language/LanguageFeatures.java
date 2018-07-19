@@ -13,12 +13,15 @@ public class LanguageFeatures {
     val factory = new LanguageFeatureFactory();
 
     features = FeaturePack.builder()
-        .feature("offensiveWordFrequencyInTables", factory.offensiveWordFrequencyInTables())
-        .feature("offensiveWordImpactInTables", factory.offensiveWordImpactInTables())
-        .feature("offensiveWordFrequencyInComment", factory.offensiveWordFrequencyInComment())
         .feature("personalPronounFrequencyInComment", factory.personalPronounFrequencyInComment())
         .feature("personalPronounFrequencyInTable", factory.personalPronounFrequencyInTable())
         .feature("personalPronounImpactInTable", factory.personalPronounImpactInTable())
+        .feature("vulgarWordFrequencyInTables", factory.vulgarWordFrequencyInTables())
+        .feature("vulgarWordImpactInTables", factory.vulgarWordImpactInTables())
+        .feature("vulgarWordFrequencyInComment", factory.vulgarWordFrequencyInComment())
+        .feature("sexualWordFrequencyInTables", factory.sexualWordFrequencyInTables())
+        .feature("sexualWordImpactInTables", factory.sexualWordImpactInTables())
+        .feature("sexualWordFrequencyInComment", factory.sexualWordFrequencyInComment())
         .feature("nonDictionaryWordFrequencyInTable", factory.nonDictionaryWordFrequencyInTable())
         .feature("nonDictionaryWordImpactInTable", factory.nonDictionaryWordImpactInTable())
         .feature("nonDictionaryWordFrequencyInComment", factory.nonDictionaryWordFrequencyInComment())
