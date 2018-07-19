@@ -17,9 +17,15 @@ import wikixmlsplit.datastructures.MyRevisionType;
 class TableWordImpact implements Feature {
 
   private final Set<String> words;
+  private final boolean isMatching;
+
+  TableWordImpact(Set<String> words, boolean isMatching) {
+    this.words = words;
+    this.isMatching = isMatching;
+  }
 
   TableWordImpact(Set<String> words) {
-    this.words = words;
+    this(words, false);
   }
 
   @Override
@@ -32,9 +38,15 @@ class TableWordImpact implements Feature {
         : "";
 
     val previousWords = WordsExtractor.extractWords(previousContent);
-    val previousMatches = Sets.intersection(previousWords.elementSet(), this.words);
-    val matches = Sets.intersection(words.elementSet(), this.words);
+    val previousMatches = getMatches(previousWords.elementSet());
+    val matches = getMatches(words.elementSet());
     val previousMatchCount = previousMatches.size() > 0 ? previousMatches.size() : 1;
     return ((float) matches.size() / previousMatchCount);
+  }
+
+  private Set<String> getMatches(Set<String> words) {
+    return this.isMatching
+        ? Sets.intersection(words, this.words)
+        : Sets.difference(words, this.words);
   }
 }

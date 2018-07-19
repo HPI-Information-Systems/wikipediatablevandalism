@@ -1,6 +1,7 @@
 package features.language;
 
 import features.Feature;
+import features.language.wordlists.DictionaryWordList;
 import features.language.wordlists.OffensiveWordList;
 import features.language.wordlists.PronounWordList;
 
@@ -8,6 +9,10 @@ class LanguageFeatureFactory {
 
   Feature commentPersonalPronounFrequency() {
     return new CommentWordFrequency(PronounWordList.getWords());
+  }
+
+  Feature commentNonDictionaryWordFrequency() {
+    return new CommentWordFrequency(DictionaryWordList.getWords(), false);
   }
 
   Feature commentOffensiveWordFrequency() {
@@ -26,8 +31,15 @@ class LanguageFeatureFactory {
     return new TableWordFrequency(OffensiveWordList.getWords());
   }
 
-  Feature addedNonDictionaryWordCount() {
-    return new AddedNonDictionaryWords();
+  Feature tableOffensiveWordImpact() {
+    return new TableWordImpact(OffensiveWordList.getWords());
   }
 
+  Feature tableNonDictionaryWordFrequency() {
+    return new TableWordFrequency(DictionaryWordList.getWords(), false);
+  }
+
+  Feature tableNonDictionaryWordImpact() {
+    return new TableWordImpact(DictionaryWordList.getWords(), false);
+  }
 }

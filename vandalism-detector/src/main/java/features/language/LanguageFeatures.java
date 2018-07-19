@@ -13,12 +13,15 @@ public class LanguageFeatures {
     val factory = new LanguageFeatureFactory();
 
     features = FeaturePack.builder()
-        .feature("offensiveWordCountInTables", factory.tableOffensiveWordFrequency())
-        .feature("offensiveWordCountInComment", factory.commentOffensiveWordFrequency())
-        .feature("addedNonDictionaryWordCount", factory.addedNonDictionaryWordCount())
+        .feature("offensiveWordFrequencyInTables", factory.tableOffensiveWordFrequency())
+        .feature("offensiveWordImpactInTables", factory.tableOffensiveWordImpact())
+        .feature("offensiveWordFrequencyInComment", factory.commentOffensiveWordFrequency())
         .feature("personalPronounFrequencyInComment", factory.commentPersonalPronounFrequency())
         .feature("personalPronounFrequencyInTable", factory.tablePersonalPronounFrequency())
         .feature("personalPronounImpactInTable", factory.tablePersonalPronounImpact())
+        .feature("nonDictionaryWordFrequencyInTable", factory.tableNonDictionaryWordFrequency())
+        .feature("nonDictionaryWordImpactInTable", factory.tableNonDictionaryWordImpact())
+        .feature("nonDictionaryWordFrequencyInComment", factory.commentNonDictionaryWordFrequency())
         .build();
   }
 

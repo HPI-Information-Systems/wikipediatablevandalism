@@ -17,9 +17,15 @@ import wikixmlsplit.datastructures.MyRevisionType;
 class TableWordFrequency implements Feature {
 
   private final Set<String> words;
+  private final boolean isMatching;
+
+  TableWordFrequency(Set<String> words, boolean isMatching) {
+    this.words = words;
+    this.isMatching = isMatching;
+  }
 
   TableWordFrequency(Set<String> words) {
-    this.words = words;
+    this(words, true);
   }
 
   @Override
@@ -31,7 +37,13 @@ class TableWordFrequency implements Feature {
 
     val content = TableContentExtractor.getContent(revision);
     val diffWords = WordsExtractor.diffWords(previousContent, content);
-    val matches = Sets.intersection(diffWords.elementSet(), words);
+    val matches = getMatches(diffWords.elementSet());
     return diffWords.size() > 0 ? ((float) matches.size() / diffWords.size()) : 0;
+  }
+
+  private Set<String> getMatches(Set<String> words) {
+    return this.isMatching
+        ? Sets.intersection(words, this.words)
+        : Sets.difference(words, this.words);
   }
 }
