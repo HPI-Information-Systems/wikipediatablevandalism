@@ -1,4 +1,4 @@
-package features.language;
+package features.language.wordlists;
 
 import java.util.Set;
 import util.WordListUtil;
@@ -8,13 +8,13 @@ import util.WordListUtil;
  *
  * @see <a href="https://github.com/dwyl/english-words">GH: dwyl/english-words</a>
  */
-class DictionaryWordList {
+public class DictionaryWordList {
 
   private static final String FILENAME = "english-words.txt";
 
   private static Set<String> WORDS = WordListUtil.read(FILENAME);
 
-  static Set<String> getWords() {
+  public static Set<String> getWords() {
     return WORDS;
   }
 }

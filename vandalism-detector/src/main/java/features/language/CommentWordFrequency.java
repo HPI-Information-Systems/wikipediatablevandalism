@@ -1,6 +1,5 @@
 package features.language;
 
-import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 import features.Feature;
 import java.util.Set;
@@ -11,9 +10,15 @@ import util.WordsExtractor;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
- * Number of added 1. & 2. personal pronouns relative to the size of the comment.
+ * Number of added matching words relative to the size of the comment.
  */
-public class CommentPronounFrequency implements Feature {
+class CommentWordFrequency implements Feature {
+
+  private final Set<String> words;
+
+  CommentWordFrequency(Set<String> words) {
+    this.words = words;
+  }
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
@@ -22,8 +27,8 @@ public class CommentPronounFrequency implements Feature {
     }
 
     val comment = revision.getComment().getValue();
-    final Multiset<String> words = WordsExtractor.extractWords(comment);
-    final Set<String> pronouns = Sets.intersection(words.elementSet(), PronounWordList.getWords());
-    return words.size() > 0 ? pronouns.size() / words.size() : 0;
+    val words = WordsExtractor.extractWords(comment);
+    val matches = Sets.intersection(words.elementSet(), this.words);
+    return words.size() > 0 ? matches.size() / words.size() : 0;
   }
 }

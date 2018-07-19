@@ -2,6 +2,7 @@ package features.language;
 
 import com.google.common.collect.Sets;
 import features.Feature;
+import features.language.wordlists.DictionaryWordList;
 import java.util.Set;
 import lombok.Builder;
 import lombok.Value;

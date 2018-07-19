@@ -2,6 +2,7 @@ package features.language;
 
 import com.google.common.collect.Sets;
 import features.Feature;
+import java.util.Set;
 import lombok.val;
 import lombok.var;
 import model.FeatureContext;
@@ -11,9 +12,15 @@ import util.WordsExtractor;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
- * Percentage increase of added 1. & 2. personal pronouns to previous revision.
+ * Percentage increase of added words from word list compared to previous revision.
  */
-class TablePronounImpact implements Feature {
+class TableWordImpact implements Feature {
+
+  private final Set<String> words;
+
+  TableWordImpact(Set<String> words) {
+    this.words = words;
+  }
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
@@ -23,12 +30,11 @@ class TablePronounImpact implements Feature {
     var previousContent = previousRevision != null
         ? TableContentExtractor.getContent(previousRevision)
         : "";
-    val previousWords = WordsExtractor.extractWords(previousContent);
 
-    val previousPronouns = Sets
-        .intersection(previousWords.elementSet(), PronounWordList.getWords());
-    val pronouns = Sets.intersection(words.elementSet(), PronounWordList.getWords());
-    val previousPronounsCount = previousPronouns.size() > 0 ? previousPronouns.size() : 1;
-    return ((float) pronouns.size() / previousPronounsCount);
+    val previousWords = WordsExtractor.extractWords(previousContent);
+    val previousMatches = Sets.intersection(previousWords.elementSet(), this.words);
+    val matches = Sets.intersection(words.elementSet(), this.words);
+    val previousMatchCount = previousMatches.size() > 0 ? previousMatches.size() : 1;
+    return ((float) matches.size() / previousMatchCount);
   }
 }
