@@ -3,7 +3,7 @@ package util;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import lombok.val;
-import mocks.MockTables;
+import mock.MockTables;
 import org.junit.jupiter.api.Test;
 
 class WordsExtractorTest {

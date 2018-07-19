@@ -1,4 +1,4 @@
-package mocks;
+package mock;
 
 import org.assertj.core.util.Lists;
 import wikixmlsplit.renderer.wikitable.Cell;
