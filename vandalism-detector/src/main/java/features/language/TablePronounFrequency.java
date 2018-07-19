@@ -13,7 +13,7 @@ import wikixmlsplit.datastructures.MyRevisionType;
 /**
  * Number of added 1. & 2. personal pronouns relative to the size of the edit in tables.
  */
-public class TablePronounFrequency implements Feature {
+class TablePronounFrequency implements Feature {
 
   @Override
   public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
