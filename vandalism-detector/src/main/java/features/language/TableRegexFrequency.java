@@ -13,6 +13,9 @@ import util.TableContentExtractor;
 import util.WordsExtractor;
 import wikixmlsplit.datastructures.MyRevisionType;
 
+/**
+ * Number of matching words to a list of regex patterns relative to the size of the edit in tables.
+ */
 public class TableRegexFrequency implements Feature {
 
   private final Set<Pattern> regularExpressions;

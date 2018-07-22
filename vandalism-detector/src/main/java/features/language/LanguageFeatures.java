@@ -26,6 +26,7 @@ public class LanguageFeatures {
         .feature("nonDictionaryWordImpactInTable", factory.nonDictionaryWordImpactInTable())
         .feature("nonDictionaryWordFrequencyInComment", factory.nonDictionaryWordFrequencyInComment())
         .feature("superlativeWordFrequencyInTable", factory.superlativeWordFrequencyInTable())
+        .feature("superlativeWordImpactInTable", factory.superlativeWordImpactInTable())
         .feature("revertInComment", factory.revertInComment())
         .build();
   }
