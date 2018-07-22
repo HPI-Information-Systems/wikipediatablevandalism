@@ -66,6 +66,10 @@ class LanguageFeatureFactory {
     return new TableRegexImpact(SuperlativePatternList.getPatterns());
   }
 
+  public Feature superlativeWordFrequencyInComment() {
+    return new CommentRegexFrequency(SuperlativePatternList.getPatterns());
+  }
+
   Feature revertInComment() {
     return new CommentContainsWords(RevertWordList.getWords());
   }
