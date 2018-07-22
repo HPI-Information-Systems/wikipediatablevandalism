@@ -25,6 +25,7 @@ public class LanguageFeatures {
         .feature("nonDictionaryWordFrequencyInTable", factory.nonDictionaryWordFrequencyInTable())
         .feature("nonDictionaryWordImpactInTable", factory.nonDictionaryWordImpactInTable())
         .feature("nonDictionaryWordFrequencyInComment", factory.nonDictionaryWordFrequencyInComment())
+        .feature("revertInComment", factory.revertInComment())
         .build();
   }
 

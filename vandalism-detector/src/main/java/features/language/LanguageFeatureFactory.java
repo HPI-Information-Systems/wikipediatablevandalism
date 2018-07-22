@@ -2,9 +2,10 @@ package features.language;
 
 import features.Feature;
 import features.language.wordlists.DictionaryWordList;
-import features.language.wordlists.VulgarWordList;
 import features.language.wordlists.PronounWordList;
+import features.language.wordlists.RevertWordList;
 import features.language.wordlists.SexualWordList;
+import features.language.wordlists.VulgarWordList;
 
 class LanguageFeatureFactory {
 
@@ -54,5 +55,9 @@ class LanguageFeatureFactory {
 
   Feature nonDictionaryWordImpactInTable() {
     return new TableWordImpact(DictionaryWordList.getWords(), false);
+  }
+
+  Feature revertInComment() {
+    return new CommentContainsWords(RevertWordList.getWords());
   }
 }
