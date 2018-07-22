@@ -1,6 +1,7 @@
 package features.language;
 
 import features.Feature;
+import features.language.regex.SuperlativePatternList;
 import features.language.wordlists.DictionaryWordList;
 import features.language.wordlists.PronounWordList;
 import features.language.wordlists.RevertWordList;
@@ -55,6 +56,10 @@ class LanguageFeatureFactory {
 
   Feature nonDictionaryWordImpactInTable() {
     return new TableWordImpact(DictionaryWordList.getWords(), false);
+  }
+
+  public Feature superlativeWordFrequencyInTable() {
+    return new TableRegexFrequency(SuperlativePatternList.getPatterns());
   }
 
   Feature revertInComment() {
