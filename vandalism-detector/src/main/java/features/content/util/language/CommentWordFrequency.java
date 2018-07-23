@@ -1,4 +1,4 @@
-package features.language;
+package features.content.util.language;
 
 import com.google.common.collect.Sets;
 import features.Feature;
@@ -11,17 +11,17 @@ import util.WordsExtractor;
 /**
  * Number of added matching words relative to the size of the comment.
  */
-class CommentWordFrequency implements Feature {
+public class CommentWordFrequency implements Feature {
 
   private final Set<String> words;
   private final boolean isMatching;
 
-  CommentWordFrequency(Set<String> words, boolean isMatching) {
+  public CommentWordFrequency(Set<String> words, boolean isMatching) {
     this.words = words;
     this.isMatching = isMatching;
   }
 
-  CommentWordFrequency(Set<String> words) {
+  public CommentWordFrequency(Set<String> words) {
     this(words, false);
   }
 

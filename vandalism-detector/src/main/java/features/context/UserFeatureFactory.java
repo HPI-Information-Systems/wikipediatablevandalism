@@ -11,24 +11,24 @@ import util.BasicUtils;
 class UserFeatureFactory {
 
   Feature isContributorAnonymous() {
-    return (revision, ignored) -> revision.getContributor().getUsername() == null;
+    return parameters -> parameters.getRevision().getContributor().getUsername() == null;
   }
 
   Feature isBot() {
     val botList = BotList.read();
-    return (revision, ignored) -> {
+    return parameters -> {
 
-      if (BasicUtils.isAnonymous(revision.getContributor())) {
+      if (BasicUtils.isAnonymous(parameters.getRevision().getContributor())) {
         return false;
       }
 
-      return botList.stream().anyMatch(str -> str.equals(revision.getContributor().getUsername()));
+      return botList.stream().anyMatch(str -> str.equals(parameters.getRevision().getContributor().getUsername()));
     };
   }
 
   // future feature currently not used
   Feature isContributorDeleted() {
-    return (revision, featureContext) -> revision.getContributor().getDeleted() != null;
+    return parameters -> parameters.getRevision().getContributor().getDeleted() != null;
   }
 
 }

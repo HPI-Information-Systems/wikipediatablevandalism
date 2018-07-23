@@ -44,10 +44,10 @@ public class BasicUtils {
   }
 
   public static MyRevisionType getPreviousRevision(final List<MyRevisionType> previousRevisions) {
-    if (previousRevisions == null || previousRevisions.size() < 2) { // == 0
+    if (previousRevisions == null || previousRevisions.size() == 0) {
       return null;
     }
-    return previousRevisions.get(1); // 0
+    return previousRevisions.get(0);
   }
 
   public static boolean hasSameContributor(final MyRevisionType revision1,

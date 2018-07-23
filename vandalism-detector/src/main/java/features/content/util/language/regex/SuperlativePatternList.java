@@ -1,4 +1,4 @@
-package features.language.regex;
+package features.content.util.language.regex;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;

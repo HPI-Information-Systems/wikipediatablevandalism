@@ -6,17 +6,15 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Value;
 import matching.table.TableMatch;
-import model.FeatureContext;
+import model.FeatureParameters;
 import util.WordsExtractor;
-import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class AddedNonDictionaryWords implements Feature {
 
-
   @Override
-  public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
-    final TableMatch match = featureContext.getRelevantMatch();
+  public Object getValue(final FeatureParameters parameters) {
+    final TableMatch match = parameters.getRelevantMatch();
     if (match == null) {
       return 0;
     }

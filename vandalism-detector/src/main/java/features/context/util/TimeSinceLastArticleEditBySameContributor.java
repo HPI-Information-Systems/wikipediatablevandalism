@@ -18,8 +18,6 @@ public class TimeSinceLastArticleEditBySameContributor implements Feature {
 
   @Override
   @SuppressWarnings("all")
-  public Object getValue(final MyRevisionType revision, FeatureContext featureContext) {
-    val precursors = featureContext.getPreviousRevisions();
   public Object getValue(final FeatureParameters parameters) {
     val revision = parameters.getRevision();
     val precursors = parameters.getPreviousRevisions();

@@ -1,8 +1,9 @@
-package features.language;
+package features.content.util.language;
 
-import static util.RegexUtil.countMatches;
+import static features.content.util.language.regex.RegexUtil.countMatches;
 
 import features.Feature;
+import features.content.util.TableContentExtractor;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.val;
@@ -13,11 +14,11 @@ import util.WordsExtractor;
 /**
  * Percentage increase of matching words to a list of regex patterns compared to previous revision.
  */
-class TableRegexImpact implements Feature {
+public class TableRegexImpact implements Feature {
 
   private final Set<Pattern> regularExpressions;
 
-  TableRegexImpact(Set<Pattern> regularExpressions) {
+  public TableRegexImpact(Set<Pattern> regularExpressions) {
     this.regularExpressions = regularExpressions;
   }
 

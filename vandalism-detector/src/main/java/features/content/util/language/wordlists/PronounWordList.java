@@ -1,4 +1,4 @@
-package features.language.wordlists;
+package features.content.util.language.wordlists;
 
 import java.util.Set;
 import util.WordListUtil;

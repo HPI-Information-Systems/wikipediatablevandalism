@@ -6,6 +6,8 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
+import util.BasicUtils;
+import util.AttributeUtil;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.Attribute;
 import wikixmlsplit.renderer.wikitable.WikiTable;

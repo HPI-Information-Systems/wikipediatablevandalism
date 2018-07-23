@@ -1,27 +1,29 @@
-package features.language;
+package features.content.util.language;
 
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Sets;
 import features.Feature;
+import features.content.util.TableContentExtractor;
 import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
+import util.WordsExtractor;
 import util.DiffUtil;
 
 /**
  * Number of matching words in word list relative to the size of the edit in tables.
  */
-class TableWordFrequency implements Feature {
+public class TableWordFrequency implements Feature {
 
   private final Set<String> words;
   private final boolean isMatching;
 
-  TableWordFrequency(Set<String> words, boolean isMatching) {
+  public TableWordFrequency(Set<String> words, boolean isMatching) {
     this.words = words;
     this.isMatching = isMatching;
   }
 
-  TableWordFrequency(Set<String> words) {
+  public TableWordFrequency(Set<String> words) {
     this(words, true);
   }
 

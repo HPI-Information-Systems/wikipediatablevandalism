@@ -1,6 +1,6 @@
-package features.language;
+package features.content.util.language;
 
-import static util.RegexUtil.countMatches;
+import static features.content.util.language.regex.RegexUtil.countMatches;
 
 import features.Feature;
 import java.util.Set;
@@ -17,7 +17,7 @@ public class CommentRegexFrequency implements Feature {
 
   private final Set<Pattern> regularExpressions;
 
-  CommentRegexFrequency(Set<Pattern> regularExpressions) {
+  public CommentRegexFrequency(Set<Pattern> regularExpressions) {
     this.regularExpressions = regularExpressions;
   }
 

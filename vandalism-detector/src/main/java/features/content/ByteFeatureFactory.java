@@ -10,30 +10,29 @@ import features.content.util.byteP.ZipUtil;
 class ByteFeatureFactory {
 
   Feature previousLength() {
-    return (ignored, featureContext) -> {
-      val previousRevision = BasicUtils
-          .getPreviousRevision(featureContext.getPreviousRevisions());
+    return parameters -> {
+      val previousRevision = parameters.getPreviousRevision(); // TODO check needed?
       if (previousRevision == null) {
         return 0;
       }
-      return TableContentExtractor.getContent(previousRevision).length();
+      return TableContentExtractor.getPreviousContent(parameters).length();
     };
   }
 
   Feature sizeChange() {
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+    return parameters -> {
+      val previousRevision = parameters.getPreviousRevision();
       int previousRevisionParsedLength = 0;
       if (previousRevision != null) {
         previousRevisionParsedLength = BasicUtils.parsedLength(previousRevision.getParsed());
       }
-      return BasicUtils.parsedLength(revision.getParsed()) - previousRevisionParsedLength;
+      return BasicUtils.parsedLength(parameters.getRevision().getParsed()) - previousRevisionParsedLength;
     };
   }
 
   Feature LZWCompressionRate() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -42,17 +41,16 @@ class ByteFeatureFactory {
   }
 
   Feature KLDOfCharDistribution() {
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils
-          .getPreviousRevision(featureContext.getPreviousRevisions());
-      if (previousRevision == null) {
+    return parameters -> {
+      val previousRevision = parameters.getPreviousRevision();
+      if (previousRevision == null) { // TODO check needed?
         return 0;
       }
-      val currentTableContents = TableContentExtractor.getContent(revision);
+      val currentTableContents = TableContentExtractor.getContent(parameters);
       if (currentTableContents.length() == 0) {
         return 0;
       }
-      val previousTableContents = TableContentExtractor.getContent(previousRevision);
+      val previousTableContents = TableContentExtractor.getPreviousContent(parameters);
       if (previousTableContents.length() == 0) {
         return 0;
       }
@@ -61,8 +59,8 @@ class ByteFeatureFactory {
   }
 
   Feature commentLength() {
-    return (revision, ignored) -> {
-      val comment = revision.getComment();
+    return parameters -> {
+      val comment = parameters.getRevision().getComment();
 
       if (comment == null || comment.getValue() == null) {
         return 0;

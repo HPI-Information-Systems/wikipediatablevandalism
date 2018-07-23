@@ -1,7 +1,8 @@
-package features.language;
+package features.content.util.language;
 
 import com.google.common.collect.Sets;
 import features.Feature;
+import features.content.util.TableContentExtractor;
 import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
@@ -11,17 +12,17 @@ import util.WordsExtractor;
 /**
  * Percentage increase of added words from word list compared to previous revision.
  */
-class TableWordImpact implements Feature {
+public class TableWordImpact implements Feature {
 
   private final Set<String> words;
   private final boolean isMatching;
 
-  TableWordImpact(Set<String> words, boolean isMatching) {
+  public TableWordImpact(Set<String> words, boolean isMatching) {
     this.words = words;
     this.isMatching = isMatching;
   }
 
-  TableWordImpact(Set<String> words) {
+  public TableWordImpact(Set<String> words) {
     this(words, false);
   }
 

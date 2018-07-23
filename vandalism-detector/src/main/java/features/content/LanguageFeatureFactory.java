@@ -1,15 +1,19 @@
 package features.content;
 
 import features.Feature;
-import features.language.regex.SuperlativePatternList;
-import features.language.wordlists.DictionaryWordList;
-import features.language.wordlists.PronounWordList;
-import features.language.wordlists.RevertWordList;
-import features.language.wordlists.SexualWordList;
-import features.language.wordlists.VulgarWordList;
-import features.content.util.language.AddedNonDictionaryWords;
-import features.content.util.language.OffensiveWordsInComment;
-import features.content.util.language.OffensiveWordsInTable;
+import features.content.util.language.CommentContainsWords;
+import features.content.util.language.CommentRegexFrequency;
+import features.content.util.language.CommentWordFrequency;
+import features.content.util.language.TableRegexFrequency;
+import features.content.util.language.TableRegexImpact;
+import features.content.util.language.TableWordFrequency;
+import features.content.util.language.TableWordImpact;
+import features.content.util.language.regex.SuperlativePatternList;
+import features.content.util.language.wordlists.DictionaryWordList;
+import features.content.util.language.wordlists.PronounWordList;
+import features.content.util.language.wordlists.RevertWordList;
+import features.content.util.language.wordlists.SexualWordList;
+import features.content.util.language.wordlists.VulgarWordList;
 
 class LanguageFeatureFactory {
 
@@ -61,15 +65,15 @@ class LanguageFeatureFactory {
     return new TableWordImpact(DictionaryWordList.getWords(), false);
   }
 
-  public Feature superlativeWordFrequencyInTable() {
+   Feature superlativeWordFrequencyInTable() {
     return new TableRegexFrequency(SuperlativePatternList.getPatterns());
   }
 
-  public Feature superlativeWordImpactInTable() {
+  Feature superlativeWordImpactInTable() {
     return new TableRegexImpact(SuperlativePatternList.getPatterns());
   }
 
-  public Feature superlativeWordFrequencyInComment() {
+  Feature superlativeWordFrequencyInComment() {
     return new CommentRegexFrequency(SuperlativePatternList.getPatterns());
   }
 

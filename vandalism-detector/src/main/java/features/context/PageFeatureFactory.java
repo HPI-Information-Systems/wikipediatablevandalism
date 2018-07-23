@@ -15,32 +15,33 @@ import util.BasicUtils;
 class PageFeatureFactory {
 
   Feature timeSinceLastArticleEdit() {
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+    return parameters -> {
+      val previousRevision = parameters.getPreviousRevision();
       if (previousRevision == null) {
         return -1;
       }
-      val revisionTime = revision.getDate().toInstant();
+      val revisionTime = parameters.getRevision().getDate().toInstant();
       val previousRevisionTime = previousRevision.getDate().toInstant();
       Preconditions.checkState(previousRevisionTime.isBefore(revisionTime),
           "previousRevisionTime should be before revisionTime");
+      val test = Duration.between(previousRevisionTime, revisionTime).toMinutes();
       return Duration.between(previousRevisionTime, revisionTime)
           .toMinutes(); // TODO maybe use getSeconds() instead
     };
   }
 
   Feature hasPreviousSameContributor() {
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+    return parameters -> {
+      val previousRevision = parameters.getPreviousRevision();
       if (previousRevision == null) {
         return false;
       }
-      return BasicUtils.hasSameContributor(revision, previousRevision);
+      return BasicUtils.hasSameContributor(parameters.getRevision(), previousRevision);
     };
   }
 
   Feature timeSinceLastArticleEditBySameContributor() {
-    return new TimeSinceLastArticleEdit();
+    return new TimeSinceLastArticleEditBySameContributor();
   }
 
   Feature revertCount() {

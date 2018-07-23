@@ -8,8 +8,6 @@ import java.util.List;
 import lombok.val;
 import util.BasicUtils;
 import features.content.util.TableContentExtractor;
-import util.KLDUtil;
-import util.TableContentExtractor;
 import util.WordsExtractor;
 
 class TextFeatureFactory {
@@ -31,7 +29,7 @@ class TextFeatureFactory {
   }
 
   Feature ratioOfAlphanumericCharsToAllChars() {
-    return (parameters) -> {
+    return parameters -> {
       val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
@@ -96,10 +94,7 @@ class TextFeatureFactory {
       int longestConsecutiveSingleCharCount = 0;
       int currentConsecutiveSingleCharCount = 0;
       for (val c : tableContents.toCharArray()) {
-        if (Character.isWhitespace(c)) {
-          continue;
-        }
-        if (charBefore != c) {
+        if (charBefore != c || Character.isWhitespace(c)) {
           if (currentConsecutiveSingleCharCount > longestConsecutiveSingleCharCount) {
             longestConsecutiveSingleCharCount = currentConsecutiveSingleCharCount;
           }
@@ -142,26 +137,8 @@ class TextFeatureFactory {
     };
   }
 
-  Feature previousLength() {
-    return parameters -> {
-      val previousRevision = parameters.getPreviousRevision();
-      if (previousRevision == null) {
-        return 0;
-      }
-      return TableContentExtractor.getPreviousContent(parameters).length();
-    };
-  }
-
   Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with deletion corpus
     return parameters -> {
-      if (parameters.getPreviousRevision() == null) {
-  Feature averageRelativeFrequencyOfNewAddedWords() {
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils
-          .getPreviousRevision(featureContext.getPreviousRevisions());
-      if (previousRevision == null) {
-        return 0;
-      }
       val currentTableContents = TableContentExtractor.getContent(parameters);
       if (currentTableContents.length() == 0) {
         return 0;
@@ -179,7 +156,8 @@ class TextFeatureFactory {
 
       List<Double> addedWordFrequency = new ArrayList<>();
       for (val addedWord : addedWordOccurrence.elementSet()) {
-        addedWordFrequency.add((double) previousWordOccurrence.count(addedWord) / previousWordOccurrence.size());
+        addedWordFrequency
+            .add((double) previousWordOccurrence.count(addedWord) / previousWordOccurrence.size());
       }
 
       return Stats.meanOf(addedWordFrequency);

@@ -1,4 +1,4 @@
-package util;
+package features.content.util.language.regex;
 
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -22,4 +22,5 @@ public final class RegexUtil {
 
   private RegexUtil() {
   }
+
 }

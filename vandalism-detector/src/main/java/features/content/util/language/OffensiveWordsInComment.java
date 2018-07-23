@@ -6,19 +6,18 @@ import features.Feature;
 import util.WordsExtractor;
 import java.util.Set;
 import lombok.val;
-import model.FeatureContext;
+import model.FeatureParameters;
 import org.apache.commons.lang3.StringUtils;
-import wikixmlsplit.datastructures.MyRevisionType;
 
 public class OffensiveWordsInComment implements Feature {
 
   @Override
-  public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
-    if (revision.getComment() == null) {
+  public Object getValue(final FeatureParameters parameters) {
+    if (parameters.getRevision().getComment() == null) {
       return 0;
     }
 
-    val comment = revision.getComment().getValue();
+    val comment = parameters.getRevision().getComment().getValue();
     if (StringUtils.isEmpty(comment)) {
       return 0;
     }

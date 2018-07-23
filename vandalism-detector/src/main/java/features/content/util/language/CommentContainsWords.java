@@ -1,4 +1,4 @@
-package features.language;
+package features.content.util.language;
 
 import com.google.common.collect.Sets;
 import features.Feature;
@@ -11,11 +11,11 @@ import util.WordsExtractor;
 /**
  * Boolean feature to show if a comment mentions a word.
  */
-class CommentContainsWords implements Feature {
+public class CommentContainsWords implements Feature {
 
   private final Set<String> words;
 
-  CommentContainsWords(Set<String> words) {
+  public CommentContainsWords(Set<String> words) {
     this.words = words;
   }
 

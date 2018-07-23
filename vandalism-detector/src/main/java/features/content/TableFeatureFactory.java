@@ -10,22 +10,22 @@ import lombok.val;
 class TableFeatureFactory {
 
   Feature currentRowCount() {
-    return (ignored, featureContext) -> {
-      val match = featureContext.getRelevantMatch();
+    return parameters -> {
+      val match = parameters.getRelevantMatch();
       return match == null ? 0 : match.getCurrentTable().getRows().size();
     };
   }
 
   Feature currentColumnCount() {
-    return (ignored, featureContext) -> {
-      val match = featureContext.getRelevantMatch();
+    return parameters -> {
+      val match = parameters.getRelevantMatch();
       return match == null ? 0 : match.getCurrentTable().getColumns().size();
     };
   }
 
   Feature currentCellCount() {
-    return (ignored, featureContext) -> {
-      val match = featureContext.getRelevantMatch();
+    return parameters -> {
+      val match = parameters.getRelevantMatch();
       if (match == null) {
         return 0;
       }
@@ -39,25 +39,25 @@ class TableFeatureFactory {
   // down here - table matching required
 
   Feature unmatchedTables() {
-    return (revision, featureContext) -> {
-      if (revision.getParsed() == null) {
+    return parameters -> {
+      if (parameters.getRevision().getParsed() == null) {
         return 1d;
       }
 
-      final double removedTableCount = featureContext.getResult().getRemovedTables().size();
-      final double currentTableCount = revision.getParsed().size();
+      final double removedTableCount = parameters.getResult().getRemovedTables().size();
+      final double currentTableCount = parameters.getRevision().getParsed().size();
       return (currentTableCount - removedTableCount) / currentTableCount;
     };
   }
 
   Feature unmatchedRows() {
-    return (ignored, featureContext) -> {
-      if (featureContext.getRowMatchResult() == null) {
+    return parameters -> {
+      if (parameters.getRowMatchResult() == null) {
         return 1d;
       }
 
-      final double matchedRowCount = featureContext.getRowMatchResult().getMatches().size();
-      final double totalRowCount = featureContext.getRelevantMatch().getCurrentTable().getRows().size();
+      final double matchedRowCount = parameters.getRowMatchResult().getMatches().size();
+      final double totalRowCount = parameters.getRelevantMatch().getCurrentTable().getRows().size();
 
       if (totalRowCount == 0) {
         return 0;

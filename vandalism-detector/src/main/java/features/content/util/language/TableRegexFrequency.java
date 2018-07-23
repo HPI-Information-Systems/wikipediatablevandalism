@@ -1,13 +1,15 @@
-package features.language;
+package features.content.util.language;
 
-import static util.RegexUtil.countMatches;
+import static features.content.util.language.regex.RegexUtil.countMatches;
 
 import features.Feature;
+import features.content.util.TableContentExtractor;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.val;
 import model.FeatureParameters;
 import util.DiffUtil;
+import util.WordsExtractor;
 
 /**
  * Number of matching words to a list of regex patterns relative to the size of the edit in tables.
@@ -16,7 +18,7 @@ public class TableRegexFrequency implements Feature {
 
   private final Set<Pattern> regularExpressions;
 
-  TableRegexFrequency(Set<Pattern> regularExpressions) {
+  public TableRegexFrequency(Set<Pattern> regularExpressions) {
     this.regularExpressions = regularExpressions;
   }
 

@@ -8,7 +8,7 @@ import com.google.common.collect.Multiset;
 import java.util.Set;
 import wikixmlsplit.renderer.wikitable.Attribute;
 
-class AttributeUtil {
+public class AttributeUtil {
 
   private static final Set<String> ATTRIBUTE_NAMES;
 
@@ -58,7 +58,7 @@ class AttributeUtil {
     return set;
   }
 
-  static Set<Attribute> filterNonStandardAttributes(final Set<Attribute> attributes) {
+  public static Set<Attribute> filterNonStandardAttributes(final Set<Attribute> attributes) {
     return attributes.stream().filter(a -> !ATTRIBUTE_NAMES.contains(a.getKey()))
         .collect(toSet());
   }

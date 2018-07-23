@@ -9,15 +9,14 @@ import util.WordsExtractor;
 import java.util.List;
 import java.util.Set;
 import matching.table.TableMatch;
-import model.FeatureContext;
-import wikixmlsplit.datastructures.MyRevisionType;
+import model.FeatureParameters;
 import wikixmlsplit.renderer.wikitable.Cell;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class OffensiveWordsInTable implements Feature {
 
   @Override
-  public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
+  public Object getValue(final FeatureParameters featureContext) {
     int totalOffensiveWords = 0;
 
     for (final WikiTable added : featureContext.getResult().getAddedTables()) {
