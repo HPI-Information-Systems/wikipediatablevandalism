@@ -24,7 +24,7 @@ public class RevisionChecker {
     if (previous.getParsed() == null || revision.getParsed() == null) {
       return true;
     }
-    
+
     final Collection<String> parsedDifference = CollectionUtils
         .disjunction(previous.getParsed(), revision.getParsed());
     return isTableInvolved(parsedDifference);
