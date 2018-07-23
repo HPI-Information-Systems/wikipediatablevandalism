@@ -1,7 +1,6 @@
 package features;
 
-import model.FeatureContext;
-import wikixmlsplit.datastructures.MyRevisionType;
+import model.FeatureParameters;
 
 /**
  * all Features which operate on the context of the revision.
@@ -9,5 +8,5 @@ import wikixmlsplit.datastructures.MyRevisionType;
 @FunctionalInterface
 public interface Feature {
 
-  Object getValue(MyRevisionType revision, FeatureContext featureContext);
+  Object getValue(FeatureParameters parameters);
 }

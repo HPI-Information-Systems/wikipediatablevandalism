@@ -1,59 +1,52 @@
 package features.content.util;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import java.util.List;
-import lombok.val;
-import lombok.var;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
 import wikixmlsplit.datastructures.MyRevisionType;
+import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class TableContentExtractor {
 
-  public static String getContent(final MyRevisionType revision) {
-    var contentString = getCommentContent(revision.getComment());
-    contentString += getTableContents(revision.getParsed());
-    return contentString;
+  @Nonnull
+  public static String getContent(final FeatureParameters parameters) {
+    return extract(parameters.getRevision(), BasicUtils.getCurrentTables(parameters));
   }
 
-  private static String getCommentContent(final CommentType comment) {
+  @Nonnull
+  public static String getPreviousContent(final FeatureParameters parameters) {
+    return extract(parameters.getPreviousRevision(), BasicUtils.getPreviousTables(parameters));
+  }
+
+  private static String extract(@Nullable final MyRevisionType revision,
+      final List<WikiTable> tables) {
+
+    final StringBuilder content = new StringBuilder(128);
+
+    if (revision != null) {
+      getCommentContent(content, revision.getComment());
+    }
+
+    getTableContents(content, tables);
+    return content.toString();
+  }
+
+  private static void getCommentContent(final StringBuilder content, final CommentType comment) {
     if (comment == null || comment.getValue() == null) {
-      return "";
+      return;
     }
-    return comment.getValue();
+    content.append(comment.getValue());
   }
 
-  private static String getTableContents(final List<String> parsedList) {
-    if (parsedList == null) {
-      return "";
-    }
-    val tableContents = new StringBuilder();
-    for (val parsed : parsedList) {
-      val jsonObject = new JsonParser().parse(parsed).getAsJsonObject();
-      tableContents.append(getTableContent(jsonObject));
-      tableContents.append("\n");
-    }
-    return tableContents.toString();
-  }
+  private static void getTableContents(final StringBuilder content,
+      final List<WikiTable> tables) {
 
-  private static String getTableContent(final JsonObject jsonObject) {
-    val tableContent = new StringBuilder();
-    if (jsonObject.has("body") && jsonObject.get("body").isJsonObject()) {
-      tableContent.append(getTableContent(jsonObject.get("body").getAsJsonObject()));
-    } else if (jsonObject.has("title") && jsonObject.get("title").isJsonObject()) {
-      tableContent.append(getTableContent(jsonObject.get("title").getAsJsonObject()));
-    } else if (jsonObject.has("target") && jsonObject.get("target").isJsonObject()) {
-      tableContent.append(getTableContent(jsonObject.get("target").getAsJsonObject()));
-    } else if (jsonObject.has("!list") && jsonObject.get("!list").isJsonArray()) {
-      for (val element : jsonObject.get("!list").getAsJsonArray()) {
-        if (element.isJsonPrimitive()) {
-          tableContent.append(element.getAsString());
-        } else if (element.isJsonObject()) {
-          tableContent.append(getTableContent(element.getAsJsonObject()));
-        }
+    for (final WikiTable table : tables) {
+      for (final String word : WordsExtractor.extractWords(table)) {
+        content.append(word);
       }
     }
-    return tableContent.toString();
   }
-
 }

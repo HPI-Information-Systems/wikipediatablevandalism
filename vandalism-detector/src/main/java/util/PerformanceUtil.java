@@ -2,9 +2,11 @@ package util;
 
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import javax.annotation.ParametersAreNonnullByDefault;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@ParametersAreNonnullByDefault
 public class PerformanceUtil {
 
   public static void runMeasured(final String name, final Runnable runnable) {

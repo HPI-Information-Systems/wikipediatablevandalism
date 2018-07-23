@@ -7,10 +7,12 @@ import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.Set;
+import javax.annotation.Nonnull;
 import lombok.val;
 
 public class WordListUtil {
 
+  @Nonnull
   public static Set<String> read(final String filename) {
     val url = WordListUtil.class.getClassLoader().getResource(filename);
 

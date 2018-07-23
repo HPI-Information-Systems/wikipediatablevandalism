@@ -6,8 +6,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.val;
 import matching.table.TableMatch;
-import model.FeatureContext;
-import wikixmlsplit.datastructures.MyRevisionType;
+import model.FeatureParameters;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class TableGeometry implements Feature {
@@ -38,17 +37,17 @@ public class TableGeometry implements Feature {
   }
 
   @Override
-  public Object getValue(final MyRevisionType revision, final FeatureContext context) {
-    val precursors = context.getPreviousRevisions();
+  public Object getValue(final FeatureParameters parameters) {
+    val precursors = parameters.getPreviousRevisions();
 
     if (precursors.isEmpty()) {
       return 0;
     }
 
-    return computeSizeChange(revision, context);
+    return computeSizeChange(parameters);
   }
 
-  private double computeSizeChange(final MyRevisionType revision, final FeatureContext context) {
+  private double computeSizeChange(final FeatureParameters context) {
     val results = context.getResult();
 
     // Matches

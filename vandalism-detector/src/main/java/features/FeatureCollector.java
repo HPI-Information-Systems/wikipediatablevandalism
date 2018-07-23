@@ -15,6 +15,7 @@ import matching.persistence.MatchingFacade;
 import model.RevisionTag;
 import model.Tag;
 import runner.Arguments;
+import tools.RevisionChecker;
 import util.PageUtil;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
@@ -27,17 +28,19 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
 @Slf4j
 public class FeatureCollector {
 
+  private final RevisionChecker revisionChecker;
   private final FeaturePack pack;
   private final FeatureSink sink;
-  private final FeatureContextFactory contextFactory;
+  private final FeatureParametersFactory contextFactory;
   private final MatchingFacade matchingFacade;
 
   public FeatureCollector(final Arguments arguments, final FeaturePack pack, final Output output) {
-    this.matchingFacade = new MatchingFacade(arguments);
+    revisionChecker = new RevisionChecker();
+    matchingFacade = new MatchingFacade(arguments);
     this.pack = pack;
     sink = new FeatureSink(pack, output);
     sink.setup();
-    contextFactory = new FeatureContextFactory();
+    contextFactory = new FeatureParametersFactory();
   }
 
   public void accept(final MyPageType page, final List<RevisionTag> observations) {
@@ -64,12 +67,25 @@ public class FeatureCollector {
     log.debug("Processing revision {} of page {} ({} {})",
         revision.getId(), page.getId(), tags.size(), tags.size() == 1 ? "tag" : "tags");
 
+    if (skipRevision(page, revision)) {
+      return;
+    }
+
     val values = new HashMap<String, Object>();
     val featureContext = contextFactory.create(page, revision, matching);
 
     runMeasured("Feature computation", () -> pack.forEachFeature(
-        (name, feature) -> values.put(name, feature.getValue(revision, featureContext))));
+        (name, feature) -> values.put(name, feature.getValue(featureContext))));
 
     sink.accept(revision, tags, values);
+  }
+
+  private boolean skipRevision(final MyPageType page, final MyRevisionType revision) {
+    final boolean valid = revisionChecker.checkRevisionFeasible(page, revision);
+    if (!valid) {
+      log.warn("Revision {} of page {} (\"{}\") is SKIPPED",
+          revision.getId(), page.getId(), page.getTitle());
+    }
+    return !valid;
   }
 }

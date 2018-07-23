@@ -8,13 +8,15 @@ import java.util.List;
 import lombok.val;
 import util.BasicUtils;
 import features.content.util.TableContentExtractor;
+import util.KLDUtil;
+import util.TableContentExtractor;
 import util.WordsExtractor;
 
 class TextFeatureFactory {
 
   Feature ratioOfNumericalCharsToAllChars() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -29,8 +31,8 @@ class TextFeatureFactory {
   }
 
   Feature ratioOfAlphanumericCharsToAllChars() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return (parameters) -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -45,8 +47,8 @@ class TextFeatureFactory {
   }
 
   Feature ratioOfUppercaseCharsToAllChars() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -61,8 +63,8 @@ class TextFeatureFactory {
   }
 
   Feature ratioOfUppercaseCharsToLowercaseChars() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -85,8 +87,8 @@ class TextFeatureFactory {
   }
 
   Feature lengthOfLongestConsecutiveSequenceOfSingleChar() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -116,8 +118,8 @@ class TextFeatureFactory {
   }
 
   Feature lengthOfLongestToken() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -140,6 +142,19 @@ class TextFeatureFactory {
     };
   }
 
+  Feature previousLength() {
+    return parameters -> {
+      val previousRevision = parameters.getPreviousRevision();
+      if (previousRevision == null) {
+        return 0;
+      }
+      return TableContentExtractor.getPreviousContent(parameters).length();
+    };
+  }
+
+  Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with deletion corpus
+    return parameters -> {
+      if (parameters.getPreviousRevision() == null) {
   Feature averageRelativeFrequencyOfNewAddedWords() {
     return (revision, featureContext) -> {
       val previousRevision = BasicUtils
@@ -147,11 +162,11 @@ class TextFeatureFactory {
       if (previousRevision == null) {
         return 0;
       }
-      val currentTableContents = TableContentExtractor.getContent(revision);
+      val currentTableContents = TableContentExtractor.getContent(parameters);
       if (currentTableContents.length() == 0) {
         return 0;
       }
-      val previousTableContents = TableContentExtractor.getContent(previousRevision);
+      val previousTableContents = TableContentExtractor.getPreviousContent(parameters);
       if (previousTableContents.length() == 0) {
         return 0;
       }
@@ -170,5 +185,4 @@ class TextFeatureFactory {
       return Stats.meanOf(addedWordFrequency);
     };
   }
-
 }

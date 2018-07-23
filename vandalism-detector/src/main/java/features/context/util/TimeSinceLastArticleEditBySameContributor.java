@@ -6,7 +6,7 @@ import java.time.Duration;
 import java.util.Objects;
 import java.util.function.Predicate;
 import lombok.val;
-import model.FeatureContext;
+import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 import util.BasicUtils;
 import wikixmlsplit.datastructures.MyRevisionType;
@@ -20,6 +20,9 @@ public class TimeSinceLastArticleEditBySameContributor implements Feature {
   @SuppressWarnings("all")
   public Object getValue(final MyRevisionType revision, FeatureContext featureContext) {
     val precursors = featureContext.getPreviousRevisions();
+  public Object getValue(final FeatureParameters parameters) {
+    val revision = parameters.getRevision();
+    val precursors = parameters.getPreviousRevisions();
     val sameContributor = getContributorFilter(revision.getContributor());
     val previousContribution = precursors.stream()
         .filter(precursor -> sameContributor.test(precursor.getContributor()))

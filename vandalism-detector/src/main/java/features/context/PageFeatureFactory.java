@@ -40,15 +40,14 @@ class PageFeatureFactory {
   }
 
   Feature timeSinceLastArticleEditBySameContributor() {
-    return (revision, featureContext) -> new TimeSinceLastArticleEditBySameContributor()
-        .getValue(revision, featureContext);
+    return new TimeSinceLastArticleEdit();
   }
 
   Feature revertCount() {
-    return (revision, featureContext) -> {
+    return parameters -> {
       int revertCount = 0;
-      for (val previousRevision : featureContext.getPreviousRevisions()) {
-        if (revision.getSha1().equals(previousRevision.getSha1())) {
+      for (val previousRevision : parameters.getPreviousRevisions()) {
+        if (parameters.getRevision().getSha1().equals(previousRevision.getSha1())) {
           ++revertCount;
         }
       }
@@ -57,22 +56,23 @@ class PageFeatureFactory {
   }
 
   Feature ratioOffAllEditsToContributorEdits() {
-    return (revision, featureContext) -> {
+    return parameters -> {
       float sameContributor = 1;
-      for (val previousRevision : featureContext.getPreviousRevisions()) {
-        if (BasicUtils.hasSameContributor(revision, previousRevision)) {
+      for (val previousRevision : parameters.getPreviousRevisions()) {
+        if (BasicUtils.hasSameContributor(parameters.getRevision(), previousRevision)) {
           ++sameContributor;
         }
       }
-      return sameContributor / (float) (featureContext.getPreviousRevisions().size() + 1);
+      return sameContributor / (float) (parameters.getPreviousRevisions().size() + 1);
     };
   }
 
   Feature contributorRevertedBeforeInThatArticleCount() {
-    return (revision, featureContext) -> {
+    return parameters -> {
       int revertedRevisionCount = 0;
       List<String> searchedBefore = new ArrayList<>();
-      val allRevisions = featureContext.getPreviousRevisions();
+      val allRevisions = parameters.getPreviousRevisions();
+      val revision = parameters.getRevision();
       allRevisions.add(0, revision);
       for (val currentRevision : allRevisions) {
         if (searchedBefore

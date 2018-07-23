@@ -11,23 +11,28 @@ import matching.row.RowMatchService;
 import matching.table.TableMatch;
 import matching.table.TableMatchResult;
 import matching.table.TableMatchService;
-import model.FeatureContext;
+import model.FeatureParameters;
+import util.BasicUtils;
 import util.PageUtil;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 @Slf4j
-class FeatureContextFactory {
+class FeatureParametersFactory {
 
-  FeatureContext create(final MyPageType page, final MyRevisionType revision,
+  FeatureParameters create(final MyPageType page, final MyRevisionType revision,
       final Matching matching) {
+
     val tableMatchResult = getTableMatching(page, revision, matching);
     val selectedMatch = selectMatch(tableMatchResult);
+    final List<MyRevisionType> previousRevisions = previousRevisions(page, revision);
 
-    return FeatureContext.builder()
+    return FeatureParameters.builder()
         .page(page)
-        .previousRevisions(previousRevisions(page, revision))
+        .revision(revision)
+        .previousRevision(BasicUtils.getPreviousRevision(previousRevisions))
+        .previousRevisions(previousRevisions)
         .result(tableMatchResult)
         .relevantMatch(selectedMatch)
         .rowMatchResult(getRowMatching(selectedMatch))
@@ -44,6 +49,10 @@ class FeatureContextFactory {
   }
 
   private TableMatch selectMatch(final TableMatchResult matches) {
+    if (matches.getMatches().isEmpty()) {
+      return null;
+    }
+
     for (final TableMatch m : matches.getMatches()) {
       if (!m.getPreviousTable().equals(m.getCurrentTable())) {
         // TODO consider similarity < 1
