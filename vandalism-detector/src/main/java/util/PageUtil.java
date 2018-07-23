@@ -6,12 +6,14 @@ import com.google.common.base.Preconditions;
 import java.math.BigInteger;
 import java.util.Collections;
 import java.util.function.Supplier;
+import javax.annotation.Nullable;
 import lombok.val;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 public class PageUtil {
 
+  @Nullable
   public static MyRevisionType findPreviousRevision(final MyPageType page,
       final MyRevisionType revision) {
 

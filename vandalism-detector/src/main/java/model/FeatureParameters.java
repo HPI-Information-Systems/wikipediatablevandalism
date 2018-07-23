@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import javax.annotation.Nullable;
 import lombok.Builder;
 import lombok.Value;
 import matching.row.RowMatchResult;
@@ -20,4 +21,14 @@ public class FeatureParameters {
   private TableMatchResult result;
   private TableMatch relevantMatch;
   private RowMatchResult rowMatchResult;
+
+  @Nullable
+  public MyRevisionType getPreviousRevision() {
+    return previousRevision;
+  }
+
+  @Nullable
+  public TableMatch getRelevantMatch() {
+    return relevantMatch;
+  }
 }

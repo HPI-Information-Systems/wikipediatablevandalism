@@ -3,6 +3,7 @@ package util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConstants;
 import lombok.val;
 import matching.table.TableMatch;
@@ -59,6 +60,7 @@ public class BasicUtils {
     return Objects.equals(revision1.getContributor().getId(), revision2.getContributor().getId());
   }
 
+  @Nonnull
   public static List<WikiTable> getCurrentTables(final FeatureParameters parameters) {
     val matchingResult = parameters.getResult();
     final List<WikiTable> tables = new ArrayList<>(matchingResult.getAddedTables());
@@ -68,6 +70,7 @@ public class BasicUtils {
     return tables;
   }
 
+  @Nonnull
   public static List<WikiTable> getPreviousTables(final FeatureParameters parameters) {
     val matchingResult = parameters.getResult();
     final List<WikiTable> tables = new ArrayList<>(matchingResult.getRemovedTables());

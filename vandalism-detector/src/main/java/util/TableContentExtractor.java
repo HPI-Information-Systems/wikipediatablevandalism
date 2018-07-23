@@ -1,6 +1,8 @@
 package util;
 
 import java.util.List;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
 import wikixmlsplit.datastructures.MyRevisionType;
@@ -8,15 +10,17 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class TableContentExtractor {
 
+  @Nonnull
   public static String getContent(final FeatureParameters parameters) {
     return extract(parameters.getRevision(), BasicUtils.getCurrentTables(parameters));
   }
 
+  @Nonnull
   public static String getPreviousContent(final FeatureParameters parameters) {
     return extract(parameters.getPreviousRevision(), BasicUtils.getPreviousTables(parameters));
   }
 
-  private static String extract(final MyRevisionType revision,
+  private static String extract(@Nullable final MyRevisionType revision,
       final List<WikiTable> tables) {
 
     final StringBuilder content = new StringBuilder(128);
