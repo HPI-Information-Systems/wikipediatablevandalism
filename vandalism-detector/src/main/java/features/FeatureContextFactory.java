@@ -27,6 +27,7 @@ class FeatureContextFactory {
 
     return FeatureContext.builder()
         .page(page)
+        .revision(revision)
         .previousRevisions(previousRevisions(page, revision))
         .result(tableMatchResult)
         .relevantMatch(selectedMatch)
