@@ -1,12 +1,20 @@
 package mock;
 
+import static java.util.stream.Collectors.toList;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Stream;
 import org.assertj.core.util.Lists;
+import wikixmlsplit.renderer.wikitable.Attribute;
 import wikixmlsplit.renderer.wikitable.Cell;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class MockTables {
 
   public static final WikiTable NEPAL_13809326_Table_0 = new WikiTable(
+      emptyTableAttributes(),
       "Urban Population",
       Lists.list(
           Lists.list(
@@ -37,9 +45,11 @@ public class MockTables {
               new Cell("156.312"),
               new Cell("5,0"),
               new Cell("190.900"))),
+      emptyRowAttributes(4),
       false);
 
   public static final WikiTable NEPAL_13809566_Table_0 = new WikiTable(
+      emptyTableAttributes(),
       "Urban Population",
       Lists.list(
           Lists.list(
@@ -70,5 +80,16 @@ public class MockTables {
               new Cell("156.312"),
               new Cell("5,0"),
               new Cell("190.900"))),
+      emptyRowAttributes(4),
       false);
+
+  private static List<Set<Attribute>> emptyRowAttributes(final int rowCount) {
+    return Stream.generate(Collections::<Attribute>emptySet)
+        .limit(rowCount)
+        .collect(toList());
+  }
+
+  private static Set<Attribute> emptyTableAttributes() {
+    return Collections.emptySet();
+  }
 }
