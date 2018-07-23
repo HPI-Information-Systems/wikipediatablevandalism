@@ -5,11 +5,10 @@ import features.Feature;
 import java.util.Set;
 import lombok.val;
 import lombok.var;
-import model.FeatureContext;
+import model.FeatureParameters;
 import util.BasicUtils;
 import util.TableContentExtractor;
 import util.WordsExtractor;
-import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
  * Percentage increase of added words from word list compared to previous revision.
@@ -29,10 +28,10 @@ class TableWordImpact implements Feature {
   }
 
   @Override
-  public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
-    val content = TableContentExtractor.getContent(revision);
+  public Object getValue(final FeatureParameters parameters) {
+    val content = TableContentExtractor.getContent(parameters);
     val words = WordsExtractor.extractWords(content);
-    val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+    val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
     var previousContent = previousRevision != null
         ? TableContentExtractor.getContent(previousRevision)
         : "";

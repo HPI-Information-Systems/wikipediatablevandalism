@@ -11,22 +11,22 @@ import util.BasicUtils;
 class ContextFeatureFactory {
 
   Feature isContributorAnonymous() {
-    return (revision, ignored) -> revision.getContributor().getUsername() == null;
+    return parameters -> parameters.getRevision().getContributor().getUsername() == null;
   }
 
   /**
    * @return the hours since midnight
    */
   Feature timeOfDay() {
-    return (revision, ignored) -> {
-      val ts = revision.getTimestamp();
+    return parameters -> {
+      val ts = parameters.getRevision().getTimestamp();
       return BasicUtils.valid(ts.getHour());
     };
   }
 
   Feature dayOfWeek() {
-    return (revision, ignored) -> {
-      val ts = revision.getTimestamp();
+    return parameters -> {
+      val ts = parameters.getRevision().getTimestamp();
       val day = BasicUtils.valid(ts.getDay());
       val month = BasicUtils.valid(ts.getMonth());
       val year = BasicUtils.valid(ts.getYear());
@@ -35,12 +35,12 @@ class ContextFeatureFactory {
   }
 
   Feature isMinorEdit() {
-    return (revision, ignored) -> revision.isMinor();
+    return parameters -> parameters.getRevision().isMinor();
   }
 
   Feature commentLength() {
-    return (revision, ignored) -> {
-      val comment = revision.getComment();
+    return parameters -> {
+      val comment = parameters.getRevision().getComment();
 
       if (comment == null || comment.getValue() == null) {
         return 0;
@@ -52,13 +52,14 @@ class ContextFeatureFactory {
 
   Feature isBot() {
     val botList = BotList.read();
-    return (revision, ignored) -> {
+    return parameters -> {
 
-      if (BasicUtils.isAnonymous(revision.getContributor())) {
+      if (BasicUtils.isAnonymous(parameters.getRevision().getContributor())) {
         return false;
       }
 
-      return botList.stream().anyMatch(str -> str.equals(revision.getContributor().getUsername()));
+      return botList.stream()
+          .anyMatch(str -> str.equals(parameters.getRevision().getContributor().getUsername()));
     };
   }
 }

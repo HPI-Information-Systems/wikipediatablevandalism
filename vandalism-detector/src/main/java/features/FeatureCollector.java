@@ -31,7 +31,7 @@ public class FeatureCollector {
   private final RevisionChecker revisionChecker;
   private final FeaturePack pack;
   private final FeatureSink sink;
-  private final FeatureContextFactory contextFactory;
+  private final FeatureParametersFactory contextFactory;
   private final MatchingFacade matchingFacade;
 
   public FeatureCollector(final Arguments arguments, final FeaturePack pack, final Output output) {
@@ -40,7 +40,7 @@ public class FeatureCollector {
     this.pack = pack;
     sink = new FeatureSink(pack, output);
     sink.setup();
-    contextFactory = new FeatureContextFactory();
+    contextFactory = new FeatureParametersFactory();
   }
 
   public void accept(final MyPageType page, final List<RevisionTag> observations) {
@@ -75,7 +75,7 @@ public class FeatureCollector {
     val featureContext = contextFactory.create(page, revision, matching);
 
     runMeasured("Feature computation", () -> pack.forEachFeature(
-        (name, feature) -> values.put(name, feature.getValue(revision, featureContext))));
+        (name, feature) -> values.put(name, feature.getValue(featureContext))));
 
     sink.accept(revision, tags, values);
   }

@@ -12,8 +12,9 @@ import util.BasicUtils;
 class ContextPreviousRevisionFeatureFactory {
 
   Feature timeSinceLastArticleEdit() {
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+    return parameters -> {
+      val revision = parameters.getRevision();
+      val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
       if (previousRevision == null) {
         return -1;
       }
@@ -27,23 +28,24 @@ class ContextPreviousRevisionFeatureFactory {
   }
 
   Feature hasPreviousSameContributor() {
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+    return parameters -> {
+      val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
       if (previousRevision == null) {
         return false;
       }
-      return BasicUtils.hasSameContributor(revision, previousRevision);
+      return BasicUtils.hasSameContributor(parameters.getRevision(), previousRevision);
     };
   }
 
   Feature sizeChange() { //TODO better parsing? -> put in ContentFeatures?
-    return (revision, featureContext) -> {
-      val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+    return parameters -> {
+      val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
       int previousRevisionParsedLength = 0;
       if (previousRevision != null) {
         previousRevisionParsedLength = BasicUtils.parsedLength(previousRevision.getParsed());
       }
-      return BasicUtils.parsedLength(revision.getParsed()) - previousRevisionParsedLength;
+      return BasicUtils.parsedLength(parameters.getRevision().getParsed())
+          - previousRevisionParsedLength;
     };
   }
 

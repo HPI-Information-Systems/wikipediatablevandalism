@@ -6,15 +6,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import matching.row.RowMatch;
 import matching.table.TableMatch;
-import model.FeatureContext;
-import wikixmlsplit.datastructures.MyRevisionType;
+import model.FeatureParameters;
 
 @RequiredArgsConstructor
 class RankChange implements Feature {
 
   @Override
-  public Object getValue(final MyRevisionType revision, final FeatureContext context) {
-    final TableMatch change = context.getRelevantMatch();
+  public Object getValue(final FeatureParameters parameters) {
+    final TableMatch change = parameters.getRelevantMatch();
 
     if (change == null) {
       // All tables identical - no rank change
@@ -25,7 +24,7 @@ class RankChange implements Feature {
     // (1) all rows of previous need to have a very similar row in current table
     // (2) the rows of previous table do not appear in the same order
     // TODO reconsider - the row matching is not necessarily injective!
-    final List<RowMatch> matchedRows = context.getRowMatchResult().getMatches();
+    final List<RowMatch> matchedRows = parameters.getRowMatchResult().getMatches();
 
     if (matchedRows.isEmpty()) {
       return false;

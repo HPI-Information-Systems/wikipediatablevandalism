@@ -11,21 +11,21 @@ import matching.row.RowMatchService;
 import matching.table.TableMatch;
 import matching.table.TableMatchResult;
 import matching.table.TableMatchService;
-import model.FeatureContext;
+import model.FeatureParameters;
 import util.PageUtil;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 @Slf4j
-class FeatureContextFactory {
+class FeatureParametersFactory {
 
-  FeatureContext create(final MyPageType page, final MyRevisionType revision,
+  FeatureParameters create(final MyPageType page, final MyRevisionType revision,
       final Matching matching) {
     val tableMatchResult = getTableMatching(page, revision, matching);
     val selectedMatch = selectMatch(tableMatchResult);
 
-    return FeatureContext.builder()
+    return FeatureParameters.builder()
         .page(page)
         .revision(revision)
         .previousRevisions(previousRevisions(page, revision))

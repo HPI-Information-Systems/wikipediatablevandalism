@@ -9,17 +9,16 @@ import java.util.List;
 import java.util.Set;
 import lombok.val;
 import matching.table.TableMatch;
-import model.FeatureContext;
-import wikixmlsplit.datastructures.MyRevisionType;
+import model.FeatureParameters;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
 class SharedCellRatio implements Feature {
 
 
   @Override
-  public Object getValue(final MyRevisionType revision, final FeatureContext context) {
+  public Object getValue(final FeatureParameters parameters) {
     final List<Double> values = new ArrayList<>();
-    for (val match : context.getResult().getMatches()) {
+    for (val match : parameters.getResult().getMatches()) {
       values.add(processMatch(match));
     }
 

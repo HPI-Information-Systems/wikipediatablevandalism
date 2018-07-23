@@ -35,8 +35,8 @@ class ContentFeatureFactory {
   }
 
   Feature ratioOfNumericalCharsToAllChars() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -51,8 +51,8 @@ class ContentFeatureFactory {
   }
 
   Feature ratioOfAlphanumericCharsToAllChars() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return (parameters) -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -67,8 +67,8 @@ class ContentFeatureFactory {
   }
 
   Feature ratioOfUppercaseCharsToAllChars() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -83,8 +83,8 @@ class ContentFeatureFactory {
   }
 
   Feature ratioOfUppercaseCharsToLowercaseChars() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -107,8 +107,8 @@ class ContentFeatureFactory {
   }
 
   Feature lengthOfLongestConsecutiveSequenceOfSingleChar() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -138,8 +138,8 @@ class ContentFeatureFactory {
   }
 
   Feature lengthOfLongestToken() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -163,9 +163,9 @@ class ContentFeatureFactory {
   }
 
   Feature previousLength() {
-    return (ignored, featureContext) -> {
+    return parameters -> {
       val previousRevision = BasicUtils
-          .getPreviousRevision(featureContext.getPreviousRevisions());
+          .getPreviousRevision(parameters.getPreviousRevisions());
       if (previousRevision == null) {
         return 0;
       }
@@ -174,13 +174,13 @@ class ContentFeatureFactory {
   }
 
   Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with deletion corpus
-    return (revision, featureContext) -> {
+    return parameters -> {
       val previousRevision = BasicUtils
-          .getPreviousRevision(featureContext.getPreviousRevisions());
+          .getPreviousRevision(parameters.getPreviousRevisions());
       if (previousRevision == null) {
         return 0;
       }
-      val currentTableContents = TableContentExtractor.getContent(revision);
+      val currentTableContents = TableContentExtractor.getContent(parameters);
       if (currentTableContents.length() == 0) {
         return 0;
       }
@@ -200,8 +200,8 @@ class ContentFeatureFactory {
   }
 
   Feature LZWCompressionRate() {
-    return (revision, ignored) -> {
-      val tableContents = TableContentExtractor.getContent(revision);
+    return parameters -> {
+      val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
         return 0;
       }
@@ -210,13 +210,13 @@ class ContentFeatureFactory {
   }
 
   Feature KLDOfCharDistribution() {
-    return (revision, featureContext) -> {
+    return parameters -> {
       val previousRevision = BasicUtils
-          .getPreviousRevision(featureContext.getPreviousRevisions());
+          .getPreviousRevision(parameters.getPreviousRevisions());
       if (previousRevision == null) {
         return -1;
       }
-      val currentTableContents = TableContentExtractor.getContent(revision);
+      val currentTableContents = TableContentExtractor.getContent(parameters);
       if (currentTableContents.length() == 0) {
         return -1;
       }
@@ -227,5 +227,4 @@ class ContentFeatureFactory {
       return KLDUtil.calculateKLDOfAddedChars(previousTableContents, currentTableContents);
     };
   }
-
 }

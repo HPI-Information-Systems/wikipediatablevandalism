@@ -5,10 +5,15 @@ import com.google.gson.JsonParser;
 import java.util.List;
 import lombok.val;
 import lombok.var;
+import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 public class TableContentExtractor {
+
+  public static String getContent(final FeatureParameters parameters) {
+    return getContent(parameters.getRevision());
+  }
 
   public static String getContent(final MyRevisionType revision) {
     var contentString = getCommentContent(revision.getComment());

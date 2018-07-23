@@ -5,11 +5,10 @@ import features.Feature;
 import java.util.Set;
 import lombok.val;
 import lombok.var;
-import model.FeatureContext;
+import model.FeatureParameters;
 import util.BasicUtils;
 import util.TableContentExtractor;
 import util.WordsExtractor;
-import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
  * Number of matching words in word list relative to the size of the edit in tables.
@@ -29,13 +28,13 @@ class TableWordFrequency implements Feature {
   }
 
   @Override
-  public Object getValue(MyRevisionType revision, FeatureContext featureContext) {
-    val previousRevision = BasicUtils.getPreviousRevision(featureContext.getPreviousRevisions());
+  public Object getValue(final FeatureParameters parameters) {
+    val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
     var previousContent = previousRevision != null
         ? TableContentExtractor.getContent(previousRevision)
         : "";
 
-    val content = TableContentExtractor.getContent(revision);
+    val content = TableContentExtractor.getContent(parameters);
     val diffWords = WordsExtractor.diffWords(previousContent, content);
     val matches = getMatches(diffWords.elementSet());
     return diffWords.size() > 0 ? ((float) matches.size() / diffWords.size()) : 0;

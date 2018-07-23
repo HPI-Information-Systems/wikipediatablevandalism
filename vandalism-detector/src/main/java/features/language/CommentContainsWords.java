@@ -4,10 +4,9 @@ import com.google.common.collect.Sets;
 import features.Feature;
 import java.util.Set;
 import lombok.val;
-import model.FeatureContext;
+import model.FeatureParameters;
 import org.apache.commons.lang3.StringUtils;
 import util.WordsExtractor;
-import wikixmlsplit.datastructures.MyRevisionType;
 
 /**
  * Boolean feature to show if a comment mentions a word.
@@ -21,12 +20,13 @@ class CommentContainsWords implements Feature {
   }
 
   @Override
-  public Object getValue(final MyRevisionType revision, final FeatureContext featureContext) {
-    if (revision.getComment() == null || StringUtils.isEmpty(revision.getComment().getValue())) {
+  public Object getValue(final FeatureParameters parameters) {
+    if (parameters.getRevision().getComment() == null ||
+        StringUtils.isEmpty(parameters.getRevision().getComment().getValue())) {
       return 0;
     }
 
-    val comment = revision.getComment().getValue();
+    val comment = parameters.getRevision().getComment().getValue();
     val words = WordsExtractor.extractWords(comment);
     val matches = Sets.intersection(words.elementSet(), this.words);
     return matches.size() > 0 ? 1 : 0;

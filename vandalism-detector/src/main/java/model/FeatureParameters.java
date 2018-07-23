@@ -11,7 +11,7 @@ import wikixmlsplit.datastructures.MyRevisionType;
 
 @Value
 @Builder
-public class FeatureContext {
+public class FeatureParameters {
 
   private MyPageType page;
   private MyRevisionType revision;
