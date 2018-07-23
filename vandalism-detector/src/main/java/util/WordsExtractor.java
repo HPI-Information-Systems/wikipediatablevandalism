@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Stream;
 import lombok.val;
+import org.apache.commons.lang3.StringUtils;
 import wikixmlsplit.renderer.wikitable.Cell;
 import wikixmlsplit.renderer.wikitable.Row;
 import wikixmlsplit.renderer.wikitable.WikiTable;
@@ -19,8 +20,7 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
  */
 public class WordsExtractor {
 
-  private static final Pattern WHITESPACE = Pattern.compile("\\s+");
-  private static final Pattern NON_ALPHANUMERIC = Pattern.compile("[^\\p{L}\\p{M} 0-9]");
+  private static final Pattern NON_ALPHANUMERIC = Pattern.compile("[^\\p{L}\\p{M}0-9]");
 
   public static Multiset<String> extractWords(final Collection<WikiTable> tables) {
     final Multiset<String> words = HashMultiset.create();
@@ -47,6 +47,7 @@ public class WordsExtractor {
         .flatMap(WordsExtractor::contentOf)
         .flatMap(WordsExtractor::wordsOf)
         .map(WordsExtractor::normalize)
+        .filter(s -> !StringUtils.isBlank(s))
         .collect(toList());
 
     return HashMultiset.create(normalizedWords);
@@ -55,7 +56,7 @@ public class WordsExtractor {
   public static Multiset<String> extractWords(final String text) {
     val normalizedWords = wordsOf(text)
         .map(WordsExtractor::normalize)
-        .filter(s -> !s.isEmpty())
+        .filter(s -> !StringUtils.isBlank(s))
         .collect(toList());
     return HashMultiset.create(normalizedWords);
   }
@@ -68,7 +69,7 @@ public class WordsExtractor {
   }
 
   private static Stream<String> wordsOf(final String value) {
-    return WHITESPACE.splitAsStream(value);
+    return NON_ALPHANUMERIC.splitAsStream(value);
   }
 
   private static String normalize(final String value) {
