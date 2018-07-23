@@ -44,6 +44,10 @@ class FeatureContextFactory {
   }
 
   private TableMatch selectMatch(final TableMatchResult matches) {
+    if (matches.getMatches().isEmpty()) {
+      return null;
+    }
+
     for (final TableMatch m : matches.getMatches()) {
       if (!m.getPreviousTable().equals(m.getCurrentTable())) {
         // TODO consider similarity < 1
