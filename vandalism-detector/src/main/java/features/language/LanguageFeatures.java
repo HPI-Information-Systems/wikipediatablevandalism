@@ -28,6 +28,9 @@ public class LanguageFeatures {
         .feature("superlativeWordFrequencyInTable", factory.superlativeWordFrequencyInTable())
         .feature("superlativeWordImpactInTable", factory.superlativeWordImpactInTable())
         .feature("superlativeWordFrequencyInComment", factory.superlativeWordFrequencyInComment())
+        .feature("wikiSyntaxElementFrequencyInTable", factory.wikiSyntaxElementFrequencyInTable())
+        .feature("wikiSyntaxElementImpactInTable", factory.wikiSyntaxElementImpactInTable())
+        .feature("wikiSyntaxElementFrequencyInComment", factory.wikiSyntaxElementFrequencyInComment())
         .feature("revertInComment", factory.revertInComment())
         .build();
   }
