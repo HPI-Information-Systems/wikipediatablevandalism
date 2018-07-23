@@ -8,7 +8,6 @@ import java.util.regex.Pattern;
 import lombok.val;
 import lombok.var;
 import model.FeatureParameters;
-import util.BasicUtils;
 import util.TableContentExtractor;
 import util.WordsExtractor;
 
@@ -27,12 +26,10 @@ class TableRegexImpact implements Feature {
   public Object getValue(final FeatureParameters parameters) {
     val content = TableContentExtractor.getContent(parameters);
     val words = WordsExtractor.extractWords(content);
-    val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
-    var previousContent = previousRevision != null
-        ? TableContentExtractor.getContent(previousRevision)
-        : "";
 
+    var previousContent = TableContentExtractor.getPreviousContent(parameters);
     val previousWords = WordsExtractor.extractWords(previousContent);
+
     val previousMatches = countMatches(this.regularExpressions, previousWords.elementSet());
     val matches = countMatches(this.regularExpressions, words.elementSet());
     val previousMatchCount = previousMatches > 0 ? previousMatches : 1;

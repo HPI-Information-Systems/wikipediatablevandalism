@@ -15,6 +15,7 @@ public class FeatureParameters {
 
   private MyPageType page;
   private MyRevisionType revision;
+  private MyRevisionType previousRevision;
   private List<MyRevisionType> previousRevisions;
   private TableMatchResult result;
   private TableMatch relevantMatch;

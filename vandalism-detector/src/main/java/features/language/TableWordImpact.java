@@ -4,9 +4,7 @@ import com.google.common.collect.Sets;
 import features.Feature;
 import java.util.Set;
 import lombok.val;
-import lombok.var;
 import model.FeatureParameters;
-import util.BasicUtils;
 import util.TableContentExtractor;
 import util.WordsExtractor;
 
@@ -31,12 +29,10 @@ class TableWordImpact implements Feature {
   public Object getValue(final FeatureParameters parameters) {
     val content = TableContentExtractor.getContent(parameters);
     val words = WordsExtractor.extractWords(content);
-    val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
-    var previousContent = previousRevision != null
-        ? TableContentExtractor.getContent(previousRevision)
-        : "";
 
+    val previousContent = TableContentExtractor.getPreviousContent(parameters);
     val previousWords = WordsExtractor.extractWords(previousContent);
+
     val previousMatches = getMatches(previousWords.elementSet());
     val matches = getMatches(words.elementSet());
     val previousMatchCount = previousMatches.size() > 0 ? previousMatches.size() : 1;

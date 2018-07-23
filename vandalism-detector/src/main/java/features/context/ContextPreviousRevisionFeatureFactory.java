@@ -14,7 +14,7 @@ class ContextPreviousRevisionFeatureFactory {
   Feature timeSinceLastArticleEdit() {
     return parameters -> {
       val revision = parameters.getRevision();
-      val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
+      val previousRevision = parameters.getPreviousRevision();
       if (previousRevision == null) {
         return -1;
       }
@@ -29,7 +29,7 @@ class ContextPreviousRevisionFeatureFactory {
 
   Feature hasPreviousSameContributor() {
     return parameters -> {
-      val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
+      val previousRevision = parameters.getPreviousRevision();
       if (previousRevision == null) {
         return false;
       }
@@ -39,7 +39,7 @@ class ContextPreviousRevisionFeatureFactory {
 
   Feature sizeChange() { //TODO better parsing? -> put in ContentFeatures?
     return parameters -> {
-      val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
+      val previousRevision = parameters.getPreviousRevision();
       int previousRevisionParsedLength = 0;
       if (previousRevision != null) {
         previousRevisionParsedLength = BasicUtils.parsedLength(previousRevision.getParsed());

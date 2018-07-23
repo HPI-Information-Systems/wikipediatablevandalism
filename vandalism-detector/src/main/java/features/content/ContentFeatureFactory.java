@@ -5,7 +5,6 @@ import features.Feature;
 import features.content.TableGeometry.Measure;
 import lombok.RequiredArgsConstructor;
 import lombok.val;
-import util.BasicUtils;
 import util.KLDUtil;
 import util.TableContentExtractor;
 import util.WordsExtractor;
@@ -164,27 +163,24 @@ class ContentFeatureFactory {
 
   Feature previousLength() {
     return parameters -> {
-      val previousRevision = BasicUtils
-          .getPreviousRevision(parameters.getPreviousRevisions());
+      val previousRevision = parameters.getPreviousRevision();
       if (previousRevision == null) {
         return 0;
       }
-      return TableContentExtractor.getContent(previousRevision).length();
+      return TableContentExtractor.getPreviousContent(parameters).length();
     };
   }
 
   Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with deletion corpus
     return parameters -> {
-      val previousRevision = BasicUtils
-          .getPreviousRevision(parameters.getPreviousRevisions());
-      if (previousRevision == null) {
+      if (parameters.getPreviousRevision() == null) {
         return 0;
       }
       val currentTableContents = TableContentExtractor.getContent(parameters);
       if (currentTableContents.length() == 0) {
         return 0;
       }
-      val previousTableContents = TableContentExtractor.getContent(previousRevision);
+      val previousTableContents = TableContentExtractor.getPreviousContent(parameters);
       if (previousTableContents.length() == 0) {
         return 0;
       }
@@ -211,8 +207,7 @@ class ContentFeatureFactory {
 
   Feature KLDOfCharDistribution() {
     return parameters -> {
-      val previousRevision = BasicUtils
-          .getPreviousRevision(parameters.getPreviousRevisions());
+      val previousRevision = parameters.getPreviousRevision();
       if (previousRevision == null) {
         return -1;
       }
@@ -220,7 +215,7 @@ class ContentFeatureFactory {
       if (currentTableContents.length() == 0) {
         return -1;
       }
-      val previousTableContents = TableContentExtractor.getContent(previousRevision);
+      val previousTableContents = TableContentExtractor.getPreviousContent(parameters);
       if (previousTableContents.length() == 0) {
         return -1;
       }

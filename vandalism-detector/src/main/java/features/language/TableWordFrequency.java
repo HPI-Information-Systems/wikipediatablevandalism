@@ -6,7 +6,6 @@ import java.util.Set;
 import lombok.val;
 import lombok.var;
 import model.FeatureParameters;
-import util.BasicUtils;
 import util.TableContentExtractor;
 import util.WordsExtractor;
 
@@ -29,11 +28,7 @@ class TableWordFrequency implements Feature {
 
   @Override
   public Object getValue(final FeatureParameters parameters) {
-    val previousRevision = BasicUtils.getPreviousRevision(parameters.getPreviousRevisions());
-    var previousContent = previousRevision != null
-        ? TableContentExtractor.getContent(previousRevision)
-        : "";
-
+    var previousContent = TableContentExtractor.getPreviousContent(parameters);
     val content = TableContentExtractor.getContent(parameters);
     val diffWords = WordsExtractor.diffWords(previousContent, content);
     val matches = getMatches(diffWords.elementSet());

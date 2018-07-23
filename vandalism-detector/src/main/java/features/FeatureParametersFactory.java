@@ -12,6 +12,7 @@ import matching.table.TableMatch;
 import matching.table.TableMatchResult;
 import matching.table.TableMatchService;
 import model.FeatureParameters;
+import util.BasicUtils;
 import util.PageUtil;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
@@ -22,13 +23,16 @@ class FeatureParametersFactory {
 
   FeatureParameters create(final MyPageType page, final MyRevisionType revision,
       final Matching matching) {
+
     val tableMatchResult = getTableMatching(page, revision, matching);
     val selectedMatch = selectMatch(tableMatchResult);
+    final List<MyRevisionType> previousRevisions = previousRevisions(page, revision);
 
     return FeatureParameters.builder()
         .page(page)
         .revision(revision)
-        .previousRevisions(previousRevisions(page, revision))
+        .previousRevision(BasicUtils.getPreviousRevision(previousRevisions))
+        .previousRevisions(previousRevisions)
         .result(tableMatchResult)
         .relevantMatch(selectedMatch)
         .rowMatchResult(getRowMatching(selectedMatch))
