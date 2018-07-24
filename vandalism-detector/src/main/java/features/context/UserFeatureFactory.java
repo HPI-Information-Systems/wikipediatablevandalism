@@ -11,7 +11,8 @@ import util.BasicUtils;
 class UserFeatureFactory {
 
   Feature isContributorAnonymous() {
-    return parameters -> parameters.getRevision().getContributor().getUsername() == null;
+    return parameters -> parameters.getRevision().getContributor().getUsername() == null
+        ? 1 : 0;
   }
 
   Feature isBot() {
@@ -19,16 +20,17 @@ class UserFeatureFactory {
     return parameters -> {
 
       if (BasicUtils.isAnonymous(parameters.getRevision().getContributor())) {
-        return false;
+        return 0;
       }
 
-      return botList.stream().anyMatch(str -> str.equals(parameters.getRevision().getContributor().getUsername()));
+      return botList.stream().anyMatch(str -> str.equals(parameters.getRevision().getContributor().getUsername()))
+          ? 1 : 0;
     };
   }
 
   // future feature currently not used
   Feature isContributorDeleted() {
-    return parameters -> parameters.getRevision().getContributor().getDeleted() != null;
+    return parameters -> parameters.getRevision().getContributor().getDeleted() != null
+        ? 1 : 0;
   }
-
 }

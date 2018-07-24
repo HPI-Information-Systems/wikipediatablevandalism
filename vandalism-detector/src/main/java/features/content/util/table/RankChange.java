@@ -12,12 +12,12 @@ import model.FeatureParameters;
 public class RankChange implements Feature {
 
   @Override
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     final TableMatch change = parameters.getRelevantMatch();
 
     if (change == null) {
       // All tables identical - no rank change
-      return false;
+      return 0;
     }
 
     // If we have a rank change
@@ -27,22 +27,22 @@ public class RankChange implements Feature {
     final List<RowMatch> matchedRows = parameters.getRowMatchResult().getMatches();
 
     if (matchedRows.isEmpty()) {
-      return false;
+      return 0;
     }
 
     val allMatched = matchedRows.size() == change.getCurrentTable().getRows().size();
     if (!allMatched) {
-      return false;
+      return 0;
     }
 
     int prev = matchedRows.get(0).getMatchedIndex();
     for (final RowMatch m : matchedRows.subList(1, matchedRows.size())) {
       if (prev >= m.getMatchedIndex()) {
-        return true;
+        return 1;
       }
       prev = m.getMatchedIndex();
     }
 
-    return false;
+    return 0;
   }
 }

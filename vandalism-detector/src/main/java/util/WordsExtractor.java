@@ -20,6 +20,7 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
  */
 public class WordsExtractor {
 
+  private static final Pattern WHITESPACE = Pattern.compile("\\s+");
   private static final Pattern NON_ALPHANUMERIC = Pattern.compile("[^\\p{L}\\p{M}0-9]");
 
   public static Multiset<String> extractWords(final Collection<WikiTable> tables) {
@@ -69,7 +70,7 @@ public class WordsExtractor {
   }
 
   private static Stream<String> wordsOf(final String value) {
-    return NON_ALPHANUMERIC.splitAsStream(value);
+    return WHITESPACE.splitAsStream(value);
   }
 
   private static String normalize(final String value) {

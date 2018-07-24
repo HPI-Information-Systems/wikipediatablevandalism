@@ -21,7 +21,7 @@ public class TableRegexFrequency implements Feature {
   }
 
   @Override
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     val diffWords = DiffUtil.diffWords(parameters);
     val matches = countMatches(this.regularExpressions, diffWords.elementSet());
     return diffWords.size() > 0 ? ((double) matches / diffWords.size()) : 0;

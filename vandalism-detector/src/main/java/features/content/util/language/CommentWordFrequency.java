@@ -27,7 +27,7 @@ public class CommentWordFrequency implements Feature {
   }
 
   @Override
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     if (parameters.getRevision().getComment() == null ||
         StringUtils.isEmpty(parameters.getRevision().getComment().getValue())) {
       return 0;
@@ -36,6 +36,6 @@ public class CommentWordFrequency implements Feature {
     val comment = parameters.getRevision().getComment().getValue();
     val words = WordsExtractor.extractWords(comment);
     val matches = getMatches(words, this.words, this.isMatching);
-    return words.size() > 0 ? matches.size() / words.size() : 0;
+    return words.size() > 0 ? ((double) matches.size() / words.size()) : 0;
   }
 }

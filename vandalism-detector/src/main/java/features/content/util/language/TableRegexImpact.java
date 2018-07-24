@@ -22,13 +22,13 @@ public class TableRegexImpact implements Feature {
   }
 
   @Override
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     val words = WordsExtractor.extractWords(BasicUtils.getCurrentTables(parameters));
     val previousWords = WordsExtractor.extractWords(BasicUtils.getPreviousTables(parameters));
 
     val previousMatches = countMatches(this.regularExpressions, previousWords.elementSet());
     val matches = countMatches(this.regularExpressions, words.elementSet());
     val previousMatchCount = previousMatches > 0 ? previousMatches : 1;
-    return ((double) (matches - previousMatchCount) / previousMatchCount);
+    return ((double) (matches - previousMatchCount + 1) / (previousMatchCount + 1));
   }
 }

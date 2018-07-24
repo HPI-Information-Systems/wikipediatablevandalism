@@ -27,7 +27,7 @@ public class TableWordFrequency implements Feature {
   }
 
   @Override
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     final Multiset<String> diffWords = DiffUtil.diffWords(parameters);
     val matches = getMatches(diffWords, this.words, this.isMatching);
     return diffWords.size() > 0 ? ((double) matches.size() / diffWords.size()) : 0;

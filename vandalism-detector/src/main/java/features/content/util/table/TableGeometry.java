@@ -37,7 +37,7 @@ public class TableGeometry implements Feature {
   }
 
   @Override
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     val precursors = parameters.getPreviousRevisions();
 
     if (precursors.isEmpty()) {
