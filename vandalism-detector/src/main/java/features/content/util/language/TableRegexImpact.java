@@ -30,6 +30,6 @@ public class TableRegexImpact implements Feature {
     val previousMatches = countMatches(this.regularExpressions, previousWords.elementSet());
     val matches = countMatches(this.regularExpressions, words.elementSet());
     val previousMatchCount = previousMatches > 0 ? previousMatches : 1;
-    return ((float) matches / previousMatchCount);
+    return ((float) (matches - previousMatchCount) / previousMatchCount);
   }
 }
