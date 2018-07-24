@@ -34,9 +34,10 @@ class PageFeatureFactory {
     return parameters -> {
       val previousRevision = parameters.getPreviousRevision();
       if (previousRevision == null) {
-        return false;
+        return 0;
       }
-      return BasicUtils.hasSameContributor(parameters.getRevision(), previousRevision);
+      return BasicUtils.hasSameContributor(parameters.getRevision(), previousRevision)
+          ? 1 : 0;
     };
   }
 
