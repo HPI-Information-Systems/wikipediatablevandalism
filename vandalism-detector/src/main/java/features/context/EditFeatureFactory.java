@@ -31,13 +31,15 @@ class EditFeatureFactory {
   }
 
   Feature isMinorEdit() {
-    return parameters -> parameters.getRevision().isMinor();
+    return parameters -> parameters.getRevision().isMinor()
+        ? 1 : 0;
   }
 
   // future feature currently not used
   Feature isCommentDeleted() {
     return parameters -> parameters.getRevision().getComment() != null
-        && parameters.getRevision().getComment().getDeleted() != null;
+        && parameters.getRevision().getComment().getDeleted() != null
+        ? 1 : 0;
   }
 
 }

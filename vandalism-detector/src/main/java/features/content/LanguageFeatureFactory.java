@@ -1,6 +1,8 @@
 package features.content;
 
+import com.google.common.collect.Lists;
 import features.Feature;
+import features.content.util.language.AverageFeature;
 import features.content.util.language.CommentContainsWords;
 import features.content.util.language.CommentRegexFrequency;
 import features.content.util.language.CommentWordFrequency;
@@ -66,19 +68,49 @@ class LanguageFeatureFactory {
     return new TableWordImpact(DictionaryWordList.getWords(), false);
   }
 
-  public Feature wikiSyntaxElementFrequencyInTable() {
+  Feature wikiSyntaxElementFrequencyInTable() {
     return new TableWordFrequency(WikiSyntaxWordList.getWords());
   }
 
-  public Feature wikiSyntaxElementImpactInTable() {
+  Feature wikiSyntaxElementImpactInTable() {
     return new TableWordImpact(WikiSyntaxWordList.getWords());
   }
 
-  public Feature wikiSyntaxElementFrequencyInComment() {
+  Feature wikiSyntaxElementFrequencyInComment() {
     return new CommentWordFrequency(WikiSyntaxWordList.getWords());
   }
 
-  public Feature superlativeWordFrequencyInTable() {
+  Feature averageAllBadWordFrequencyInTable() {
+    return new AverageFeature(Lists.newArrayList(
+        vulgarWordFrequencyInTables(),
+        personalPronounFrequencyInTable(),
+        nonDictionaryWordFrequencyInTable(),
+        sexualWordFrequencyInTables(),
+        superlativeWordFrequencyInTable()
+    ));
+  }
+
+  Feature averageAllBadWordImpactInTable() {
+    return new AverageFeature(Lists.newArrayList(
+        vulgarWordImpactInTables(),
+        personalPronounImpactInTable(),
+        nonDictionaryWordImpactInTable(),
+        sexualWordImpactInTables(),
+        superlativeWordImpactInTable()
+    ));
+  }
+
+  Feature averageAllBadWordFrequencyInComment() {
+    return new AverageFeature(Lists.newArrayList(
+        vulgarWordFrequencyInComment(),
+        personalPronounFrequencyInComment(),
+        nonDictionaryWordFrequencyInComment(),
+        sexualWordFrequencyInComment(),
+        superlativeWordFrequencyInComment()
+    ));
+  }
+
+  Feature superlativeWordFrequencyInTable() {
     return new TableRegexFrequency(SuperlativePatternList.getPatterns());
   }
 

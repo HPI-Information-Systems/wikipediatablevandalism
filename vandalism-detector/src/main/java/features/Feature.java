@@ -8,5 +8,5 @@ import model.FeatureParameters;
 @FunctionalInterface
 public interface Feature {
 
-  Object getValue(FeatureParameters parameters);
+  double getValue(FeatureParameters parameters);
 }

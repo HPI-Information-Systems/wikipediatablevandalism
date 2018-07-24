@@ -20,7 +20,7 @@ public class CommentContainsWords implements Feature {
   }
 
   @Override
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     if (parameters.getRevision().getComment() == null ||
         StringUtils.isEmpty(parameters.getRevision().getComment().getValue())) {
       return 0;
