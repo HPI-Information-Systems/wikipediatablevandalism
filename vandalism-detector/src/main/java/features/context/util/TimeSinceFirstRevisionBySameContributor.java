@@ -8,7 +8,7 @@ import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 import util.BasicUtils;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-public class TimeSinceFirstRevisionBySameContributorUtil {
+public class TimeSinceFirstRevisionBySameContributor {
 
   @SuppressWarnings("all")
   public static Object getTime(final MyRevisionType revision, final List<MyRevisionType> previousRevisions) {

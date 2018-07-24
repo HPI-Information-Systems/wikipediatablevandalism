@@ -5,7 +5,7 @@ import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
 import lombok.val;
 
-public class KLDUtil {
+public class KLD {
 
   public static Double calculateKLDOfAddedChars(final String before, final String current) {
     Multiset<Character> beforeCharDistributionMultiSet = HashMultiset.create();

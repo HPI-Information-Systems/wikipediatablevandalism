@@ -2,8 +2,8 @@ package features.content;
 
 import features.Feature;
 import features.content.util.TableContentExtractor;
-import features.content.util.byteP.KLDUtil;
-import features.content.util.byteP.ZipUtil;
+import features.content.util.byteP.KLD;
+import features.content.util.byteP.Zip;
 import lombok.val;
 import util.BasicUtils;
 
@@ -41,12 +41,12 @@ class ByteFeatureFactory {
       if (tableContents.length() == 0) {
         return 0;
       }
-      return ZipUtil.getCompressionRatio(tableContents);
+      return Zip.getCompressionRatio(tableContents);
     };
   }
 
   Feature KLDOfCharDistribution() {
-    return parameters -> KLDUtil.calculateKLDOfAddedChars(TableContentExtractor.getPreviousContent(parameters), TableContentExtractor.getContent(parameters));
+    return parameters -> KLD.calculateKLDOfAddedChars(TableContentExtractor.getPreviousContent(parameters), TableContentExtractor.getContent(parameters));
   }
 
   Feature commentLength() {

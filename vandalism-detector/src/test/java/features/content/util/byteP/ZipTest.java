@@ -11,7 +11,7 @@ import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class ZipUtilTest {
+class ZipTest {
 
   private String value;
 
@@ -28,16 +28,16 @@ class ZipUtilTest {
 
   @Test
   void saneCompressionRatio() {
-    final double actual = ZipUtil.getCompressionRatio(value);
+    final double actual = Zip.getCompressionRatio(value);
 
     assertThat(actual).isCloseTo(0.75, Offset.offset(0.01));
   }
 
   @Test
   void canCompress() {
-    final byte[] compressed = ZipUtil.compress(value);
+    final byte[] compressed = Zip.compress(value);
     final byte[] uncompressed = uncompress(compressed);
-    assertThat(uncompressed).isEqualTo(value.getBytes(ZipUtil.CHARSET));
+    assertThat(uncompressed).isEqualTo(value.getBytes(Zip.CHARSET));
   }
 
   private byte[] uncompress(final byte[] value) {

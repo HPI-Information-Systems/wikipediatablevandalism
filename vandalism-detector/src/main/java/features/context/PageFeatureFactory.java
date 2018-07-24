@@ -2,8 +2,8 @@ package features.context;
 
 import com.google.common.collect.Lists;
 import features.Feature;
-import features.context.util.ContributorRevertedBeforeInThatArticleUtil;
-import features.context.util.TimeSinceFirstRevisionBySameContributorUtil;
+import features.context.util.ContributorRevertedBeforeInThatArticle;
+import features.context.util.TimeSinceFirstRevisionBySameContributor;
 import lombok.val;
 import util.BasicUtils;
 
@@ -33,11 +33,13 @@ class PageFeatureFactory {
   }
 
   Feature timeSinceLastArticleEditBySameContributor() {
-    return parameters -> TimeSinceFirstRevisionBySameContributorUtil.getTime(parameters.getRevision(), parameters.getPreviousRevisions());
+    return parameters -> TimeSinceFirstRevisionBySameContributor
+        .getTime(parameters.getRevision(), parameters.getPreviousRevisions());
   }
 
   Feature timeSinceFirstArticleEditBySameContributor() {
-    return parameters -> TimeSinceFirstRevisionBySameContributorUtil.getTime(parameters.getRevision(), Lists.reverse(parameters.getPreviousRevisions()));
+    return parameters -> TimeSinceFirstRevisionBySameContributor
+        .getTime(parameters.getRevision(), Lists.reverse(parameters.getPreviousRevisions()));
   }
 
   Feature revertCount() {
@@ -69,11 +71,11 @@ class PageFeatureFactory {
   }
 
   Feature contributorRevertedBeforeInThatArticleCount() {
-    return ContributorRevertedBeforeInThatArticleUtil::getRevertedCount;
+    return ContributorRevertedBeforeInThatArticle::getRevertedCount;
   }
 
   Feature timeSinceContributorRevertedBeforeInThatArticle() {
-    return ContributorRevertedBeforeInThatArticleUtil::getTimeSinceLastReverted;
+    return ContributorRevertedBeforeInThatArticle::getTimeSinceLastReverted;
   }
 
 }

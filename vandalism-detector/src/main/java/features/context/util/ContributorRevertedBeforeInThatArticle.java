@@ -7,7 +7,7 @@ import model.FeatureParameters;
 import util.BasicUtils;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-public class ContributorRevertedBeforeInThatArticleUtil {
+public class ContributorRevertedBeforeInThatArticle {
 
   public static int getRevertedCount(final FeatureParameters parameters) {
     int revertedRevisionCount = 0;
