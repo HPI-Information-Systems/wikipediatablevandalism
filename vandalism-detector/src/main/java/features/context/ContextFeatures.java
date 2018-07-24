@@ -13,28 +13,22 @@ public class ContextFeatures {
   private final FeaturePack features;
 
   private ContextFeatures() {
-    val contextFactory = new ContextFeatureFactory();
-    val contextPreviousRevision = new ContextPreviousRevisionFeatureFactory();
-    val contextPreviousRevisions = new ContextPreviousRevisionsFeatureFactory();
+    val userFeatureFactory = new UserFeatureFactory();
+    val editFeatureFactory = new EditFeatureFactory();
+    val pageFeatureFactory = new PageFeatureFactory();
 
     features = FeaturePack.builder()
-        .feature("isContributorAnonymous", contextFactory.isContributorAnonymous())
-        .feature("timeOfDay", contextFactory.timeOfDay())
-        .feature("dayOfWeek", contextFactory.dayOfWeek())
-        .feature("isMinorEdit", contextFactory.isMinorEdit())
-        .feature("commentLength", contextFactory.commentLength())
-        .feature("isBot", contextFactory.isBot())
-        .feature("hasPreviousSameContributor",
-            contextPreviousRevision.hasPreviousSameContributor())
-        .feature("timeSinceLastArticleEdit", contextPreviousRevision.timeSinceLastArticleEdit())
-        .feature("sizeChange", contextPreviousRevision.sizeChange())
-        .feature("timeSinceLastArticleEditBySameContributor",
-            contextPreviousRevisions.timeSinceLastArticleEditBySameContributor())
-        .feature("revertCount", contextPreviousRevisions.revertCount())
-        .feature("ratioOffAllEditsToContributorEdits",
-            contextPreviousRevisions.ratioOffAllEditsToContributorEdits())
-        .feature("contributorRevertedBeforeInThatArticleCount",
-            contextPreviousRevisions.contributorRevertedBeforeInThatArticleCount())
+        .feature("isContributorAnonymous", userFeatureFactory.isContributorAnonymous())
+        .feature("isBot", userFeatureFactory.isBot())
+        .feature("timeOfDay", editFeatureFactory.timeOfDay())
+        .feature("dayOfWeek", editFeatureFactory.dayOfWeek())
+        .feature("isMinorEdit", editFeatureFactory.isMinorEdit())
+        .feature("hasPreviousSameContributor", pageFeatureFactory.hasPreviousSameContributor())
+        .feature("timeSinceLastArticleEdit", pageFeatureFactory.timeSinceLastArticleEdit())
+        .feature("timeSinceLastArticleEditBySameContributor", pageFeatureFactory.timeSinceLastArticleEditBySameContributor())
+        .feature("revertCount", pageFeatureFactory.revertCount())
+        .feature("ratioOffAllEditsToContributorEdits", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
+        .feature("contributorRevertedBeforeInThatArticleCount", pageFeatureFactory.contributorRevertedBeforeInThatArticleCount())
         .build();
   }
 
