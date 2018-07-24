@@ -2,16 +2,11 @@ package features.content.util.language;
 
 import static util.MultisetUtils.getMatches;
 
-import com.google.common.collect.HashMultiset;
-import com.google.common.collect.ImmutableMultiset;
 import com.google.common.collect.Multiset;
-import com.google.common.collect.Multisets;
 import features.Feature;
-import features.content.util.TableContentExtractor;
 import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
-import util.WordsExtractor;
 import util.DiffUtil;
 
 /**
@@ -35,6 +30,6 @@ public class TableWordFrequency implements Feature {
   public Object getValue(final FeatureParameters parameters) {
     final Multiset<String> diffWords = DiffUtil.diffWords(parameters);
     val matches = getMatches(diffWords, this.words, this.isMatching);
-    return diffWords.size() > 0 ? ((float) matches.size() / diffWords.size()) : 0;
+    return diffWords.size() > 0 ? ((double) matches.size() / diffWords.size()) : 0;
   }
 }

@@ -19,8 +19,6 @@ public class KLDUtil {
     val addedCharDistributionMultiSet = Multisets
         .difference(currentCharDistributionMultiSet, beforeCharDistributionMultiSet);
     return calculateKLD(beforeCharDistributionMultiSet, addedCharDistributionMultiSet);
-    //return calculateKLD(beforeCharDistributionMultiSet, currentCharDistributionMultiSet);
-    // TODO evaluate added vs. before OR current vs. before ?
   }
 
   /*

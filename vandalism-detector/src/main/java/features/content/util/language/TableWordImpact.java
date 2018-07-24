@@ -3,7 +3,6 @@ package features.content.util.language;
 import static util.MultisetUtils.getMatches;
 
 import features.Feature;
-import features.content.util.TableContentExtractor;
 import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
@@ -35,6 +34,6 @@ public class TableWordImpact implements Feature {
     val previousMatches = getMatches(previousWords, this.words, this.isMatching);
     val matches = getMatches(words, this.words, this.isMatching);
     val previousMatchCount = previousMatches.size() > 0 ? previousMatches.size() : 1;
-    return ((float) (matches.size() - previousMatchCount) / previousMatchCount);
+    return ((double) (matches.size() - previousMatchCount) / previousMatchCount);
   }
 }

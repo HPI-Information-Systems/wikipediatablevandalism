@@ -1,22 +1,16 @@
 package features.content;
 
 import features.Feature;
+import features.content.util.TableContentExtractor;
+import features.content.util.byteP.KLDUtil;
+import features.content.util.byteP.ZipUtil;
 import lombok.val;
 import util.BasicUtils;
-import features.content.util.byteP.KLDUtil;
-import features.content.util.TableContentExtractor;
-import features.content.util.byteP.ZipUtil;
 
 class ByteFeatureFactory {
 
   Feature previousLength() {
-    return parameters -> {
-      val previousRevision = parameters.getPreviousRevision(); // TODO check needed?
-      if (previousRevision == null) {
-        return 0;
-      }
-      return TableContentExtractor.getPreviousContent(parameters).length();
-    };
+    return parameters -> TableContentExtractor.getPreviousContent(parameters).length();
   }
 
   Feature sizeChange() {
@@ -27,6 +21,17 @@ class ByteFeatureFactory {
         previousRevisionParsedLength = BasicUtils.parsedLength(previousRevision.getParsed());
       }
       return BasicUtils.parsedLength(parameters.getRevision().getParsed()) - previousRevisionParsedLength;
+    };
+  }
+
+  Feature sizeRatio() {
+    return parameters -> {
+      val previousRevision = parameters.getPreviousRevision();
+      int previousRevisionParsedLength = 0;
+      if (previousRevision != null) {
+        previousRevisionParsedLength = BasicUtils.parsedLength(previousRevision.getParsed());
+      }
+      return (double) (BasicUtils.parsedLength(parameters.getRevision().getParsed()) - previousRevisionParsedLength + 1) / (previousRevisionParsedLength + 1);
     };
   }
 
@@ -41,21 +46,7 @@ class ByteFeatureFactory {
   }
 
   Feature KLDOfCharDistribution() {
-    return parameters -> {
-      val previousRevision = parameters.getPreviousRevision();
-      if (previousRevision == null) { // TODO check needed?
-        return 0;
-      }
-      val currentTableContents = TableContentExtractor.getContent(parameters);
-      if (currentTableContents.length() == 0) {
-        return 0;
-      }
-      val previousTableContents = TableContentExtractor.getPreviousContent(parameters);
-      if (previousTableContents.length() == 0) {
-        return 0;
-      }
-      return KLDUtil.calculateKLDOfAddedChars(previousTableContents, currentTableContents);
-    };
+    return parameters -> KLDUtil.calculateKLDOfAddedChars(TableContentExtractor.getPreviousContent(parameters), TableContentExtractor.getContent(parameters));
   }
 
   Feature commentLength() {

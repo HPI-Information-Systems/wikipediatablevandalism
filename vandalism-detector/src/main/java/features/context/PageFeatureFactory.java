@@ -1,11 +1,11 @@
 package features.context;
 
 import com.google.common.base.Preconditions;
+import com.google.common.collect.Lists;
 import features.Feature;
-import features.context.util.TimeSinceLastArticleEditBySameContributor;
+import features.context.util.ContributorRevertedBeforeInThatArticleUtil;
+import features.context.util.TimeSinceFirstRevisionBySameContributorUtil;
 import java.time.Duration;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.val;
 import util.BasicUtils;
 
@@ -24,9 +24,8 @@ class PageFeatureFactory {
       val previousRevisionTime = previousRevision.getDate().toInstant();
       Preconditions.checkState(previousRevisionTime.isBefore(revisionTime),
           "previousRevisionTime should be before revisionTime");
-      val test = Duration.between(previousRevisionTime, revisionTime).toMinutes();
       return Duration.between(previousRevisionTime, revisionTime)
-          .toMinutes(); // TODO maybe use getSeconds() instead
+          .toMinutes();
     };
   }
 
@@ -41,7 +40,11 @@ class PageFeatureFactory {
   }
 
   Feature timeSinceLastArticleEditBySameContributor() {
-    return new TimeSinceLastArticleEditBySameContributor();
+    return parameters -> TimeSinceFirstRevisionBySameContributorUtil.getTime(parameters.getRevision(), parameters.getPreviousRevisions());
+  }
+
+  Feature timeSinceFirstArticleEditBySameContributor() {
+    return parameters -> TimeSinceFirstRevisionBySameContributorUtil.getTime(parameters.getRevision(), Lists.reverse(parameters.getPreviousRevisions()));
   }
 
   Feature revertCount() {
@@ -58,52 +61,26 @@ class PageFeatureFactory {
 
   Feature ratioOffAllEditsToContributorEdits() {
     return parameters -> {
-      float sameContributor = 1;
-      for (val previousRevision : parameters.getPreviousRevisions()) {
+      val previousRevisions = parameters.getPreviousRevisions();
+      if (previousRevisions == null) {
+        return -1;
+      }
+      double sameContributor = 0;
+      for (val previousRevision : previousRevisions) {
         if (BasicUtils.hasSameContributor(parameters.getRevision(), previousRevision)) {
           ++sameContributor;
         }
       }
-      return sameContributor / (float) (parameters.getPreviousRevisions().size() + 1);
+      return sameContributor / parameters.getPreviousRevisions().size();
     };
   }
 
   Feature contributorRevertedBeforeInThatArticleCount() {
-    return parameters -> {
-      int revertedRevisionCount = 0;
-      List<String> searchedBefore = new ArrayList<>();
-      val allRevisions = parameters.getPreviousRevisions();
-      val revision = parameters.getRevision();
-      allRevisions.add(0, revision);
-      for (val currentRevision : allRevisions) {
-        if (searchedBefore
-            .contains(currentRevision.getSha1())) { // not search for already searched sha1 value
-          continue;
-        }
-        searchedBefore.add(currentRevision.getSha1()); // save searched sha1 value
+    return ContributorRevertedBeforeInThatArticleUtil::getRevertedCount;
+  }
 
-        // calculate reverted revisions indexes
-        List<Integer> revertedRevisionsIndexes = new ArrayList<>();
-        for (int i = 0; i < allRevisions.size(); ++i) {
-          if (allRevisions.get(i).getSha1().equals(currentRevision.getSha1())) {
-            revertedRevisionsIndexes.add(i);
-          }
-        }
-
-        if (revertedRevisionsIndexes.size() > 1) { // find always currentRevision
-          for (int i = 0; i < revertedRevisionsIndexes.size() - 1; ++i) {
-            // search for contributor between i and i+1 ; start at 'get(i)+1' because you want to search just between
-            for (int j = revertedRevisionsIndexes.get(i) + 1;
-                j < revertedRevisionsIndexes.get(i + 1); ++j) {
-              if (BasicUtils.hasSameContributor(allRevisions.get(j), revision)) {
-                ++revertedRevisionCount;
-              }
-            }
-          }
-        }
-      }
-      return revertedRevisionCount;
-    };
+  Feature timeSinceContributorRevertedBeforeInThatArticle() {
+    return ContributorRevertedBeforeInThatArticleUtil::getTimeSinceLastReverted;
   }
 
 }

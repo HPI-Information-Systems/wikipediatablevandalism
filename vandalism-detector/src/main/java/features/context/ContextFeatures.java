@@ -26,9 +26,11 @@ public class ContextFeatures {
         .feature("hasPreviousSameContributor", pageFeatureFactory.hasPreviousSameContributor())
         .feature("timeSinceLastArticleEdit", pageFeatureFactory.timeSinceLastArticleEdit())
         .feature("timeSinceLastArticleEditBySameContributor", pageFeatureFactory.timeSinceLastArticleEditBySameContributor())
+        .feature("timeSinceFirstArticleEditBySameContributor", pageFeatureFactory.timeSinceFirstArticleEditBySameContributor())
         .feature("revertCount", pageFeatureFactory.revertCount())
         .feature("ratioOffAllEditsToContributorEdits", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
         .feature("contributorRevertedBeforeInThatArticleCount", pageFeatureFactory.contributorRevertedBeforeInThatArticleCount())
+        .feature("timeSinceContributorRevertedBeforeInThatArticle", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())
         .build();
   }
 

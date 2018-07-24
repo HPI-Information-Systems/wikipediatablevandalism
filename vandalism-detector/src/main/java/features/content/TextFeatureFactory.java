@@ -3,11 +3,10 @@ package features.content;
 import com.google.common.collect.Multisets;
 import com.google.common.math.Stats;
 import features.Feature;
+import features.content.util.TableContentExtractor;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.val;
-import util.BasicUtils;
-import features.content.util.TableContentExtractor;
 import util.WordsExtractor;
 
 class TextFeatureFactory {
@@ -16,15 +15,15 @@ class TextFeatureFactory {
     return parameters -> {
       val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
-        return 0;
+        return -1;
       }
-      float numericalCount = 0;
+      double numericalCount = 0;
       for (val c : tableContents.toCharArray()) {
         if (Character.isDigit(c)) {
           ++numericalCount;
         }
       }
-      return numericalCount / (float) tableContents.length();
+      return numericalCount / tableContents.length();
     };
   }
 
@@ -32,15 +31,15 @@ class TextFeatureFactory {
     return parameters -> {
       val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
-        return 0;
+        return -1;
       }
-      float alphanumericalCount = 0;
+      double alphanumericalCount = 0;
       for (val c : tableContents.toCharArray()) {
         if (Character.isAlphabetic(c) || Character.isDigit(c)) {
           ++alphanumericalCount;
         }
       }
-      return alphanumericalCount / (float) tableContents.length();
+      return alphanumericalCount / tableContents.length();
     };
   }
 
@@ -48,15 +47,15 @@ class TextFeatureFactory {
     return parameters -> {
       val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
-        return 0;
+        return -1;
       }
-      float uppercaseCount = 0;
+      double uppercaseCount = 0;
       for (val c : tableContents.toCharArray()) {
         if (Character.isUpperCase(c)) {
           ++uppercaseCount;
         }
       }
-      return uppercaseCount / (float) tableContents.length();
+      return uppercaseCount / tableContents.length();
     };
   }
 
@@ -64,20 +63,16 @@ class TextFeatureFactory {
     return parameters -> {
       val tableContents = TableContentExtractor.getContent(parameters);
       if (tableContents.length() == 0) {
-        return 0;
+        return -1;
       }
-      float uppercaseCount = 0;
-      float lowercaseCount = 0;
+      double uppercaseCount = 1;
+      double lowercaseCount = 1;
       for (val c : tableContents.toCharArray()) {
         if (Character.isUpperCase(c)) {
           ++uppercaseCount;
         } else if (Character.isLowerCase(c)) {
           ++lowercaseCount;
         }
-      }
-
-      if (lowercaseCount == 0) {
-        return 1;
       }
 
       return uppercaseCount / lowercaseCount;
@@ -87,9 +82,6 @@ class TextFeatureFactory {
   Feature lengthOfLongestConsecutiveSequenceOfSingleChar() {
     return parameters -> {
       val tableContents = TableContentExtractor.getContent(parameters);
-      if (tableContents.length() == 0) {
-        return 0;
-      }
       char charBefore = ' ';
       int longestConsecutiveSingleCharCount = 0;
       int currentConsecutiveSingleCharCount = 0;
@@ -115,9 +107,6 @@ class TextFeatureFactory {
   Feature lengthOfLongestToken() {
     return parameters -> {
       val tableContents = TableContentExtractor.getContent(parameters);
-      if (tableContents.length() == 0) {
-        return 0;
-      }
       int longestTokenCount = 0;
       int currentTokenCount = 0;
       for (val c : tableContents.toCharArray()) {
@@ -137,21 +126,13 @@ class TextFeatureFactory {
     };
   }
 
-  Feature averageRelativeFrequencyOfNewAddedWords() { // FIXME to test with deletion corpus
+  Feature averageRelativeFrequencyOfNewAddedWords() {
     return parameters -> {
-      val currentTableContents = TableContentExtractor.getContent(parameters);
-      if (currentTableContents.length() == 0) {
-        return 0;
-      }
-      val previousTableContents = TableContentExtractor.getPreviousContent(parameters);
-      if (previousTableContents.length() == 0) {
-        return 0;
-      }
-      val currentWordOccurrence = WordsExtractor.extractWords(currentTableContents);
-      val previousWordOccurrence = WordsExtractor.extractWords(previousTableContents);
+      val currentWordOccurrence = WordsExtractor.extractWords(TableContentExtractor.getContent(parameters));
+      val previousWordOccurrence = WordsExtractor.extractWords(TableContentExtractor.getPreviousContent(parameters));
       val addedWordOccurrence = Multisets.difference(currentWordOccurrence, previousWordOccurrence);
-      if (addedWordOccurrence.isEmpty()) {
-        return 0;
+      if (addedWordOccurrence.isEmpty() || previousWordOccurrence.isEmpty()) {
+        return -1;
       }
 
       List<Double> addedWordFrequency = new ArrayList<>();

@@ -54,6 +54,7 @@ public class ContentFeatures {
         .feature("averageRelativeFrequencyOfNewAddedWords", textFeatureFactory.averageRelativeFrequencyOfNewAddedWords())
         .feature("previousLength", byteFeatureFactory.previousLength())
         .feature("sizeChange", byteFeatureFactory.sizeChange())
+        .feature("sizeRatio", byteFeatureFactory.sizeRatio())
         .feature("LZWCompressionRate", byteFeatureFactory.LZWCompressionRate())
         .feature("KLDOfCharDistribution", byteFeatureFactory.KLDOfCharDistribution())
         .feature("commentLength", byteFeatureFactory.commentLength())
