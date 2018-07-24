@@ -6,11 +6,8 @@ import com.beust.jcommander.JCommander;
 import com.esotericsoftware.kryo.Kryo;
 import features.FeatureCollector;
 import features.FeaturePack;
-import features.basic.BasicFeatures;
 import features.content.ContentFeatures;
 import features.context.ContextFeatures;
-import features.future.FutureFeatures;
-import features.language.LanguageFeatures;
 import features.output.Output;
 import java.nio.file.Path;
 import java.text.DecimalFormat;
@@ -83,11 +80,8 @@ public class Main {
   }
 
   private static FeaturePack getDefaultFeaturePack() {
-    return BasicFeatures.get().getFeatures()
-        .combineWith(ContextFeatures.get().getFeatures())
-        .combineWith(ContentFeatures.get().getFeatures())
-        .combineWith(LanguageFeatures.get().getFeatures())
-        .combineWith(FutureFeatures.get().getFeatures());
+    return ContextFeatures.get().getFeatures()
+        .combineWith(ContentFeatures.get().getFeatures());
   }
 
 

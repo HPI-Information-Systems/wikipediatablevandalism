@@ -2,7 +2,7 @@ package tools;
 
 import java.util.Collection;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections.CollectionUtils;
 import util.PageUtil;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
