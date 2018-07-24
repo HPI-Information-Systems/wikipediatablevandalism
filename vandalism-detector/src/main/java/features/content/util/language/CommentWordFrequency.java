@@ -1,6 +1,7 @@
 package features.content.util.language;
 
-import com.google.common.collect.Sets;
+import static util.MultisetUtils.getMatches;
+
 import features.Feature;
 import java.util.Set;
 import lombok.val;
@@ -34,13 +35,7 @@ public class CommentWordFrequency implements Feature {
 
     val comment = parameters.getRevision().getComment().getValue();
     val words = WordsExtractor.extractWords(comment);
-    val matches = getMatches(words.elementSet());
+    val matches = getMatches(words, this.words, this.isMatching);
     return words.size() > 0 ? matches.size() / words.size() : 0;
-  }
-
-  private Set<String> getMatches(Set<String> words) {
-    return this.isMatching
-        ? Sets.intersection(words, this.words)
-        : Sets.difference(words, this.words);
   }
 }

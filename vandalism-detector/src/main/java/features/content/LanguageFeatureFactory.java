@@ -14,6 +14,7 @@ import features.content.util.language.wordlists.PronounWordList;
 import features.content.util.language.wordlists.RevertWordList;
 import features.content.util.language.wordlists.SexualWordList;
 import features.content.util.language.wordlists.VulgarWordList;
+import features.content.util.language.wordlists.WikiSyntaxWordList;
 
 class LanguageFeatureFactory {
 
@@ -65,7 +66,19 @@ class LanguageFeatureFactory {
     return new TableWordImpact(DictionaryWordList.getWords(), false);
   }
 
-   Feature superlativeWordFrequencyInTable() {
+  public Feature wikiSyntaxElementFrequencyInTable() {
+    return new TableWordFrequency(WikiSyntaxWordList.getWords());
+  }
+
+  public Feature wikiSyntaxElementImpactInTable() {
+    return new TableWordImpact(WikiSyntaxWordList.getWords());
+  }
+
+  public Feature wikiSyntaxElementFrequencyInComment() {
+    return new CommentWordFrequency(WikiSyntaxWordList.getWords());
+  }
+
+  public Feature superlativeWordFrequencyInTable() {
     return new TableRegexFrequency(SuperlativePatternList.getPatterns());
   }
 
