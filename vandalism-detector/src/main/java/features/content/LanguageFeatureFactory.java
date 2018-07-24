@@ -1,6 +1,8 @@
 package features.content;
 
+import com.google.common.collect.Lists;
 import features.Feature;
+import features.content.util.language.AverageFeature;
 import features.content.util.language.CommentContainsWords;
 import features.content.util.language.CommentRegexFrequency;
 import features.content.util.language.CommentWordFrequency;
@@ -76,6 +78,36 @@ class LanguageFeatureFactory {
 
   Feature wikiSyntaxElementFrequencyInComment() {
     return new CommentWordFrequency(WikiSyntaxWordList.getWords());
+  }
+
+  Feature averageAllBadWordFrequencyInTable() {
+    return new AverageFeature(Lists.newArrayList(
+        vulgarWordFrequencyInTables(),
+        personalPronounFrequencyInTable(),
+        nonDictionaryWordFrequencyInTable(),
+        sexualWordFrequencyInTables(),
+        superlativeWordFrequencyInTable()
+    ));
+  }
+
+  Feature averageAllBadWordImpactInTable() {
+    return new AverageFeature(Lists.newArrayList(
+        vulgarWordImpactInTables(),
+        personalPronounImpactInTable(),
+        nonDictionaryWordImpactInTable(),
+        sexualWordImpactInTables(),
+        superlativeWordImpactInTable()
+    ));
+  }
+
+  Feature averageAllBadWordFrequencyInComment() {
+    return new AverageFeature(Lists.newArrayList(
+        vulgarWordFrequencyInComment(),
+        personalPronounFrequencyInComment(),
+        nonDictionaryWordFrequencyInComment(),
+        sexualWordFrequencyInComment(),
+        superlativeWordFrequencyInComment()
+    ));
   }
 
   Feature superlativeWordFrequencyInTable() {
