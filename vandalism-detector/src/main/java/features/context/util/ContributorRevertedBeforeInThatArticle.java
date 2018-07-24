@@ -9,7 +9,7 @@ import wikixmlsplit.datastructures.MyRevisionType;
 
 public class ContributorRevertedBeforeInThatArticle {
 
-  public static int getRevertedCount(final FeatureParameters parameters) {
+  public static double getRevertedCount(final FeatureParameters parameters) {
     int revertedRevisionCount = 0;
     List<String> searchedBefore = new ArrayList<>();
     val allRevisions = createAllRevisions(parameters);
@@ -32,7 +32,7 @@ public class ContributorRevertedBeforeInThatArticle {
     return revertedRevisionCount;
   }
 
-  public static long getTimeSinceLastReverted(final FeatureParameters parameters) {
+  public static double getTimeSinceLastReverted(final FeatureParameters parameters) {
     List<String> searchedBefore = new ArrayList<>();
     val allRevisions = createAllRevisions(parameters);
 

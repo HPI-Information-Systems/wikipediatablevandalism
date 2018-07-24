@@ -3,11 +3,19 @@ package features.content.util.byteP;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
+import features.Feature;
+import features.content.util.TableContentExtractor;
 import lombok.val;
+import model.FeatureParameters;
 
-public class KLD {
+public class KLD implements Feature {
 
-  public static Double calculateKLDOfAddedChars(final String before, final String current) {
+  @Override
+  public double getValue(FeatureParameters parameters) {
+    return KLD.calculateKLDOfAddedChars(TableContentExtractor.getPreviousContent(parameters), TableContentExtractor.getContent(parameters));
+  }
+
+  private static Double calculateKLDOfAddedChars(final String before, final String current) {
     Multiset<Character> beforeCharDistributionMultiSet = HashMultiset.create();
     Multiset<Character> currentCharDistributionMultiSet = HashMultiset.create();
     for (char c : before.toCharArray()) {

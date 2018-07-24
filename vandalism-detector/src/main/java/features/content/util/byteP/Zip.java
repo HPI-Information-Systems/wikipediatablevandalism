@@ -1,6 +1,8 @@
 package features.content.util.byteP;
 
 import com.google.common.annotations.VisibleForTesting;
+import features.Feature;
+import features.content.util.TableContentExtractor;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -8,13 +10,23 @@ import java.nio.charset.StandardCharsets;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import lombok.val;
+import model.FeatureParameters;
 
-public class Zip {
+public class Zip implements Feature {
 
   @VisibleForTesting
   static final Charset CHARSET = StandardCharsets.UTF_8;
 
-  public static double getCompressionRatio(final String value) {
+  @Override
+  public double getValue(FeatureParameters parameters) {
+    val tableContents = TableContentExtractor.getContent(parameters);
+    if (tableContents.length() == 0) {
+      return 0;
+    }
+    return getCompressionRatio(tableContents);
+  }
+
+  private static double getCompressionRatio(final String value) {
     final byte[] compressed = compress(value);
     final byte[] uncompressed = value.getBytes(CHARSET);
     return (double) compressed.length / uncompressed.length;
@@ -32,4 +44,5 @@ public class Zip {
       throw new RuntimeException(e);
     }
   }
+
 }

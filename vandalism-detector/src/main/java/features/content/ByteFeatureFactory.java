@@ -36,17 +36,11 @@ class ByteFeatureFactory {
   }
 
   Feature LZWCompressionRate() {
-    return parameters -> {
-      val tableContents = TableContentExtractor.getContent(parameters);
-      if (tableContents.length() == 0) {
-        return 0;
-      }
-      return Zip.getCompressionRatio(tableContents);
-    };
+    return new Zip();
   }
 
   Feature KLDOfCharDistribution() {
-    return parameters -> KLD.calculateKLDOfAddedChars(TableContentExtractor.getPreviousContent(parameters), TableContentExtractor.getContent(parameters));
+    return new KLD();
   }
 
   Feature commentLength() {
