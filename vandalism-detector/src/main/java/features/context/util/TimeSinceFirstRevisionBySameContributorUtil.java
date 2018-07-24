@@ -1,7 +1,5 @@
 package features.context.util;
 
-import com.google.common.base.Preconditions;
-import java.time.Duration;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Predicate;
@@ -37,10 +35,7 @@ public class TimeSinceFirstRevisionBySameContributorUtil {
   }
 
   private static long timeDelta(final MyRevisionType previous, final MyRevisionType next) {
-    val past = previous.getDate().toInstant();
-    val upcoming = next.getDate().toInstant();
-    Preconditions.checkState(past.isBefore(upcoming), "Time delta should compare past to upcoming");
-    return Duration.between(past, upcoming).toMinutes();
+    return BasicUtils.getTimeDuration(next, previous);
   }
 
 }

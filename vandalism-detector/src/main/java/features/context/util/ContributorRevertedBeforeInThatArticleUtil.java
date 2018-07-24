@@ -1,7 +1,5 @@
 package features.context.util;
 
-import com.google.common.base.Preconditions;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.val;
@@ -11,8 +9,8 @@ import wikixmlsplit.datastructures.MyRevisionType;
 
 public class ContributorRevertedBeforeInThatArticleUtil {
 
-  public static long getRevertedCount(final FeatureParameters parameters) {
-    long revertedRevisionCount = 0;
+  public static int getRevertedCount(final FeatureParameters parameters) {
+    int revertedRevisionCount = 0;
     List<String> searchedBefore = new ArrayList<>();
     val allRevisions = createAllRevisions(parameters);
 
@@ -25,8 +23,10 @@ public class ContributorRevertedBeforeInThatArticleUtil {
 
       List<Integer> revertedRevisionsIndexes = calculateRevertedRevisionsIndexes(allRevisions,
           currentRevision);
-      revertedRevisionCount += calculateRevertedRevisions(revertedRevisionsIndexes,
-          allRevisions, parameters.getRevision(), true);
+      val revertedRevisionsBySameContributor = calculateRevertedRevisionsBySameContributor(revertedRevisionsIndexes,
+          allRevisions,
+          parameters.getRevision());
+      revertedRevisionCount += revertedRevisionsBySameContributor.size();
     }
 
     return revertedRevisionCount;
@@ -45,10 +45,11 @@ public class ContributorRevertedBeforeInThatArticleUtil {
 
       List<Integer> revertedRevisionsIndexes = calculateRevertedRevisionsIndexes(allRevisions,
           currentRevision);
-      long timeSinceContributorLastRevertedInThatArticle = calculateRevertedRevisions(
-          revertedRevisionsIndexes, allRevisions, parameters.getRevision(), false);
-      if (timeSinceContributorLastRevertedInThatArticle != -1) {
-        return timeSinceContributorLastRevertedInThatArticle;
+      val revertedRevisionsBySameContributor = calculateRevertedRevisionsBySameContributor(revertedRevisionsIndexes,
+          allRevisions,
+          parameters.getRevision());
+      if (!revertedRevisionsBySameContributor.isEmpty()) {
+        BasicUtils.getTimeDuration(parameters.getRevision(), revertedRevisionsBySameContributor.get(0));
       }
     }
 
@@ -73,35 +74,22 @@ public class ContributorRevertedBeforeInThatArticleUtil {
     return revertedRevisionsIndexes;
   }
 
-  private static long calculateRevertedRevisions(final List<Integer> revertedRevisionsIndexes,
-      final List<MyRevisionType> allRevisions, final MyRevisionType revision, final boolean calculateCount) {
-    long revertedRevisionCount = 0;
+  private static List<MyRevisionType> calculateRevertedRevisionsBySameContributor(
+      final List<Integer> revertedRevisionsIndexes,
+      final List<MyRevisionType> allRevisions, final MyRevisionType revision) {
+    List<MyRevisionType> revertedRevisions = new ArrayList<>();
     if (revertedRevisionsIndexes.size() > 1) { // find always currentRevision
       for (int i = 0; i < revertedRevisionsIndexes.size() - 1; ++i) {
         // search for contributor between i and i+1 ; start at 'get(i)+1' because you want to search just between
         for (int j = revertedRevisionsIndexes.get(i) + 1;
             j < revertedRevisionsIndexes.get(i + 1); ++j) {
           if (BasicUtils.hasSameContributor(allRevisions.get(j), revision)) {
-            if (calculateCount) {
-              ++revertedRevisionCount;
-            } else {
-              val revisionTime = revision.getDate().toInstant();
-              val previousRevisionTime = allRevisions.get(j).getDate().toInstant();
-              Preconditions.checkState(previousRevisionTime.isBefore(revisionTime),
-                  "previousRevisionTime should be before revisionTime");
-              return Duration.between(previousRevisionTime, revisionTime)
-                  .toMinutes();
-            }
+            revertedRevisions.add(allRevisions.get(j));
           }
         }
       }
     }
-
-    if (calculateCount) {
-      return revertedRevisionCount;
-    } else {
-      return -1;
-    }
+    return revertedRevisions;
   }
 
 }

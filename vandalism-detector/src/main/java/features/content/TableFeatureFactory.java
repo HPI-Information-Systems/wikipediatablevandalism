@@ -1,8 +1,10 @@
 package features.content;
 
 import features.Feature;
+import features.content.util.TableContentExtractor;
 import features.content.util.table.RankChange;
 import features.content.util.table.SharedCellRatio;
+import features.content.util.table.SyntaxChecker;
 import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
 import lombok.val;
@@ -85,6 +87,10 @@ class TableFeatureFactory {
 
   Feature rankChange() {
     return new RankChange();
+  }
+
+  Feature clipCount() {
+    return parameters -> SyntaxChecker.checkClipCount(TableContentExtractor.getContent(parameters));
   }
 
 }

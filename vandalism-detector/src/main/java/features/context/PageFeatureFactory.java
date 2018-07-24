@@ -1,11 +1,9 @@
 package features.context;
 
-import com.google.common.base.Preconditions;
 import com.google.common.collect.Lists;
 import features.Feature;
 import features.context.util.ContributorRevertedBeforeInThatArticleUtil;
 import features.context.util.TimeSinceFirstRevisionBySameContributorUtil;
-import java.time.Duration;
 import lombok.val;
 import util.BasicUtils;
 
@@ -20,12 +18,7 @@ class PageFeatureFactory {
       if (previousRevision == null) {
         return -1;
       }
-      val revisionTime = parameters.getRevision().getDate().toInstant();
-      val previousRevisionTime = previousRevision.getDate().toInstant();
-      Preconditions.checkState(previousRevisionTime.isBefore(revisionTime),
-          "previousRevisionTime should be before revisionTime");
-      return Duration.between(previousRevisionTime, revisionTime)
-          .toMinutes();
+      return BasicUtils.getTimeDuration(parameters.getRevision(), previousRevision);
     };
   }
 
