@@ -66,19 +66,19 @@ class LanguageFeatureFactory {
     return new TableWordImpact(DictionaryWordList.getWords(), false);
   }
 
-  public Feature wikiSyntaxElementFrequencyInTable() {
+  Feature wikiSyntaxElementFrequencyInTable() {
     return new TableWordFrequency(WikiSyntaxWordList.getWords());
   }
 
-  public Feature wikiSyntaxElementImpactInTable() {
+  Feature wikiSyntaxElementImpactInTable() {
     return new TableWordImpact(WikiSyntaxWordList.getWords());
   }
 
-  public Feature wikiSyntaxElementFrequencyInComment() {
+  Feature wikiSyntaxElementFrequencyInComment() {
     return new CommentWordFrequency(WikiSyntaxWordList.getWords());
   }
 
-  public Feature superlativeWordFrequencyInTable() {
+  Feature superlativeWordFrequencyInTable() {
     return new TableRegexFrequency(SuperlativePatternList.getPatterns());
   }
 
