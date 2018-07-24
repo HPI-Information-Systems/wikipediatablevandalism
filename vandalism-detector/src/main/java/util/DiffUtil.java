@@ -15,6 +15,13 @@ public class DiffUtil {
     );
   }
 
+  public static Multiset<String> diffTokens(final FeatureParameters parameters) {
+    return diffTokens(
+        BasicUtils.getPreviousTables(parameters),
+        BasicUtils.getCurrentTables(parameters)
+    );
+  }
+
   @VisibleForTesting
   static Multiset<String> diffWords(final Collection<WikiTable> previous,
       final Collection<WikiTable> current) {
@@ -23,6 +30,16 @@ public class DiffUtil {
     final Multiset<String> words = WordsExtractor.extractWords(current);
     words.removeAll(previousWords);
     return words;
+  }
+
+  @VisibleForTesting
+  static Multiset<String> diffTokens(final Collection<WikiTable> previous,
+      final Collection<WikiTable> current) {
+
+    final Multiset<String> previousTokens = TokenExtractor.extractTokens(previous);
+    final Multiset<String> tokens = TokenExtractor.extractTokens(current);
+    tokens.removeAll(previousTokens);
+    return tokens;
   }
 
   public static Multiset<String> diffWords(final String previousText, final String text) {
