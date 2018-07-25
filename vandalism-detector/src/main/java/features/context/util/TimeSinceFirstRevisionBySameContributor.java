@@ -11,7 +11,7 @@ import wikixmlsplit.datastructures.MyRevisionType;
 public class TimeSinceFirstRevisionBySameContributor {
 
   @SuppressWarnings("all")
-  public static Object getTime(final MyRevisionType revision, final List<MyRevisionType> previousRevisions) {
+  public static double getTime(final MyRevisionType revision, final List<MyRevisionType> previousRevisions) {
     val sameContributor = getContributorFilter(revision.getContributor());
     val previousContribution = previousRevisions.stream()
         .filter(precursor -> sameContributor.test(precursor.getContributor()))
