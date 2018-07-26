@@ -6,17 +6,19 @@ import features.content.util.language.AverageFeature;
 import features.content.util.language.CommentContainsWords;
 import features.content.util.language.CommentRegexFrequency;
 import features.content.util.language.CommentWordFrequency;
+import features.content.util.language.TableCellRegexFrequency;
+import features.content.util.language.TableCellRegexImpact;
 import features.content.util.language.TableRegexFrequency;
 import features.content.util.language.TableRegexImpact;
 import features.content.util.language.TableWordFrequency;
 import features.content.util.language.TableWordImpact;
 import features.content.util.language.regex.SuperlativePatternList;
+import features.content.util.language.regex.WikiSyntaxPatternList;
 import features.content.util.language.wordlists.DictionaryWordList;
 import features.content.util.language.wordlists.PronounWordList;
 import features.content.util.language.wordlists.RevertWordList;
 import features.content.util.language.wordlists.SexualWordList;
 import features.content.util.language.wordlists.VulgarWordList;
-import features.content.util.language.wordlists.WikiSyntaxWordList;
 
 class LanguageFeatureFactory {
 
@@ -69,15 +71,15 @@ class LanguageFeatureFactory {
   }
 
   Feature wikiSyntaxElementFrequencyInTable() {
-    return new TableWordFrequency(WikiSyntaxWordList.getWords());
+    return new TableCellRegexFrequency(WikiSyntaxPatternList.getPatterns());
   }
 
   Feature wikiSyntaxElementImpactInTable() {
-    return new TableWordImpact(WikiSyntaxWordList.getWords());
+    return new TableCellRegexImpact(WikiSyntaxPatternList.getPatterns());
   }
 
   Feature wikiSyntaxElementFrequencyInComment() {
-    return new CommentWordFrequency(WikiSyntaxWordList.getWords());
+    return new CommentRegexFrequency(WikiSyntaxPatternList.getPatterns());
   }
 
   Feature averageAllBadWordFrequencyInTable() {

@@ -1,9 +1,13 @@
 package util;
 
+import static util.CellExtractor.extractCells;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Multiset;
 import java.util.Collection;
+import java.util.List;
 import model.FeatureParameters;
+import wikixmlsplit.renderer.wikitable.Cell;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class DiffUtil {
@@ -21,6 +25,14 @@ public class DiffUtil {
         BasicUtils.getCurrentTables(parameters)
     );
   }
+
+  public static Multiset<Cell> diffCells(final FeatureParameters parameters) {
+    return diffCells(
+        BasicUtils.getPreviousTables(parameters),
+        BasicUtils.getCurrentTables(parameters)
+    );
+  }
+
 
   @VisibleForTesting
   static Multiset<String> diffWords(final Collection<WikiTable> previous,
@@ -47,5 +59,14 @@ public class DiffUtil {
     Multiset<String> words = WordsExtractor.extractWords(text);
     words.removeAll(previousWords);
     return words;
+  }
+
+  public static Multiset<Cell> diffCells(List<WikiTable> previousTables,
+      List<WikiTable> currentTables) {
+
+    Multiset<Cell> previousCells = extractCells(previousTables);
+    Multiset<Cell> cells = extractCells(currentTables);
+    cells.removeAll(previousCells);
+    return cells;
   }
 }
