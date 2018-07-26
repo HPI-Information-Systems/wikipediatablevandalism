@@ -2,13 +2,12 @@ package features.content.util.byteP;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import features.content.util.byteP.KLDUtil;
 import lombok.val;
 import org.assertj.core.data.Offset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class KLDUtilTest {
+class KLDTest {
 
   private String basicString;
   private String addSensefullString;
@@ -33,25 +32,25 @@ class KLDUtilTest {
 
   @Test
   void KLDIdentic() {
-    val divergence = KLDUtil.calculateKLDOfAddedChars(basicString, basicString);
+    val divergence = KLD.calculateKLDOfAddedChars(basicString, basicString);
     assertThat(divergence).isEqualTo(0.0);
   }
 
   @Test
   void KLDAddSensefull() {
-    val divergence = KLDUtil.calculateKLDOfAddedChars(basicString, addSensefullString);
+    val divergence = KLD.calculateKLDOfAddedChars(basicString, addSensefullString);
     assertThat(divergence).isCloseTo(0.1, Offset.offset(0.1));
   }
 
   @Test
   void KLDAddNonsense() {
-    val divergence = KLDUtil.calculateKLDOfAddedChars(basicString, addNonsenseString);
+    val divergence = KLD.calculateKLDOfAddedChars(basicString, addNonsenseString);
     assertThat(divergence).isCloseTo(200.0, Offset.offset(5.0));
   }
 
   @Test
   void KLDDeleted() {
-    val divergence = KLDUtil.calculateKLDOfAddedChars(basicString, deletedString);
+    val divergence = KLD.calculateKLDOfAddedChars(basicString, deletedString);
     assertThat(divergence).isCloseTo(0.5, Offset.offset(0.5));
   }
 

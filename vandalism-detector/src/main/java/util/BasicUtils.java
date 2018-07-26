@@ -1,5 +1,7 @@
 package util;
 
+import com.google.common.base.Preconditions;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -78,5 +80,15 @@ public class BasicUtils {
       tables.add(match.getPreviousTable());
     }
     return tables;
+  }
+
+  public static long getTimeDuration(final MyRevisionType currentRevision,
+      final MyRevisionType previousRevision) {
+    val currentRevisionTime = currentRevision.getDate().toInstant();
+    val previousRevisionTime = previousRevision.getDate().toInstant();
+    Preconditions.checkState(previousRevisionTime.isBefore(currentRevisionTime),
+        "previousRevisionTime should be before revisionTime");
+    return Duration.between(previousRevisionTime, currentRevisionTime)
+        .toMinutes();
   }
 }

@@ -9,7 +9,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 import lombok.val;
 
-public class ZipUtil {
+public class Zip {
 
   @VisibleForTesting
   static final Charset CHARSET = StandardCharsets.UTF_8;

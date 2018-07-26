@@ -3,7 +3,6 @@ package features.content.util.language;
 import static features.content.util.language.regex.RegexUtil.countMatches;
 
 import features.Feature;
-import features.content.util.TableContentExtractor;
 import java.util.Set;
 import java.util.regex.Pattern;
 import lombok.val;
@@ -23,13 +22,13 @@ public class TableRegexImpact implements Feature {
   }
 
   @Override
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     val words = WordsExtractor.extractWords(BasicUtils.getCurrentTables(parameters));
     val previousWords = WordsExtractor.extractWords(BasicUtils.getPreviousTables(parameters));
 
     val previousMatches = countMatches(this.regularExpressions, previousWords.elementSet());
     val matches = countMatches(this.regularExpressions, words.elementSet());
     val previousMatchCount = previousMatches > 0 ? previousMatches : 1;
-    return ((float) (matches - previousMatchCount) / previousMatchCount);
+    return ((double) (matches - previousMatchCount + 1) / (previousMatchCount + 1));
   }
 }

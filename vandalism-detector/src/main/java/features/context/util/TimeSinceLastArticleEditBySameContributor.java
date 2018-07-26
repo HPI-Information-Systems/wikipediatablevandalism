@@ -18,14 +18,14 @@ public class TimeSinceLastArticleEditBySameContributor implements Feature {
 
   @Override
   @SuppressWarnings("all")
-  public Object getValue(final FeatureParameters parameters) {
+  public double getValue(final FeatureParameters parameters) {
     val revision = parameters.getRevision();
     val precursors = parameters.getPreviousRevisions();
     val sameContributor = getContributorFilter(revision.getContributor());
     val previousContribution = precursors.stream()
         .filter(precursor -> sameContributor.test(precursor.getContributor()))
         .findFirst();
-    return previousContribution.map(precursor -> timeDelta(precursor, revision)).orElse(-1l);
+    return previousContribution.map(precursor -> timeDelta(precursor, revision)).orElse(-1.0);
   }
 
   private Predicate<ContributorType> getContributorFilter(final ContributorType toCompare) {
@@ -43,7 +43,7 @@ public class TimeSinceLastArticleEditBySameContributor implements Feature {
     return contributor -> Objects.equals(toCompare.getUsername(), contributor.getUsername());
   }
 
-  private long timeDelta(final MyRevisionType previous, final MyRevisionType next) {
+  private double timeDelta(final MyRevisionType previous, final MyRevisionType next) {
     val past = previous.getDate().toInstant();
     val upcoming = next.getDate().toInstant();
     Preconditions.checkState(past.isBefore(upcoming), "Time delta should compare past to upcoming");
