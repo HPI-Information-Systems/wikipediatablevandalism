@@ -36,7 +36,6 @@ public class TableCellRegexImpact implements Feature {
 
     val previousMatches = countMatches(this.regularExpressions, previousValues);
     val matches = countMatches(this.regularExpressions, values);
-
     return ((double) (matches - previousMatches + 1) / (previousMatches + 1));
   }
 }
