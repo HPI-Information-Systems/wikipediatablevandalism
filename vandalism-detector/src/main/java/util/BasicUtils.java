@@ -86,7 +86,7 @@ public class BasicUtils {
       final MyRevisionType previousRevision) {
     val currentRevisionTime = currentRevision.getDate().toInstant();
     val previousRevisionTime = previousRevision.getDate().toInstant();
-    Preconditions.checkState(previousRevisionTime.isBefore(currentRevisionTime),
+    Preconditions.checkState(!previousRevisionTime.isAfter(currentRevisionTime),
         "previousRevisionTime should be before revisionTime");
     return Duration.between(previousRevisionTime, currentRevisionTime)
         .toMinutes();
