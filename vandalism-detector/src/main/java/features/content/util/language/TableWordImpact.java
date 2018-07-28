@@ -23,7 +23,7 @@ public class TableWordImpact implements Feature {
   }
 
   public TableWordImpact(Set<String> words) {
-    this(words, false);
+    this(words, true);
   }
 
   @Override

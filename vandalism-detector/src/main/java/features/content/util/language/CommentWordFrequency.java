@@ -23,7 +23,7 @@ public class CommentWordFrequency implements Feature {
   }
 
   public CommentWordFrequency(Set<String> words) {
-    this(words, false);
+    this(words, true);
   }
 
   @Override
