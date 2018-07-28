@@ -7,67 +7,74 @@ import features.content.util.TableContentExtractor;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.val;
+import util.DiffUtil;
 import util.WordsExtractor;
 
 class TextFeatureFactory {
 
   Feature ratioOfNumericalCharsToAllChars() {
     return parameters -> {
-      val tableContents = TableContentExtractor.getContent(parameters);
-      if (tableContents.length() == 0) {
+      val insertedText = DiffUtil.insertedText(parameters);
+
+      if (insertedText.isEmpty()) {
         return -1;
       }
+
       double numericalCount = 0;
-      for (val c : tableContents.toCharArray()) {
+
+      for (val c : insertedText.toCharArray()) {
         if (Character.isDigit(c)) {
           ++numericalCount;
         }
       }
-      return numericalCount / tableContents.length();
+      return numericalCount / insertedText.length();
     };
   }
 
   Feature ratioOfAlphanumericCharsToAllChars() {
     return parameters -> {
-      val tableContents = TableContentExtractor.getContent(parameters);
-      if (tableContents.length() == 0) {
+      val insertedText = DiffUtil.insertedText(parameters);
+      if (insertedText.length() == 0) {
         return -1;
       }
       double alphanumericalCount = 0;
-      for (val c : tableContents.toCharArray()) {
+
+      for (val c : insertedText.toCharArray()) {
         if (Character.isAlphabetic(c) || Character.isDigit(c)) {
           ++alphanumericalCount;
         }
       }
-      return alphanumericalCount / tableContents.length();
+      return alphanumericalCount / insertedText.length();
     };
   }
 
   Feature ratioOfUppercaseCharsToAllChars() {
     return parameters -> {
-      val tableContents = TableContentExtractor.getContent(parameters);
-      if (tableContents.length() == 0) {
+      val insertedText = DiffUtil.insertedText(parameters);
+      if (insertedText.length() == 0) {
         return -1;
       }
       double uppercaseCount = 0;
-      for (val c : tableContents.toCharArray()) {
+
+      for (val c : insertedText.toCharArray()) {
         if (Character.isUpperCase(c)) {
           ++uppercaseCount;
         }
       }
-      return uppercaseCount / tableContents.length();
+      return uppercaseCount / insertedText.length();
     };
   }
 
   Feature ratioOfUppercaseCharsToLowercaseChars() {
     return parameters -> {
-      val tableContents = TableContentExtractor.getContent(parameters);
-      if (tableContents.length() == 0) {
+      val insertedText = DiffUtil.insertedText(parameters);
+      if (insertedText.length() == 0) {
         return -1;
       }
       double uppercaseCount = 1;
       double lowercaseCount = 1;
-      for (val c : tableContents.toCharArray()) {
+
+      for (val c : insertedText.toCharArray()) {
         if (Character.isUpperCase(c)) {
           ++uppercaseCount;
         } else if (Character.isLowerCase(c)) {
@@ -81,11 +88,12 @@ class TextFeatureFactory {
 
   Feature lengthOfLongestConsecutiveSequenceOfSingleChar() {
     return parameters -> {
-      val tableContents = TableContentExtractor.getContent(parameters);
+      val insertedText = DiffUtil.insertedText(parameters);
       char charBefore = ' ';
       int longestConsecutiveSingleCharCount = 0;
       int currentConsecutiveSingleCharCount = 0;
-      for (val c : tableContents.toCharArray()) {
+
+      for (val c : insertedText.toCharArray()) {
         if (charBefore != c || Character.isWhitespace(c)) {
           if (currentConsecutiveSingleCharCount > longestConsecutiveSingleCharCount) {
             longestConsecutiveSingleCharCount = currentConsecutiveSingleCharCount;
@@ -106,10 +114,11 @@ class TextFeatureFactory {
 
   Feature lengthOfLongestToken() {
     return parameters -> {
-      val tableContents = TableContentExtractor.getContent(parameters);
+      val insertedText = DiffUtil.insertedText(parameters);
       int longestTokenCount = 0;
       int currentTokenCount = 0;
-      for (val c : tableContents.toCharArray()) {
+
+      for (val c : insertedText.toCharArray()) {
         if (Character.isWhitespace(c)) {
           if (currentTokenCount > longestTokenCount) {
             longestTokenCount = currentTokenCount;
@@ -128,8 +137,10 @@ class TextFeatureFactory {
 
   Feature averageRelativeFrequencyOfNewAddedWords() {
     return parameters -> {
-      val currentWordOccurrence = WordsExtractor.extractWords(TableContentExtractor.getContent(parameters));
-      val previousWordOccurrence = WordsExtractor.extractWords(TableContentExtractor.getPreviousContent(parameters));
+      val currentWordOccurrence = WordsExtractor
+          .extractWords(TableContentExtractor.getContent(parameters));
+      val previousWordOccurrence = WordsExtractor
+          .extractWords(TableContentExtractor.getPreviousContent(parameters));
       val addedWordOccurrence = Multisets.difference(currentWordOccurrence, previousWordOccurrence);
       if (addedWordOccurrence.isEmpty() || previousWordOccurrence.isEmpty()) {
         return -1;
