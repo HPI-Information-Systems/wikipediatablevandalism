@@ -15,11 +15,12 @@ public class ContributorRevertedBeforeInThatArticle {
     val allRevisions = createAllRevisions(parameters);
 
     for (val currentRevision : allRevisions) {
-      if (searchedBefore
-          .contains(currentRevision.getSha1())) { // not search for already searched sha1 value
+      // not search for already searched sha1 value
+      if (searchedBefore.contains(currentRevision.getSha1())) {
         continue;
       }
-      searchedBefore.add(currentRevision.getSha1()); // save searched sha1 value
+      // save searched sha1 value
+      searchedBefore.add(currentRevision.getSha1());
 
       List<Integer> revertedRevisionsIndexes = calculateRevertedRevisionsIndexes(allRevisions,
           currentRevision);
@@ -37,11 +38,12 @@ public class ContributorRevertedBeforeInThatArticle {
     val allRevisions = createAllRevisions(parameters);
 
     for (val currentRevision : allRevisions) {
-      if (searchedBefore
-          .contains(currentRevision.getSha1())) { // not search for already searched sha1 value
+      // not search for already searched sha1 value
+      if (searchedBefore.contains(currentRevision.getSha1())) {
         continue;
       }
-      searchedBefore.add(currentRevision.getSha1()); // save searched sha1 value
+      // save searched sha1 value
+      searchedBefore.add(currentRevision.getSha1());
 
       List<Integer> revertedRevisionsIndexes = calculateRevertedRevisionsIndexes(allRevisions,
           currentRevision);
@@ -49,7 +51,7 @@ public class ContributorRevertedBeforeInThatArticle {
           allRevisions,
           parameters.getRevision());
       if (!revertedRevisionsBySameContributor.isEmpty()) {
-        BasicUtils.getTimeDuration(parameters.getRevision(), revertedRevisionsBySameContributor.get(0));
+        return BasicUtils.getTimeDuration(parameters.getRevision(), revertedRevisionsBySameContributor.get(0));
       }
     }
 
