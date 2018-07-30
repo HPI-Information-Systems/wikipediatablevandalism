@@ -1,12 +1,10 @@
 package features.content.util.language;
 
-import com.google.common.collect.Sets;
 import features.Feature;
 import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
 import org.apache.commons.lang3.StringUtils;
-import util.WordsExtractor;
 
 /**
  * Boolean feature to show if a comment mentions a word.
@@ -27,8 +25,8 @@ public class CommentContainsWords implements Feature {
     }
 
     val comment = parameters.getRevision().getComment().getValue();
-    val words = WordsExtractor.extractWords(comment);
-    val matches = Sets.intersection(words.elementSet(), this.words);
-    return matches.size() > 0 ? 1 : 0;
+    val containsWord = words.stream()
+        .anyMatch(word -> StringUtils.containsIgnoreCase(comment, word));
+    return containsWord ? 1 : 0;
   }
 }
