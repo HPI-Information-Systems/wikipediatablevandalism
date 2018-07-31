@@ -13,6 +13,8 @@ import java.nio.file.Path;
 import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.atomic.AtomicInteger;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import model.RevisionTag;
@@ -30,13 +32,11 @@ public class Main {
 
   private final Arguments arguments;
   private final PagePathFinder finder;
-  private final PageParser parser;
   private final ObservationCollector observationCollector;
 
   private Main(final Arguments arguments) {
     this.arguments = arguments;
     finder = new PagePathFinder(arguments.getRevisionPath());
-    parser = new PageParser(new Kryo());
     observationCollector = new ObservationCollector(arguments);
   }
 
@@ -45,7 +45,8 @@ public class Main {
     return finder.findAll(pageIds);
   }
 
-  private MyPageType loadPage(final Map<Integer, Path> pageIdToPath, final int pageId) {
+  private synchronized MyPageType loadPage(final Map<Integer, Path> pageIdToPath, final int pageId) {
+    val parser = new PageParser(new Kryo());
     val pagePath = requireNonNull(pageIdToPath.get(pageId), "Page file of " + pageId + "not found");
     return parser.parse(pagePath);
   }
@@ -56,14 +57,20 @@ public class Main {
         observations.stream().collect(groupingBy(t -> t.getPageRevision().getPageId()));
     final Map<Integer, Path> pageIdToPath = findPages(observations);
 
-    int processed = 0;
+    final AtomicInteger progress = new AtomicInteger();
     final int total = pageToObservations.size();
-    for (val entry : pageToObservations.entrySet()) {
-      val page = loadPage(pageIdToPath, entry.getKey());
-      logProgress(page, processed, total);
-      collector.accept(page, entry.getValue());
-      ++processed;
-    }
+
+    ForkJoinPool pool = new ForkJoinPool(this.arguments.getParallel());
+    pool.submit(() ->
+        pageToObservations.entrySet()
+            .parallelStream()
+            .forEach(entry -> {
+              val page = loadPage(pageIdToPath, entry.getKey());
+              val currentProgress = progress.incrementAndGet();
+              collector.accept(page, entry.getValue());
+              logProgress(page, currentProgress, total);
+            })
+    ).invoke();
   }
 
   private void logProgress(final MyPageType page, final int processed, final int total) {
@@ -100,5 +107,4 @@ public class Main {
     Main main = new Main(arguments);
     main.runPack(getDefaultFeaturePack());
   }
-
 }

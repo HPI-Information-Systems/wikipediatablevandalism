@@ -3,17 +3,11 @@ package features.content.util.language.wordlists;
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
 
-public class RevertWordList {
+public class ReplaceWordList {
 
   private static Set<String> words = ImmutableSet.of(
-      "revert",
-      "reverted",
-      "reverting",
-      "rollback",
-      "rv",
-      "rvv",
-      "undo",
-      "undid"
+      "replace",
+      "replaced"
   );
 
   public static Set<String> getWords() {
