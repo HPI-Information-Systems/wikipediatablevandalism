@@ -51,6 +51,7 @@ public class ContentFeatures {
         .feature("averageAllBadWordImpactInTable", languageFeatureFactory.averageAllBadWordImpactInTable())
         .feature("averageAllBadWordFrequencyInComment", languageFeatureFactory.averageAllBadWordFrequencyInComment())
         .feature("revertInComment", languageFeatureFactory.revertInComment())
+        .feature("redirectInComment", languageFeatureFactory.redirectInComment())
 
         .feature("ratioOfNumericalCharsToAllChars", textFeatureFactory.ratioOfNumericalCharsToAllChars())
         .feature("ratioOfAlphanumericCharsToAllChars", textFeatureFactory.ratioOfAlphanumericCharsToAllChars())
