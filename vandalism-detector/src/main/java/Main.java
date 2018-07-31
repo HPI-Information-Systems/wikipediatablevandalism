@@ -40,7 +40,7 @@ public class Main {
     observationCollector = new ObservationCollector(arguments);
   }
 
-  private synchronized Map<Integer, Path> findPages(final List<RevisionTag> observations) {
+  private Map<Integer, Path> findPages(final List<RevisionTag> observations) {
     val pageIds = observations.stream().map(r -> r.getPageRevision().getPageId()).collect(toSet());
     return finder.findAll(pageIds);
   }
@@ -70,7 +70,7 @@ public class Main {
               collector.accept(page, entry.getValue());
               logProgress(page, currentProgress, total);
             })
-    ).join();
+    ).invoke();
   }
 
   private void logProgress(final MyPageType page, final int processed, final int total) {
