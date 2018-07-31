@@ -66,4 +66,13 @@ class DiffUtilTest {
     assertThat(words)
         .containsExactlyInAnyOrder("kathmandu", "kathmandu", "414264", "671846", "47", "807300");
   }
+
+  @Test
+  void diffReturnsTokensInTableIntroducedInNewRevision() {
+    val previousTable = MockTables.NEPAL_13809326_Table_0;
+    val table = MockTables.NEPAL_13809326_Table_0_ADDED_SYNTAX;
+    val diff = DiffUtil.diffTokens(singleton(previousTable), singleton(table));
+
+    assertThat(diff).containsExactlyInAnyOrder("purple", "duckie", "i", "am", "dumb", "2001</b>", "[[Kathmandu]]", "<b>Pop.");
+  }
 }

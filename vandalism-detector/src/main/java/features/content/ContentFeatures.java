@@ -1,6 +1,7 @@
 package features.content;
 
 import features.FeaturePack;
+import features.content.wikisyntax.TemplateUseFeatures;
 import lombok.val;
 
 public class ContentFeatures {
@@ -27,6 +28,7 @@ public class ContentFeatures {
         .feature("sharedCellRatio", tableFeatureFactory.sharedCellRatio())
         .feature("rankChange", tableFeatureFactory.rankChange())
         .feature("clipCount", tableFeatureFactory.clipCount())
+
         .feature("personalPronounFrequencyInComment", languageFeatureFactory.personalPronounFrequencyInComment())
         .feature("personalPronounFrequencyInTable", languageFeatureFactory.personalPronounFrequencyInTable())
         .feature("personalPronounImpactInTable", languageFeatureFactory.personalPronounImpactInTable())
@@ -49,6 +51,7 @@ public class ContentFeatures {
         .feature("averageAllBadWordImpactInTable", languageFeatureFactory.averageAllBadWordImpactInTable())
         .feature("averageAllBadWordFrequencyInComment", languageFeatureFactory.averageAllBadWordFrequencyInComment())
         .feature("revertInComment", languageFeatureFactory.revertInComment())
+
         .feature("ratioOfNumericalCharsToAllChars", textFeatureFactory.ratioOfNumericalCharsToAllChars())
         .feature("ratioOfAlphanumericCharsToAllChars", textFeatureFactory.ratioOfAlphanumericCharsToAllChars())
         .feature("ratioOfUppercaseCharsToAllChars", textFeatureFactory.ratioOfUppercaseCharsToAllChars())
@@ -56,13 +59,16 @@ public class ContentFeatures {
         .feature("lengthOfLongestConsecutiveSequenceOfSingleChar", textFeatureFactory.lengthOfLongestConsecutiveSequenceOfSingleChar())
         .feature("lengthOfLongestToken", textFeatureFactory.lengthOfLongestToken())
         .feature("averageRelativeFrequencyOfNewAddedWords", textFeatureFactory.averageRelativeFrequencyOfNewAddedWords())
+
         .feature("previousLength", byteFeatureFactory.previousLength())
         .feature("sizeChange", byteFeatureFactory.sizeChange())
         .feature("sizeRatio", byteFeatureFactory.sizeRatio())
         .feature("LZWCompressionRate", byteFeatureFactory.LZWCompressionRate())
         .feature("KLDOfCharDistribution", byteFeatureFactory.KLDOfCharDistribution())
         .feature("commentLength", byteFeatureFactory.commentLength())
-        .build();
+
+        .build()
+        .combineWith(TemplateUseFeatures.get().getFeatures());
   }
 
   public FeaturePack getFeatures() {

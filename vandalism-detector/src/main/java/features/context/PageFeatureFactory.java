@@ -67,7 +67,9 @@ class PageFeatureFactory {
           ++sameContributor;
         }
       }
-      return sameContributor / parameters.getPreviousRevisions().size();
+
+      val previousRevisionCount = parameters.getPreviousRevisions().size();
+      return previousRevisionCount > 0 ? sameContributor / previousRevisionCount : 0;
     };
   }
 

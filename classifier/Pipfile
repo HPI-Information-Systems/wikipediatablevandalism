@@ -13,6 +13,8 @@ matplotlib = "*"
 graphviz = "*"
 sklearn = "*"
 scipy = "*"
+imbalanced-learn = "*"
+ipynb = "*"
 
 [requires]
 python_version = "3.6"

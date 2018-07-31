@@ -5,7 +5,16 @@ import java.util.Set;
 
 public class RevertWordList {
 
-  private static Set<String> words = ImmutableSet.of("Revert", "Reverted", "Reverting", "Rollback");
+  private static Set<String> words = ImmutableSet.of(
+      "Revert",
+      "Reverted",
+      "Reverting",
+      "Rollback",
+      "Rv",
+      "Rvv",
+      "Undo",
+      "Undid"
+  );
 
   public static Set<String> getWords() {
     return words;

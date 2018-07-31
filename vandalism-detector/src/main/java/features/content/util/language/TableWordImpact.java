@@ -23,7 +23,7 @@ public class TableWordImpact implements Feature {
   }
 
   public TableWordImpact(Set<String> words) {
-    this(words, false);
+    this(words, true);
   }
 
   @Override
@@ -34,6 +34,6 @@ public class TableWordImpact implements Feature {
     val previousMatches = getMatches(previousWords, this.words, this.isMatching);
     val matches = getMatches(words, this.words, this.isMatching);
     val previousMatchCount = previousMatches.size() > 0 ? previousMatches.size() : 1;
-    return ((double) (matches.size() - previousMatchCount + 1) / (previousMatchCount + 1));
+    return ((double) (matches.size() - previousMatches.size()) / previousMatchCount);
   }
 }
