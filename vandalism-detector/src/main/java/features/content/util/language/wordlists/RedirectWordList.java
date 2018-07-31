@@ -6,8 +6,12 @@ import java.util.Set;
 public class RedirectWordList {
 
   private static Set<String> words = ImmutableSet.of(
-      "Redirect",
-      "Direct"
+      "redirect",
+      "redirected",
+      "direct",
+      "directed",
+      "redir",
+      "rdr"
   );
 
   public static Set<String> getWords() {
