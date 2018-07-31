@@ -6,14 +6,14 @@ import java.util.Set;
 public class RevertWordList {
 
   private static Set<String> words = ImmutableSet.of(
-      "Revert",
-      "Reverted",
-      "Reverting",
-      "Rollback",
-      "Rv",
-      "Rvv",
-      "Undo",
-      "Undid"
+      "revert",
+      "reverted",
+      "reverting",
+      "rollback",
+      "rv",
+      "rvv",
+      "undo",
+      "undid"
   );
 
   public static Set<String> getWords() {
