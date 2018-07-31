@@ -16,6 +16,8 @@ import features.content.util.language.regex.SuperlativePatternList;
 import features.content.util.language.regex.WikiSyntaxPatternList;
 import features.content.util.language.wordlists.DictionaryWordList;
 import features.content.util.language.wordlists.PronounWordList;
+import features.content.util.language.wordlists.RedirectWordList;
+import features.content.util.language.wordlists.ReplaceWordList;
 import features.content.util.language.wordlists.RevertWordList;
 import features.content.util.language.wordlists.SexualWordList;
 import features.content.util.language.wordlists.VulgarWordList;
@@ -126,5 +128,13 @@ class LanguageFeatureFactory {
 
   Feature revertInComment() {
     return new CommentContainsWords(RevertWordList.getWords());
+  }
+
+  Feature redirectInComment() {
+    return new CommentContainsWords(RedirectWordList.getWords());
+  }
+
+  Feature replaceInComment() {
+    return new CommentContainsWords(ReplaceWordList.getWords());
   }
 }

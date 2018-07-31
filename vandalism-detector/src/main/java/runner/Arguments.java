@@ -34,6 +34,9 @@ public class Arguments {
   @Parameter(names = "--matching-path", description = "Path to matching persistence")
   Path matchingPath;
 
+  @Parameter(names = "--parallel", description = "Number of parallel threads")
+  int parallel = Runtime.getRuntime().availableProcessors();
+
   @Parameter(names = {"-h", "--help"}, help = true)
   boolean help;
 

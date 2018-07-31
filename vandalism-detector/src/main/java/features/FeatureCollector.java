@@ -43,7 +43,7 @@ public class FeatureCollector {
     contextFactory = new FeatureParametersFactory();
   }
 
-  public void accept(final MyPageType page, final List<RevisionTag> observations) {
+  public synchronized void accept(final MyPageType page, final List<RevisionTag> observations) {
 
     final Map<Integer, List<RevisionTag>> groupByRevision = observations.stream()
         .collect(groupingBy(r -> r.getPageRevision().getRevisionId()));
