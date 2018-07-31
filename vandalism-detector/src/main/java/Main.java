@@ -32,22 +32,21 @@ public class Main {
 
   private final Arguments arguments;
   private final PagePathFinder finder;
-  private final PageParser parser;
   private final ObservationCollector observationCollector;
 
   private Main(final Arguments arguments) {
     this.arguments = arguments;
     finder = new PagePathFinder(arguments.getRevisionPath());
-    parser = new PageParser(new Kryo());
     observationCollector = new ObservationCollector(arguments);
   }
 
-  private Map<Integer, Path> findPages(final List<RevisionTag> observations) {
+  private synchronized Map<Integer, Path> findPages(final List<RevisionTag> observations) {
     val pageIds = observations.stream().map(r -> r.getPageRevision().getPageId()).collect(toSet());
     return finder.findAll(pageIds);
   }
 
-  private MyPageType loadPage(final Map<Integer, Path> pageIdToPath, final int pageId) {
+  private synchronized MyPageType loadPage(final Map<Integer, Path> pageIdToPath, final int pageId) {
+    val parser = new PageParser(new Kryo());
     val pagePath = requireNonNull(pageIdToPath.get(pageId), "Page file of " + pageId + "not found");
     return parser.parse(pagePath);
   }
@@ -65,7 +64,7 @@ public class Main {
     pool.submit(() ->
         pageToObservations.entrySet()
             .parallelStream()
-            .forEachOrdered(entry -> {
+            .forEach(entry -> {
               val page = loadPage(pageIdToPath, entry.getKey());
               val currentProgress = progress.incrementAndGet();
               collector.accept(page, entry.getValue());
