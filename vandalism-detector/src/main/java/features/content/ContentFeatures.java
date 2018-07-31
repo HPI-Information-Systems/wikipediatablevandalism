@@ -68,6 +68,7 @@ public class ContentFeatures {
         .feature("LZWCompressionRate", byteFeatureFactory.LZWCompressionRate())
         .feature("KLDOfCharDistribution", byteFeatureFactory.KLDOfCharDistribution())
         .feature("commentLength", byteFeatureFactory.commentLength())
+        .feature("userCommentLength", byteFeatureFactory.userCommentLength())
 
         .build()
         .combineWith(TemplateUseFeatures.get().getFeatures());
