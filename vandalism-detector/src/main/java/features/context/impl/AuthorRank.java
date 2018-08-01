@@ -6,12 +6,16 @@ import features.Feature;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 import util.BasicUtils;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-public class PageOwnership implements Feature {
+@RequiredArgsConstructor
+public class AuthorRank implements Feature {
+
+  private final RevisionProvider revisionProvider;
 
   @Override
   public double getValue(FeatureParameters parameters) {
@@ -41,7 +45,7 @@ public class PageOwnership implements Feature {
   private Map<String, Integer> contributionCounts(final FeatureParameters parameters) {
     final Map<String, Integer> editCounts = new HashMap<>();
 
-    for (final MyRevisionType revision : parameters.getPreviousRevisions()) {
+    for (final MyRevisionType revision : revisionProvider.get(parameters)) {
 
       if (BasicUtils.isAnonymous(revision.getContributor())) {
         continue;

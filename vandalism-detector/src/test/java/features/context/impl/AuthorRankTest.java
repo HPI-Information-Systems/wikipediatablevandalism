@@ -12,25 +12,25 @@ import org.junit.jupiter.api.Test;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
-class PageOwnershipTest {
+class AuthorRankTest {
 
   private static final String ANONYMOUS = null;
   private static final String BOB = "bob";
   private static final String ALICE = "alice";
   private static final String MALICE = "malice";
 
-  private PageOwnership pageOwnership;
+  private AuthorRank authorRank;
 
   @BeforeEach
   void setUp() {
-    pageOwnership = new PageOwnership();
+    authorRank = new AuthorRank(RevisionProvider.all());
   }
 
   @Test
   void anonymous_hasLowestRankPossible() {
     val params = params(ANONYMOUS);
 
-    val value = pageOwnership.getValue(params);
+    val value = authorRank.getValue(params);
 
     assertThat(value).isEqualTo(-1);
   }
@@ -39,7 +39,7 @@ class PageOwnershipTest {
   void firstEditOfCurrentUser_historyEmpty() {
     val params = params(BOB);
 
-    val value = pageOwnership.getValue(params);
+    val value = authorRank.getValue(params);
 
     assertThat(value).isZero();
   }
@@ -49,7 +49,7 @@ class PageOwnershipTest {
     val params = params(BOB,
         ALICE);
 
-    val value = pageOwnership.getValue(params);
+    val value = authorRank.getValue(params);
 
     assertThat(value).isZero();
   }
@@ -59,7 +59,7 @@ class PageOwnershipTest {
     val params = params(BOB,
         ALICE, ALICE, ALICE);
 
-    val value = pageOwnership.getValue(params);
+    val value = authorRank.getValue(params);
 
     assertThat(value).isZero();
   }
@@ -69,7 +69,7 @@ class PageOwnershipTest {
     val params = params(BOB,
         BOB, ALICE, BOB);
 
-    val value = pageOwnership.getValue(params);
+    val value = authorRank.getValue(params);
 
     assertThat(value).isEqualTo(0.5);
   }
@@ -79,7 +79,7 @@ class PageOwnershipTest {
     val params = params(BOB,
         MALICE, MALICE, ALICE, ALICE, BOB, BOB, BOB, BOB, ANONYMOUS);
 
-    val value = pageOwnership.getValue(params);
+    val value = authorRank.getValue(params);
 
     assertThat(value).isEqualTo(0.5);
   }
