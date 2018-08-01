@@ -7,6 +7,7 @@ import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
 import org.apache.commons.lang3.StringUtils;
+import util.StemmerUtils;
 import util.WordsExtractor;
 
 /**
@@ -34,7 +35,7 @@ public class CommentWordFrequency implements Feature {
     }
 
     val comment = parameters.getRevision().getComment().getValue();
-    val words = WordsExtractor.extractWords(comment);
+    val words = StemmerUtils.stem(WordsExtractor.extractWords(comment));
     val matches = getMatches(words, this.words, this.isMatching);
     return words.size() > 0 ? ((double) matches.size() / words.size()) : 0;
   }

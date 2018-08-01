@@ -55,6 +55,8 @@ dependencies {
     testImplementation 'org.assertj:assertj-core:3.10.0'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
+
+    implementation 'edu.stanford.nlp:stanford-corenlp:3.9.1'
 }
 
 compileJava {
