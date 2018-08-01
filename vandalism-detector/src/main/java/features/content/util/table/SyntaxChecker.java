@@ -1,16 +1,38 @@
 package features.content.util.table;
 
+import java.util.regex.Pattern;
+import lombok.val;
+
 public class SyntaxChecker {
+
+  private static Pattern TABLE_OPEN_HTML = Pattern.compile("<table(\\s+\\p{Graph}+\\s*=\\s*\"\\s*\\p{Graph}+\\s*\")*\\s*>");
+  private static Pattern TABLE_CLOSE_HTML = Pattern.compile("</table>");
+  private static Pattern TABLE_OPEN_WIKI = Pattern.compile("\\{\\|");
+  private static Pattern TABLE_CLOSE_WIKI = Pattern.compile("\\|}");
 
   public static int checkClipCount(String content) {
     int clipCount = 0;
-    for (Character c : content.toCharArray()) {
-      if (c.compareTo('{') == 0) {
-        ++clipCount;
-      } else if (c.compareTo('}') == 0) {
-        --clipCount;
-      }
+
+    //count wiki style table clips
+    val matcherOpenWiki = TABLE_OPEN_WIKI.matcher(content);
+    while (matcherOpenWiki.find()) {
+      ++clipCount;
     }
+    val matcherCloseWiki = TABLE_CLOSE_WIKI.matcher(content);
+    while (matcherCloseWiki.find()) {
+      --clipCount;
+    }
+
+    //count html table clips
+    val matcherOpenHTML = TABLE_OPEN_HTML.matcher(content);
+    while (matcherOpenHTML.find()) {
+      ++clipCount;
+    }
+    val matcherCloseHTML = TABLE_CLOSE_HTML.matcher(content);
+    while (matcherCloseHTML.find()) {
+      --clipCount;
+    }
+
     return clipCount;
   }
 

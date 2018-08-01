@@ -29,7 +29,6 @@ public class ContextFeatures {
         .feature("localizedDayOfWeek", editFeatureFactory.localizedDayOfWeek())
         .feature("isMinorEdit", editFeatureFactory.isMinorEdit())
         .feature("authorRank", editFeatureFactory.authorRank())
-
         .feature("authorRankOfLast200Edits", editFeatureFactory.authorRankOfLast200Edits())
         .feature("authorRankOneMonth", editFeatureFactory.authorRankOfLastMonth())
         .feature("authorRankOfLast200EditsOfOneMonth", editFeatureFactory.authorRankOfLast200EditsOfOneMonth())
@@ -43,6 +42,7 @@ public class ContextFeatures {
         .feature("ratioOffAllEditsToContributorEdits", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
         .feature("contributorRevertedBeforeInThatArticleCount", pageFeatureFactory.contributorRevertedBeforeInThatArticleCount())
         .feature("timeSinceContributorRevertedBeforeInThatArticle", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())
+
         .build();
   }
 
