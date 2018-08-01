@@ -64,7 +64,7 @@ public class Main {
     pool.submit(() ->
         pageToObservations.entrySet()
             .parallelStream()
-            .forEach(entry -> {
+            .forEachOrdered(entry -> {
               val page = loadPage(pageIdToPath, entry.getKey());
               val currentProgress = progress.incrementAndGet();
               collector.accept(page, entry.getValue());
