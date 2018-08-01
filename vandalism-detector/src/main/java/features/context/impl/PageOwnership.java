@@ -35,7 +35,7 @@ public class PageOwnership implements Feature {
         .sorted()
         .collect(toList());
 
-    return ranks.indexOf(myContributions);
+    return (float) ranks.indexOf(myContributions) / ranks.size();
   }
 
   private Map<String, Integer> contributionCounts(final FeatureParameters parameters) {

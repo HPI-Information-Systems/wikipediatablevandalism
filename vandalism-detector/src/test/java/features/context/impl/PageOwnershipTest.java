@@ -71,7 +71,7 @@ class PageOwnershipTest {
 
     val value = pageOwnership.getValue(params);
 
-    assertThat(value).isOne();
+    assertThat(value).isEqualTo(0.5);
   }
 
   @Test
@@ -81,7 +81,7 @@ class PageOwnershipTest {
 
     val value = pageOwnership.getValue(params);
 
-    assertThat(value).isEqualTo(1);
+    assertThat(value).isEqualTo(0.5);
   }
 
   private FeatureParameters params(final String currentAuthor, final String... previousAuthors) {
@@ -89,12 +89,6 @@ class PageOwnershipTest {
         .revision(revisionOf(currentAuthor))
         .previousRevisions(Stream.of(previousAuthors).map(this::revisionOf).collect(toList()))
         .build();
-  }
-
-  private MyRevisionType anonymous() {
-    return new MyRevisionType() {{
-      contributor = new ContributorType();
-    }};
   }
 
   private MyRevisionType revisionOf(final String author) {
