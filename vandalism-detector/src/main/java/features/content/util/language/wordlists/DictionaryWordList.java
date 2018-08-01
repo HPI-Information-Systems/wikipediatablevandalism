@@ -12,7 +12,7 @@ public class DictionaryWordList {
 
   private static final String FILENAME = "english-words.txt";
 
-  private static Set<String> WORDS = WordListUtil.read(FILENAME);
+  private static Set<String> WORDS = WordListUtil.readStemms(FILENAME);
 
   public static Set<String> getWords() {
     return WORDS;

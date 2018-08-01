@@ -28,4 +28,9 @@ public class WordListUtil {
       throw new UncheckedIOException(e);
     }
   }
+
+  @Nonnull
+  public static Set<String> readStemms(final String filename) {
+    return StemmerUtils.stem(read(filename));
+  }
 }

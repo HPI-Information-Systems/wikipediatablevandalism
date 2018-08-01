@@ -7,6 +7,7 @@ import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
 import util.BasicUtils;
+import util.StemmerUtils;
 import util.WordsExtractor;
 
 /**
@@ -28,8 +29,10 @@ public class TableWordImpact implements Feature {
 
   @Override
   public double getValue(final FeatureParameters parameters) {
-    val words = WordsExtractor.extractWords(BasicUtils.getCurrentTables(parameters));
-    val previousWords = WordsExtractor.extractWords(BasicUtils.getPreviousTables(parameters));
+    val words = StemmerUtils
+        .stem(WordsExtractor.extractWords(BasicUtils.getCurrentTables(parameters)));
+    val previousWords = StemmerUtils
+        .stem(WordsExtractor.extractWords(BasicUtils.getPreviousTables(parameters)));
 
     val previousMatches = getMatches(previousWords, this.words, this.isMatching);
     val matches = getMatches(words, this.words, this.isMatching);
