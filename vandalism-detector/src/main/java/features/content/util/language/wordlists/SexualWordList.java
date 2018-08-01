@@ -10,7 +10,7 @@ public class SexualWordList {
 
   private static final String FILENAME = "sexual-words.txt";
 
-  private static Set<String> words = WordListUtil.read(FILENAME);
+  private static Set<String> words = WordListUtil.readStemms(FILENAME);
 
   public static Set<String> getWords() {
     return words;

@@ -2,10 +2,11 @@ package features.content.util.language.wordlists;
 
 import com.google.common.collect.ImmutableSet;
 import java.util.Set;
+import util.StemmerUtils;
 
 public class RevertWordList {
 
-  private static Set<String> words = ImmutableSet.of(
+  private static Set<String> words = StemmerUtils.stem(ImmutableSet.of(
       "revert",
       "reverted",
       "reverting",
@@ -14,7 +15,7 @@ public class RevertWordList {
       "rvv",
       "undo",
       "undid"
-  );
+  ));
 
   public static Set<String> getWords() {
     return words;

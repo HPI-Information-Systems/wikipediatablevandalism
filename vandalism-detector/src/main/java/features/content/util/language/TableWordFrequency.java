@@ -2,12 +2,12 @@ package features.content.util.language;
 
 import static util.MultisetUtils.getMatches;
 
-import com.google.common.collect.Multiset;
 import features.Feature;
 import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
 import util.DiffUtil;
+import util.StemmerUtils;
 
 /**
  * Number of matching words in word list relative to the size of the edit in tables.
@@ -28,7 +28,7 @@ public class TableWordFrequency implements Feature {
 
   @Override
   public double getValue(final FeatureParameters parameters) {
-    final Multiset<String> diffWords = DiffUtil.diffWords(parameters);
+    val diffWords = StemmerUtils.stem(DiffUtil.diffWords(parameters));
     val matches = getMatches(diffWords, this.words, this.isMatching);
     return diffWords.size() > 0 ? ((double) matches.size() / diffWords.size()) : 0;
   }
