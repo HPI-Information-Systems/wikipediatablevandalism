@@ -1,14 +1,21 @@
 package features.context;
 
 import features.Feature;
+import features.context.impl.LocalizedTime;
 import java.time.LocalDate;
+import java.time.temporal.ChronoField;
 import lombok.val;
 import util.BasicUtils;
+import util.IpGeoLocator;
+import util.LocationToTimeZoneConverter;
 
 /**
  * Create all features based on the metadata connected to the current revision
  */
 class EditFeatureFactory {
+
+  private final IpGeoLocator locator = new IpGeoLocator();
+  private final LocationToTimeZoneConverter locationConverter = new LocationToTimeZoneConverter();
 
   /**
    * @return the hours since midnight
@@ -20,6 +27,10 @@ class EditFeatureFactory {
     };
   }
 
+  Feature localizedTimeOfDay() {
+    return new LocalizedTime(ChronoField.HOUR_OF_DAY, locator, locationConverter);
+  }
+
   Feature dayOfWeek() {
     return parameters -> {
       val ts = parameters.getRevision().getTimestamp();
@@ -28,6 +39,10 @@ class EditFeatureFactory {
       val year = BasicUtils.valid(ts.getYear());
       return LocalDate.of(year, month, day).getDayOfWeek().getValue();
     };
+  }
+
+  Feature localizedDayOfWeek() {
+    return new LocalizedTime(ChronoField.DAY_OF_WEEK, locator, locationConverter);
   }
 
   Feature isMinorEdit() {
