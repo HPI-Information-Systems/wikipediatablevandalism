@@ -38,8 +38,6 @@ class TableFeatureFactory {
     };
   }
 
-  // down here - table matching required
-
   Feature unmatchedTables() {
     return parameters -> {
       if (parameters.getRevision().getParsed() == null) {

@@ -42,6 +42,12 @@ public class ContextFeatures {
         .feature("ratioOffAllEditsToContributorEdits", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
         .feature("contributorRevertedBeforeInThatArticleCount", pageFeatureFactory.contributorRevertedBeforeInThatArticleCount())
         .feature("timeSinceContributorRevertedBeforeInThatArticle", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())
+        .feature("articleTemperatureAll", pageFeatureFactory.articleTemperatureAll())
+        .feature("articleTemperatureYear", pageFeatureFactory.articleTemperatureYear())
+        .feature("articleTemperatureMonth", pageFeatureFactory.articleTemperatureMonth())
+        .feature("articleTemperatureWeek", pageFeatureFactory.articleTemperatureWeek())
+        .feature("articleTemperatureDay", pageFeatureFactory.articleTemperatureDay())
+        .feature("articleTemperatureHour", pageFeatureFactory.articleTemperatureHour())
 
         .build();
   }

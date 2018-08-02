@@ -26,7 +26,8 @@ public class Zip implements Feature {
     return getCompressionRatio(tableContents);
   }
 
-  private static double getCompressionRatio(final String value) {
+  @VisibleForTesting
+  static double getCompressionRatio(final String value) {
     final byte[] compressed = compress(value);
     final byte[] uncompressed = value.getBytes(CHARSET);
     return (double) compressed.length / uncompressed.length;

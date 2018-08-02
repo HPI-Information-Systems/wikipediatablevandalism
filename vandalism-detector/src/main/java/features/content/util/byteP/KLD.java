@@ -1,5 +1,6 @@
 package features.content.util.byteP;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
@@ -15,7 +16,8 @@ public class KLD implements Feature {
     return KLD.calculateKLDOfAddedChars(TableContentExtractor.getPreviousContent(parameters), TableContentExtractor.getContent(parameters));
   }
 
-  private static Double calculateKLDOfAddedChars(final String before, final String current) {
+  @VisibleForTesting
+  static Double calculateKLDOfAddedChars(final String before, final String current) {
     Multiset<Character> beforeCharDistributionMultiSet = HashMultiset.create();
     Multiset<Character> currentCharDistributionMultiSet = HashMultiset.create();
     for (char c : before.toCharArray()) {

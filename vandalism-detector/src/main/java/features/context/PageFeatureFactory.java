@@ -2,6 +2,7 @@ package features.context;
 
 import com.google.common.collect.Lists;
 import features.Feature;
+import features.context.util.ArticleTemperature;
 import features.context.util.ContributorRevertedBeforeInThatArticle;
 import features.context.util.TimeSinceFirstRevisionBySameContributor;
 import lombok.val;
@@ -79,6 +80,30 @@ class PageFeatureFactory {
 
   Feature timeSinceContributorRevertedBeforeInThatArticle() {
     return ContributorRevertedBeforeInThatArticle::getTimeSinceLastReverted;
+  }
+
+  Feature articleTemperatureAll() {
+    return ArticleTemperature::getAll;
+  }
+
+  Feature articleTemperatureYear() {
+    return ArticleTemperature::getYear;
+  }
+
+  Feature articleTemperatureMonth() {
+    return ArticleTemperature::getMonth;
+  }
+
+  Feature articleTemperatureWeek() {
+    return ArticleTemperature::getWeek;
+  }
+
+  Feature articleTemperatureDay() {
+    return ArticleTemperature::getDay;
+  }
+
+  Feature articleTemperatureHour() {
+    return ArticleTemperature::getHour;
   }
 
 }
