@@ -28,6 +28,10 @@ public class ContentFeatures {
         .feature("sharedCellRatio", tableFeatureFactory.sharedCellRatio())
         .feature("rankChange", tableFeatureFactory.rankChange())
         .feature("clipCount", tableFeatureFactory.clipCount())
+        .feature("sizePerTable", tableFeatureFactory.sizePerTable())
+        .feature("sizePerRow", tableFeatureFactory.sizePerRow())
+        .feature("sizePerColumn", tableFeatureFactory.sizePerColumn())
+        .feature("sizePerCell", tableFeatureFactory.sizePerCell())
 
         .feature("personalPronounFrequencyInComment", languageFeatureFactory.personalPronounFrequencyInComment())
         .feature("personalPronounFrequencyInTable", languageFeatureFactory.personalPronounFrequencyInTable())

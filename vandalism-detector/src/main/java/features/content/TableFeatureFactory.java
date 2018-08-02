@@ -8,44 +8,56 @@ import features.content.util.table.SyntaxChecker;
 import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
 import lombok.val;
+import util.BasicUtils;
 
 class TableFeatureFactory {
 
   Feature currentRowCount() {
     return parameters -> {
-      val match = parameters.getRelevantMatch();
-      return match == null ? 0 : match.getCurrentTable().getRows().size();
+      int totalRowCount = 0;
+      for (val table : parameters.getResult().getMatches()) {
+        totalRowCount += table.getCurrentTable().getRows().size();
+      }
+      for (val table : parameters.getResult().getAddedTables()) {
+        totalRowCount += table.getRows().size();
+      }
+      return totalRowCount;
     };
   }
 
   Feature currentColumnCount() {
     return parameters -> {
-      val match = parameters.getRelevantMatch();
-      return match == null ? 0 : match.getCurrentTable().getColumns().size();
+      int totalColumnCount = 0;
+      for (val table : parameters.getResult().getMatches()) {
+        totalColumnCount += table.getCurrentTable().getColumns().size();
+      }
+      for (val table : parameters.getResult().getAddedTables()) {
+        totalColumnCount += table.getColumns().size();
+      }
+      return totalColumnCount;
     };
   }
 
   Feature currentCellCount() {
     return parameters -> {
-      val match = parameters.getRelevantMatch();
-      if (match == null) {
-        return 0;
+      int totalCellCount = 0;
+      for (val table : parameters.getResult().getMatches()) {
+        totalCellCount += table.getCurrentTable().getRows().size() * table.getCurrentTable().getColumns().size();
       }
-
-      val rows = match.getCurrentTable().getRows().size();
-      val columns = match.getCurrentTable().getColumns().size();
-      return rows * columns;
+      for (val table : parameters.getResult().getAddedTables()) {
+        totalCellCount += table.getRows().size() * table.getColumns().size();
+      }
+      return totalCellCount;
     };
   }
 
   Feature unmatchedTables() {
     return parameters -> {
-      if (parameters.getRevision().getParsed() == null) {
-        return 1d;
-      }
-
       final double removedTableCount = parameters.getResult().getRemovedTables().size();
-      final double currentTableCount = parameters.getRevision().getParsed().size();
+      final double currentTableCount = parameters.getResult().getMatches().size() + parameters.getResult().getAddedTables().size();
+      if (currentTableCount == 0) {
+        return 1;
+      }
       return (currentTableCount - removedTableCount) / currentTableCount;
     };
   }
@@ -57,10 +69,15 @@ class TableFeatureFactory {
       }
 
       final double matchedRowCount = parameters.getRowMatchResult().getMatches().size();
-      final double totalRowCount = parameters.getRelevantMatch().getCurrentTable().getRows().size();
-
+      int totalRowCount = 0;
+      for (val table : parameters.getResult().getMatches()) {
+        totalRowCount += table.getCurrentTable().getRows().size();
+      }
+      for (val table : parameters.getResult().getAddedTables()) {
+        totalRowCount += table.getRows().size();
+      }
       if (totalRowCount == 0) {
-        return 0;
+        return 1;
       }
 
       return (totalRowCount - matchedRowCount) / totalRowCount;
@@ -89,6 +106,74 @@ class TableFeatureFactory {
 
   Feature clipCount() {
     return parameters -> SyntaxChecker.checkClipCount(TableContentExtractor.getContent(parameters));
+  }
+
+  Feature sizePerTable() {
+    return parameters -> {
+      double size = BasicUtils.parsedLength(parameters.getRevision().getParsed());
+      int tableCount = parameters.getResult().getMatches().size() + parameters.getResult().getAddedTables().size();
+      if (tableCount == 0) {
+        return -1;
+      }
+      return size / tableCount;
+    };
+  }
+
+  Feature sizePerRow() {
+    return parameters -> {
+      double size = BasicUtils.parsedLength(parameters.getRevision().getParsed());
+
+      int totalRowCount = 0;
+      for (val table : parameters.getResult().getMatches()) {
+        totalRowCount += table.getCurrentTable().getRows().size();
+      }
+      for (val table : parameters.getResult().getAddedTables()) {
+        totalRowCount += table.getRows().size();
+      }
+      if (totalRowCount == 0) {
+        return -1;
+      }
+
+      return size / totalRowCount;
+    };
+  }
+
+  Feature sizePerColumn() {
+    return parameters -> {
+      double size = BasicUtils.parsedLength(parameters.getRevision().getParsed());
+
+      int totalColumnCount = 0;
+      for (val table : parameters.getResult().getMatches()) {
+        totalColumnCount += table.getCurrentTable().getColumns().size();
+      }
+      for (val table : parameters.getResult().getAddedTables()) {
+        totalColumnCount += table.getColumns().size();
+      }
+      if (totalColumnCount == 0) {
+        return -1;
+      }
+
+      return size / totalColumnCount;
+    };
+  }
+
+  Feature sizePerCell() {
+    return parameters -> {
+      double size = BasicUtils.parsedLength(parameters.getRevision().getParsed());
+
+      int totalCellCount = 0;
+      for (val table : parameters.getResult().getMatches()) {
+        totalCellCount += table.getCurrentTable().getRows().size() * table.getCurrentTable().getColumns().size();
+      }
+      for (val table : parameters.getResult().getAddedTables()) {
+        totalCellCount += table.getRows().size() * table.getColumns().size();
+      }
+      if (totalCellCount == 0) {
+        return -1;
+      }
+
+      return size / totalCellCount;
+    };
   }
 
 }
