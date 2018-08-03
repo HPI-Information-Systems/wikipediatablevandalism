@@ -31,4 +31,16 @@ class SyntaxCheckerTest {
     assertThat(matcher.find()).isTrue();
   }
 
+  @Test
+  void findRefOpen() {
+    val matcher = SyntaxChecker.REF_OPEN.matcher("<ref name=\"Chomsky\">");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findRefClose() {
+    val matcher = SyntaxChecker.REF_CLOSE.matcher("</ref>");
+    assertThat(matcher.find()).isTrue();
+  }
+
 }

@@ -2,6 +2,7 @@ package features.content;
 
 import features.Feature;
 import features.content.util.TableContentExtractor;
+import features.content.util.table.FilledCellRatio;
 import features.content.util.table.RankChange;
 import features.content.util.table.SharedCellRatio;
 import features.content.util.table.SyntaxChecker;
@@ -108,6 +109,10 @@ class TableFeatureFactory {
     return parameters -> SyntaxChecker.checkClipCount(TableContentExtractor.getContent(parameters));
   }
 
+  Feature refCount() {
+    return parameters -> SyntaxChecker.checkRefCount(TableContentExtractor.getContent(parameters));
+  }
+
   Feature sizePerTable() {
     return parameters -> {
       double size = BasicUtils.parsedLength(parameters.getRevision().getParsed());
@@ -174,6 +179,10 @@ class TableFeatureFactory {
 
       return size / totalCellCount;
     };
+  }
+
+  Feature emptyCellRatio() {
+    return new FilledCellRatio();
   }
 
 }

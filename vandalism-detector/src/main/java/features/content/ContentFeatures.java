@@ -28,10 +28,12 @@ public class ContentFeatures {
         .feature("sharedCellRatio", tableFeatureFactory.sharedCellRatio())
         .feature("rankChange", tableFeatureFactory.rankChange())
         .feature("clipCount", tableFeatureFactory.clipCount())
+        .feature("refCount", tableFeatureFactory.refCount())
         .feature("sizePerTable", tableFeatureFactory.sizePerTable())
         .feature("sizePerRow", tableFeatureFactory.sizePerRow())
         .feature("sizePerColumn", tableFeatureFactory.sizePerColumn())
         .feature("sizePerCell", tableFeatureFactory.sizePerCell())
+        .feature("filledCellRatio", tableFeatureFactory.emptyCellRatio())
 
         .feature("personalPronounFrequencyInComment", languageFeatureFactory.personalPronounFrequencyInComment())
         .feature("personalPronounFrequencyInTable", languageFeatureFactory.personalPronounFrequencyInTable())
@@ -57,6 +59,7 @@ public class ContentFeatures {
         .feature("revertInComment", languageFeatureFactory.revertInComment())
         .feature("redirectInComment", languageFeatureFactory.redirectInComment())
         .feature("replaceInComment", languageFeatureFactory.replaceInComment())
+        .feature("goodFaithInComment", languageFeatureFactory.goodFaithInComment())
 
         .feature("ratioOfNumericalCharsToAllChars", textFeatureFactory.ratioOfNumericalCharsToAllChars())
         .feature("ratioOfAlphanumericCharsToAllChars", textFeatureFactory.ratioOfAlphanumericCharsToAllChars())
@@ -65,6 +68,7 @@ public class ContentFeatures {
         .feature("lengthOfLongestConsecutiveSequenceOfSingleChar", textFeatureFactory.lengthOfLongestConsecutiveSequenceOfSingleChar())
         .feature("lengthOfLongestToken", textFeatureFactory.lengthOfLongestToken())
         .feature("averageRelativeFrequencyOfNewAddedWords", textFeatureFactory.averageRelativeFrequencyOfNewAddedWords())
+        .feature("refRatio", textFeatureFactory.refRatio())
 
         .feature("previousLength", byteFeatureFactory.previousLength())
         .feature("sizeChange", byteFeatureFactory.sizeChange())

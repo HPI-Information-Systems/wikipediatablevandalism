@@ -167,4 +167,11 @@ class WikiSyntaxPatternListTest {
     val matcher = WikiSyntaxPatternList.DEFINITION_LIST.matcher(": Definition description");
     assertThat(matcher.find()).isTrue();
   }
+
+  @Test
+  void findLinks() {
+    val matcher = WikiSyntaxPatternList.LINKS.matcher("[[test]]");
+    assertThat(matcher.find()).isTrue();
+  }
+
 }

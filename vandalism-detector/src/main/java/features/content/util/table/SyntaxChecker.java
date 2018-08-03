@@ -36,4 +36,22 @@ public class SyntaxChecker {
     return clipCount;
   }
 
+  static Pattern REF_OPEN = Pattern.compile("<ref(\\s+\\p{Graph}+\\s*=\\s*\"\\s*\\p{Graph}+\\s*\")*\\s*>");
+  static Pattern REF_CLOSE = Pattern.compile("</\\s*r\\s*e\\s*f\\s*>");
+
+  public static int checkRefCount(String content) {
+    int refCount = 0;
+
+    val matcherOpenWiki = REF_OPEN.matcher(content);
+    while (matcherOpenWiki.find()) {
+      ++refCount;
+    }
+    val matcherCloseWiki = REF_CLOSE.matcher(content);
+    while (matcherCloseWiki.find()) {
+      --refCount;
+    }
+
+    return refCount;
+  }
+
 }

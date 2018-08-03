@@ -15,6 +15,7 @@ import features.content.util.language.TableWordImpact;
 import features.content.util.language.regex.SuperlativePatternList;
 import features.content.util.language.regex.WikiSyntaxPatternList;
 import features.content.util.language.wordlists.DictionaryWordList;
+import features.content.util.language.wordlists.GoodFaithWordList;
 import features.content.util.language.wordlists.PronounWordList;
 import features.content.util.language.wordlists.RedirectWordList;
 import features.content.util.language.wordlists.ReplaceWordList;
@@ -137,4 +138,9 @@ class LanguageFeatureFactory {
   Feature replaceInComment() {
     return new CommentContainsWords(ReplaceWordList.getWords());
   }
+
+  Feature goodFaithInComment() {
+    return new CommentContainsWords(GoodFaithWordList.getWords());
+  }
+
 }

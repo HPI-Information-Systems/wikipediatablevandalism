@@ -3,6 +3,7 @@ package features.content;
 import com.google.common.collect.Multisets;
 import com.google.common.math.Stats;
 import features.Feature;
+import features.content.util.RefRatio;
 import features.content.util.TableContentExtractor;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,4 +156,9 @@ class TextFeatureFactory {
       return Stats.meanOf(addedWordFrequency);
     };
   }
+
+  Feature refRatio() {
+    return new RefRatio();
+  }
+
 }
