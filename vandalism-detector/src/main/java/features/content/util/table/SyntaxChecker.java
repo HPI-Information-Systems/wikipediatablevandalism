@@ -5,7 +5,7 @@ import lombok.val;
 
 public class SyntaxChecker {
 
-  static Pattern TABLE_OPEN_HTML = Pattern.compile("<table(\\s+\\p{Graph}+\\s*=\\s*\"\\s*\\p{Graph}+\\s*\")*\\s*>");
+  static Pattern TABLE_OPEN_HTML = Pattern.compile("<table(\\s+\\p{Graph}+\\s*=\\s*\"(\\s*\\p{Graph})+\\s*\")*\\s*>");
   static Pattern TABLE_CLOSE_HTML = Pattern.compile("</\\s*t\\s*a\\s*b\\s*l\\s*e\\s*>");
   static Pattern TABLE_OPEN_WIKI = Pattern.compile("\\{\\|");
   static Pattern TABLE_CLOSE_WIKI = Pattern.compile("\\|}");

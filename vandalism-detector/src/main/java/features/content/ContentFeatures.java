@@ -29,11 +29,8 @@ public class ContentFeatures {
         .feature("rankChange", tableFeatureFactory.rankChange())
         .feature("clipCount", tableFeatureFactory.clipCount())
         .feature("refCount", tableFeatureFactory.refCount())
-        .feature("sizePerTable", tableFeatureFactory.sizePerTable())
-        .feature("sizePerRow", tableFeatureFactory.sizePerRow())
-        .feature("sizePerColumn", tableFeatureFactory.sizePerColumn())
-        .feature("sizePerCell", tableFeatureFactory.sizePerCell())
-        .feature("filledCellRatio", tableFeatureFactory.emptyCellRatio())
+        .feature("sizePerCellChangeRatio", tableFeatureFactory.sizePerCellChangeRatio())
+        .feature("emptyCellChangeRatio", tableFeatureFactory.emptyCellRatio())
 
         .feature("personalPronounFrequencyInComment", languageFeatureFactory.personalPronounFrequencyInComment())
         .feature("personalPronounFrequencyInTable", languageFeatureFactory.personalPronounFrequencyInTable())

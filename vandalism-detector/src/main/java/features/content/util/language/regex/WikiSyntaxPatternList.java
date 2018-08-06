@@ -9,21 +9,21 @@ import java.util.regex.Pattern;
  */
 public class WikiSyntaxPatternList {
 
-  static Pattern BOLD_ITALIC = Pattern.compile("(\\'\\'.*?\\'\\')");
-  static Pattern LINKS = Pattern.compile("(\\[\\[.*?\\]\\])");
-  static Pattern MATH_FORMULA = Pattern.compile("(<math(.*?)>.*?<\\/math>)");
-  static Pattern SUPERSCRIPT = Pattern.compile("(<sup>.*?<\\/sup>)");
-  static Pattern SUBSCRIPT = Pattern.compile("(<sub>.*?<\\/sub>)");
-  static Pattern POEM = Pattern.compile("(<poem>.*?<\\/poem>)");
-  static Pattern CODE = Pattern.compile("(<code>.*?<\\/code>)");
-  static Pattern BLOCKQUOTE = Pattern.compile("(<blockquote>.*?<\\/blockquote>)");
-  static Pattern DIV = Pattern.compile("(<div(.*?)>.*?<\\/div>)");
-  static Pattern STACK_TEXT = Pattern.compile("(\\{\\{stack|(.*?)\\}\\})");
+  static Pattern BOLD_ITALIC = Pattern.compile("(\'\'.*?\'\')", Pattern.DOTALL);
+  static Pattern LINKS = Pattern.compile("(\\[\\[.*?]])", Pattern.DOTALL);
+  static Pattern MATH_FORMULA = Pattern.compile("(<math(.*?)>.*?</math>)", Pattern.DOTALL);
+  static Pattern SUPERSCRIPT = Pattern.compile("(<sup>.*?</sup>)", Pattern.DOTALL);
+  static Pattern SUBSCRIPT = Pattern.compile("(<sub>.*?</sub>)", Pattern.DOTALL);
+  static Pattern POEM = Pattern.compile("(<poem>.*?</poem>)", Pattern.DOTALL);
+  static Pattern CODE = Pattern.compile("(<code>.*?</code>)", Pattern.DOTALL);
+  static Pattern BLOCKQUOTE = Pattern.compile("(<blockquote>.*?</blockquote>)", Pattern.DOTALL);
+  static Pattern DIV = Pattern.compile("(<div(.*?)>.*?</div>)", Pattern.DOTALL);
+  static Pattern STACK_TEXT = Pattern.compile("(\\{\\{stack|(.*?)}})", Pattern.DOTALL);
   static Pattern TABLE_OF_CONTENTS = Pattern.compile("(__TOC__)");
-  static Pattern COMMENT = Pattern.compile("(<!--.*?-->)");
-  static Pattern HEADING = Pattern.compile("(==.*?==)");
+  static Pattern COMMENT = Pattern.compile("(<!--.*?-->)", Pattern.DOTALL);
+  static Pattern HEADING = Pattern.compile("(==.*?==)", Pattern.DOTALL);
   static Pattern UNORDERED_LIST = Pattern.compile("\\*[^,#]+");
-  static Pattern ORDERED_LIST = Pattern.compile("\\#[^,#]+");
+  static Pattern ORDERED_LIST = Pattern.compile("#[^,#]+");
   static Pattern DEFINITION_LIST = Pattern.compile("[;:][^,;:]+");
   static Pattern NON_BREAKING_SPACE = Pattern.compile("(&nbsp;)");
 
