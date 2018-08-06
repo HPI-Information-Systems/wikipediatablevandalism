@@ -15,12 +15,6 @@ def get_labels(X: pd.DataFrame):
     return X.columns
 
 
-def get_revisions(X: pd.DataFrame):
-    revisions = X['revision_id']
-    X.drop(['revision_id'], axis=1, inplace=True)
-    return revisions
-
-
 def get_tags(X: pd.DataFrame):
     tags = X['tag_id']
     X.drop(['tag_id'], axis=1, inplace=True)

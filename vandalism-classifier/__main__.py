@@ -23,8 +23,8 @@ def single_label(features):
     preprocessor = Preprocessor(features, [Tags.BLANKING], BASELINE_FEATURE_COLUMNS)
     output = preprocessor.run()
     clf = SingleLabelClassifier(output, 300)
-    clf.train()
-    clf.test()
+    clf.cross_validate()
+    confusion_matrix
 
 
 if __name__ == '__main__':
