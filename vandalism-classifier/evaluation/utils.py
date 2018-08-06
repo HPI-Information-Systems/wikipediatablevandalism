@@ -2,6 +2,7 @@ import logging
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
+from ipywidgets import HTML
 from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve, average_precision_score, \
     auc, roc_curve
 from sklearn.model_selection import cross_val_predict
@@ -71,4 +72,31 @@ def create_feature_importance_graph(clf, labels):
     plt.bar(x_pos, feature_importance, align='center')
     plt.xticks(x_pos, labels, rotation='vertical')
     plt.ylabel('Feature Importance')
+    return plt
+
+
+def false_negatives(X, y, y_predict):
+    return X[(y == 1) & (y_predict == 0)]
+
+
+def false_positives(X, y, y_predict):
+    return X[(y == 0) & (y_predict == 1)]
+
+
+def create_revision_link_html(revisions, tags, n=10):
+    revisions_with_labels = revisions.merge(tags, how='left', left_on='tag_id', right_on='id')
+    html = []
+    for index, item in revisions_with_labels.head(n).iterrows():
+        item_html = '<li>{tag}: <a href="http://en.wikipedia.org/index.php?diff={rev_id}">{rev_id} </a></li>' \
+            .format(rev_id=int(item['revision_id']), tag=item['name'])
+        html.append(item_html)
+    return HTML('<ul>' + ''.join(html) + '</ul>')
+
+
+def create_revisions_by_tag_graph(revisions, tags):
+    revisions_with_labels = revisions.merge(tags, how='left', left_on='tag_id', right_on='id')
+    tag_counts = revisions_with_labels.name.value_counts()
+    tag_indices = np.arange(len(tag_counts))
+    plt.bar(tag_indices, tag_counts)
+    plt.xticks(tag_indices, tag_counts.index, rotation=45)
     return plt
