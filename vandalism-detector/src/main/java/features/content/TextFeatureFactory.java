@@ -157,7 +157,7 @@ class TextFeatureFactory {
     };
   }
 
-  Feature refRatio() {
+  Feature refChangeRatio() {
     return new RefChangeRatio();
   }
 

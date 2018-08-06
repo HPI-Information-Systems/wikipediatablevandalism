@@ -65,7 +65,7 @@ public class ContentFeatures {
         .feature("lengthOfLongestConsecutiveSequenceOfSingleChar", textFeatureFactory.lengthOfLongestConsecutiveSequenceOfSingleChar())
         .feature("lengthOfLongestToken", textFeatureFactory.lengthOfLongestToken())
         .feature("averageRelativeFrequencyOfNewAddedWords", textFeatureFactory.averageRelativeFrequencyOfNewAddedWords())
-        .feature("refRatio", textFeatureFactory.refRatio())
+        .feature("refChangeRatio", textFeatureFactory.refChangeRatio())
 
         .feature("previousLength", byteFeatureFactory.previousLength())
         .feature("sizeChange", byteFeatureFactory.sizeChange())
