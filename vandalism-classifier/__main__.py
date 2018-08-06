@@ -3,7 +3,6 @@ import logging
 import click
 
 from classifier.single_label_classifier import SingleLabelClassifier
-from evaluation.utils import log_scores
 from preprocessing.features import BASELINE_FEATURE_COLUMNS
 from preprocessing.preprocessor import Preprocessor
 from preprocessing.tags import Tags
