@@ -28,12 +28,9 @@ class BaselineSingleLabelClassifiers:
             Tags.BLANKING,
             Tags.NONSENSE,
             Tags.QUALITY_ISSUE,
-            Tags.PERSONAL_STORY,
             Tags.FALSE_FACT,
             Tags.SYNTAX,
-            Tags.TEMPLATE,
             Tags.EDIT_WARS,
-            Tags.SEO,
             Tags.INTENTION
         ]
 
@@ -50,13 +47,13 @@ class BaselineSingleLabelClassifiers:
             logger.debug(create_classification_report(y_train, y_train_predict))
 
             plt, pr_auc = create_precision_recall_graph(y_train, y_train_predict_proba[:, 1])
+            plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_train_pr_auc.png'))
             plt.show()
             print("PR-AUC", pr_auc)
-            plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_train_pr_auc.png'))
 
             plt, roc_auc = create_receiver_operation_characteristic_graph(y_train, y_train_predict_proba[:, 1])
-            plt.show()
             plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_train_roc_auc.png'))
+            plt.show()
             print("ROC-AUC", roc_auc)
 
             # Testing
@@ -65,22 +62,22 @@ class BaselineSingleLabelClassifiers:
             logger.debug(create_classification_report(y, y_predict))
 
             plt, pr_auc = create_precision_recall_graph(y, y_predict_proba[:, 1])
+            plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_test_pr_auc.png'))
             plt.show()
             print("PR-AUC", pr_auc)
-            plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_test_pr_auc.png'))
 
             plt, roc_auc = create_receiver_operation_characteristic_graph(y, y_predict_proba[:, 1])
+            plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_test_roc_auc.png'))
             plt.show()
             print("ROC-AUC", roc_auc)
-            plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_test_roc_auc.png'))
 
             # False negatives
             fn = false_negatives(data.X_test_with_meta, y, y_predict)
             plt = create_revisions_by_tag_graph(fn, self.tags)
-            plt.show()
             plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_false_negatives.png'))
+            plt.show()
 
             # Feature importance
             plt = create_feature_importance_graph(clf, data.labels)
-            plt.show()
             plt.savefig(os.path.join(self.report_output, 'baseline_' + tag_name + '_test_feature_importance.png'))
+            plt.show()
