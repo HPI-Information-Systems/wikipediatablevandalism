@@ -13,7 +13,7 @@ logger = logging.getLogger()
 
 class Preprocessor:
 
-    def __init__(self, path: str, tags: [Tags], feature_columns, vandalism_sample_rate=0.3):
+    def __init__(self, path: str, tags: [Tags], feature_columns=None, vandalism_sample_rate=0.3):
         self.vandalism_sample_rate = vandalism_sample_rate
         self.tags = tags
         self.feature_columns = feature_columns
