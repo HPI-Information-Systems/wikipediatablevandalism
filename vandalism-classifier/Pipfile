@@ -13,6 +13,7 @@ numpy = "*"
 click = "*"
 jupyter = "*"
 matplotlib = "*"
+seaborn = "*"
 
 [requires]
 python_version = "3.6"
