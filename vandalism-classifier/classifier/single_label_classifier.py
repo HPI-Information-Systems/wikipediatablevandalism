@@ -17,8 +17,9 @@ class SingleLabelClassifier:
         self.k_folds = k_folds
         self.clf = RandomForestClassifier(n_estimators=self.trees, n_jobs=-1)
 
-    def train_cross_validate(self):
+    def cross_validate(self):
         logger.debug('Training single label classifier with %d trees on %d folds', self.trees, self.k_folds)
+        self.clf = RandomForestClassifier(n_estimators=self.trees, n_jobs=-1)
         scores = cross_validate(self.clf, self.output.X_train, self.output.y_train,
                                 scoring=['f1', 'precision', 'recall', 'roc_auc', 'accuracy'],
                                 cv=self.k_folds, n_jobs=-1, return_train_score=False)
@@ -27,7 +28,7 @@ class SingleLabelClassifier:
 
     def train_predict(self):
         logger.debug('Retrieving probabilities with %d trees on %d folds', self.trees, self.k_folds)
-
+        self.clf = RandomForestClassifier(n_estimators=self.trees, n_jobs=-1)
         classes = cross_val_predict(self.clf, self.output.X_train, self.output.y_train,
                                     cv=self.k_folds, n_jobs=-1, method='predict')
         probabilities = cross_val_predict(self.clf, self.output.X_train, self.output.y_train,
@@ -36,6 +37,7 @@ class SingleLabelClassifier:
 
     def test_predict(self):
         logger.debug('Retrieving probabilities with %d trees on %d folds', self.trees, self.k_folds)
+        self.clf = RandomForestClassifier(n_estimators=self.trees, n_jobs=-1)
         self.clf.fit(self.output.X_train, self.output.y_train)
 
         classes = self.clf.predict(self.output.X_test)
