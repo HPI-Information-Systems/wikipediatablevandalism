@@ -27,8 +27,8 @@ public class ContentFeatures {
         .feature("columnCountChange", tableFeatureFactory.columnCount())
         .feature("sharedCellRatio", tableFeatureFactory.sharedCellRatio())
         .feature("rankChange", tableFeatureFactory.rankChange())
-        .feature("clipCount", tableFeatureFactory.clipCount())
-        .feature("refCount", tableFeatureFactory.refCount())
+        .feature("clipCount", tableFeatureFactory.tableClipCount())
+        .feature("refCount", tableFeatureFactory.openAndCloseSyntaxCount())
         .feature("sizePerCellChangeRatio", tableFeatureFactory.sizePerCellChangeRatio())
         .feature("emptyCellChangeRatio", tableFeatureFactory.emptyCellRatio())
 

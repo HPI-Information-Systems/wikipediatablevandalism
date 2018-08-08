@@ -8,7 +8,7 @@ import model.FeatureParameters;
 public class RefChangeRatio implements Feature {
 
   static Pattern REF_HTML = Pattern.compile("<ref(.*?)>.*?</ref>", Pattern.DOTALL);
-  static Pattern REF_WIKI_SYNTAX = Pattern.compile("\\[\\[ref:.*?\\]\\]", Pattern.DOTALL);
+  static Pattern REF_WIKI_SYNTAX = Pattern.compile("\\[\\[ref:.*?]]", Pattern.DOTALL);
 
   @Override
   public double getValue(FeatureParameters parameters) {
