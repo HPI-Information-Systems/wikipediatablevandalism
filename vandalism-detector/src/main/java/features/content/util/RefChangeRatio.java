@@ -7,7 +7,8 @@ import model.FeatureParameters;
 
 public class RefChangeRatio implements Feature {
 
-  static Pattern REF = Pattern.compile("<ref(\\s+\\p{Graph}+\\s*=\\s*\"(\\s*\\p{Graph})+\\s*\")*\\s*>.*?</\\s*r\\s*e\\s*f\\s*>", Pattern.DOTALL);
+  static Pattern REF_HTML = Pattern.compile("<ref(.*?)>.*?</ref>", Pattern.DOTALL);
+  static Pattern REF_WIKI_SYNTAX = Pattern.compile("\\[\\[ref:.*?\\]\\]", Pattern.DOTALL);
 
   @Override
   public double getValue(FeatureParameters parameters) {
@@ -24,10 +25,13 @@ public class RefChangeRatio implements Feature {
 
   private double getRefCount(String content) {
     double refCount = 0;
-    val currentMatcherRef = REF.matcher(content);
-    while (currentMatcherRef.find()) {
+    val htmlMatcher = REF_HTML.matcher(content);
+    val wikiSyntaxMatcher = REF_WIKI_SYNTAX.matcher(content);
+
+    while (htmlMatcher.find() || wikiSyntaxMatcher.find()) {
       ++refCount;
     }
+
     return refCount;
   }
 

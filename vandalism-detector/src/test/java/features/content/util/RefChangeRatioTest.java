@@ -8,8 +8,18 @@ import org.junit.jupiter.api.Test;
 class RefChangeRatioTest {
 
   @Test
+  void findWikiHtmlReference() {
+    val matcher = RefChangeRatio.REF_HTML
+        .matcher("Lorem Ipsum<ref name=\"Chomsky\">www.test.de</ref>Dolor");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
   void findWikiOpen() {
-    val matcher = RefChangeRatio.REF.matcher("<ref name=\"Chomsky\">www.test.de</ref>");
+    val matcher = RefChangeRatio.REF_WIKI_SYNTAX
+        .matcher("Obama PolitickerME[[ref:name=pme-noneofusurl=[http://www.politickerme.com/"
+            + "jessicaalaimo/1316/none-us-delegate-stuff None of us like this delegate stuff], "
+            + "PolitickerME, 14 April 2008.]] 01 Jun 2008");
     assertThat(matcher.find()).isTrue();
   }
 
