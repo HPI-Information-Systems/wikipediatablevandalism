@@ -25,7 +25,7 @@ public class ArticleTemperature {
     if (maxDuration == 0) {
       return 0;
     }
-    return get(parameters, maxDuration);
+    return previousRevisions.size() / (maxDuration / editsPer);
   }
 
   public static double getYear(FeatureParameters parameters) {
