@@ -18,8 +18,14 @@ public class ArticleTemperature {
 
   public static double getAll(FeatureParameters parameters) {
     val previousRevisions = parameters.getPreviousRevisions();
-    val duration = BasicUtils.getTimeDuration(parameters.getRevision(), previousRevisions.get(previousRevisions.size()-1)); // return minutes
-    return previousRevisions.size() / (duration / editsPer);
+    if (previousRevisions.size() == 0) {
+      return 0;
+    }
+    val maxDuration = BasicUtils.getTimeDuration(parameters.getRevision(), previousRevisions.get(previousRevisions.size()-1)); // return minutes
+    if (maxDuration == 0) {
+      return 0;
+    }
+    return get(parameters, maxDuration);
   }
 
   public static double getYear(FeatureParameters parameters) {
