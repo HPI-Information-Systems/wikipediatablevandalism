@@ -74,7 +74,11 @@ class DataTypeInference {
     }
   }
 
-
+  // See https://en.wikipedia.org/wiki/Wikipedia:Manual_of_Style/Dates_and_numbers#Formats
+  // Of course there are many other date formats. However, for changes in the data type
+  // distribution, the notion of "number of well-formatted dates according to manual"
+  // is most helpful
+  
   private static final Pattern pattern0 = Pattern.compile("\\d{4}-\\d{1,2}-\\d{1,2}");
   private final DateTimeFormatter format0 = new DateTimeFormatterBuilder()
       .appendValue(ChronoField.YEAR)
