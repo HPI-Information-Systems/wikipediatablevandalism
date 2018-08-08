@@ -30,6 +30,10 @@ configurations {
     implementation.extendsFrom apt
 }
 
+ext {
+    junitVersion = '5.1.0'
+}
+
 dependencies {
     // Wiki
     implementation('de.hpi.naumann:wikixmlsplit:0.0.1-SNAPSHOT') {
@@ -41,6 +45,7 @@ dependencies {
     implementation 'com.google.code.findbugs:jsr305:3.0.2'
     implementation 'com.maxmind.geoip2:geoip2:2.12.0'
     implementation 'net.iakovlev:timeshape:2018d.4'
+    implementation 'edu.stanford.nlp:stanford-corenlp:3.9.1'
 
     // Logging
     implementation 'org.apache.logging.log4j:log4j-core:2.11.0'
@@ -53,10 +58,9 @@ dependencies {
     runtimeOnly 'org.apache.logging.log4j:log4j-slf4j-impl:2.11.0'
 
     testImplementation 'org.assertj:assertj-core:3.10.0'
-    testImplementation 'org.junit.jupiter:junit-jupiter-api:5.1.0'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.1.0'
-
-    implementation 'edu.stanford.nlp:stanford-corenlp:3.9.1'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter-params:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
 }
 
 compileJava {

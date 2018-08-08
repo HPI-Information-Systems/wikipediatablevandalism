@@ -48,7 +48,7 @@ public class Main {
   private synchronized MyPageType loadPage(final Map<Integer, Path> pageIdToPath,
       final int pageId) {
     val parser = new PageParser(new Kryo());
-    val pagePath = requireNonNull(pageIdToPath.get(pageId), "Page file of " + pageId + "not found");
+    val pagePath = requireNonNull(pageIdToPath.get(pageId), "Page file of " + pageId + " not found");
     return parser.parse(pagePath);
   }
 
