@@ -1,3 +1,0 @@
-DEBUG:root:Dataset before resampling: 5995 total, vandalism rate: 0
-WARNING:root:Too little non-vandalism in dataset. Wanted 43955 samples, set to max 5551
-DEBUG:root:Dataset after resampling: 5995 total, vandalism rate: 0
