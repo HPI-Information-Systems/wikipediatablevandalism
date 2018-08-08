@@ -1,6 +1,7 @@
 package features.content;
 
 import features.FeaturePack;
+import features.content.util.typing.DataTypeDependentFeatureFactory;
 import features.content.wikisyntax.TemplateUseFeatures;
 import lombok.val;
 
@@ -78,6 +79,10 @@ public class ContentFeatures {
         .feature("KLDOfCharDistribution", byteFeatureFactory.KLDOfCharDistribution())
         .feature("commentLength", byteFeatureFactory.commentLength())
         .feature("userCommentLength", byteFeatureFactory.userCommentLength())
+
+        .feature("hasNumericOutlierInColumns", tableFeatureFactory.hasNumericOutlierInColumns())
+        .feature("hasNumericOutlierInRows", tableFeatureFactory.hasNumericOutlierInRows())
+        .feature("tableDataTypeInformationGain", new DataTypeDependentFeatureFactory().dataTypeDistributionInformationGain())
 
         .build()
         .combineWith(TemplateUseFeatures.get().getFeatures());

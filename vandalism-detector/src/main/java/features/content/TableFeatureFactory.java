@@ -9,9 +9,14 @@ import features.content.util.table.SizePerCellChangeRatio;
 import features.content.util.table.SyntaxChecker;
 import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
+import features.content.util.typing.DataTypeDependentFeatureFactory;
+import lombok.experimental.Delegate;
 import lombok.val;
 
 class TableFeatureFactory {
+
+  @Delegate
+  private final DataTypeDependentFeatureFactory withTypes = new DataTypeDependentFeatureFactory();
 
   Feature currentRowCount() {
     return parameters -> {
