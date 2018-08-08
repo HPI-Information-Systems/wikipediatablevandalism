@@ -18,7 +18,7 @@ public class ContextFeatures {
     val pageFeatureFactory = new PageFeatureFactory();
 
     features = FeaturePack.builder()
-        // Usesr
+        // User
         .feature("isContributorAnonymous", userFeatureFactory.isContributorAnonymous())
         .feature("isBot", userFeatureFactory.isBot())
 
@@ -37,11 +37,11 @@ public class ContextFeatures {
         .feature("hasPreviousSameContributor", pageFeatureFactory.hasPreviousSameContributor())
         .feature("timeSinceLastArticleEdit", pageFeatureFactory.timeSinceLastArticleEdit())
         .feature("timeSinceLastArticleEditBySameContributor", pageFeatureFactory.timeSinceLastArticleEditBySameContributor())
-        .feature("timeSinceFirstArticleEditBySameContributor", pageFeatureFactory.timeSinceFirstArticleEditBySameContributor())
+        .feature("timeSinceFirstArticleEdit", pageFeatureFactory.timeSinceFirstArticleEditBySameContributor())
         .feature("revertCount", pageFeatureFactory.revertCount())
-        .feature("ratioOffAllEditsToContributorEdits", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
-        .feature("contributorRevertedBeforeInThatArticleCount", pageFeatureFactory.contributorRevertedBeforeInThatArticleCount())
-        .feature("timeSinceContributorRevertedBeforeInThatArticle", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())
+        .feature("editRatio", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
+        .feature("contributorRevertCount", pageFeatureFactory.contributorRevertedBeforeInThatArticleCount())
+        .feature("timeSinceReverted", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())
         .feature("articleTemperatureAll", pageFeatureFactory.articleTemperatureAll())
         .feature("articleTemperatureYear", pageFeatureFactory.articleTemperatureYear())
         .feature("articleTemperatureMonth", pageFeatureFactory.articleTemperatureMonth())

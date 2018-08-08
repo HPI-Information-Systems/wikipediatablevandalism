@@ -17,6 +17,7 @@ public class ContentFeatures {
     val byteFeatureFactory = new ByteFeatureFactory();
 
     features = FeaturePack.builder()
+        // Table
         .feature("currentRowCount", tableFeatureFactory.currentRowCount())
         .feature("currentColumnCount", tableFeatureFactory.currentColumnCount())
         .feature("currentCellCount", tableFeatureFactory.currentCellCount())
@@ -27,11 +28,12 @@ public class ContentFeatures {
         .feature("columnCountChange", tableFeatureFactory.columnCount())
         .feature("sharedCellRatio", tableFeatureFactory.sharedCellRatio())
         .feature("rankChange", tableFeatureFactory.rankChange())
-        .feature("clipCount", tableFeatureFactory.tableClipCount())
-        .feature("refCount", tableFeatureFactory.openAndCloseSyntaxCount())
+        .feature("tableClipRatio", tableFeatureFactory.tableClipRatio())
+        .feature("syntaxRatio", tableFeatureFactory.openAndCloseSyntaxRatio())
         .feature("sizePerCellChangeRatio", tableFeatureFactory.sizePerCellChangeRatio())
         .feature("emptyCellChangeRatio", tableFeatureFactory.emptyCellRatio())
 
+        // Language
         .feature("personalPronounFrequencyInComment", languageFeatureFactory.personalPronounFrequencyInComment())
         .feature("personalPronounFrequencyInTable", languageFeatureFactory.personalPronounFrequencyInTable())
         .feature("personalPronounImpactInTable", languageFeatureFactory.personalPronounImpactInTable())
@@ -58,15 +60,17 @@ public class ContentFeatures {
         .feature("replaceInComment", languageFeatureFactory.replaceInComment())
         .feature("goodFaithInComment", languageFeatureFactory.goodFaithInComment())
 
-        .feature("ratioOfNumericalCharsToAllChars", textFeatureFactory.ratioOfNumericalCharsToAllChars())
-        .feature("ratioOfAlphanumericCharsToAllChars", textFeatureFactory.ratioOfAlphanumericCharsToAllChars())
-        .feature("ratioOfUppercaseCharsToAllChars", textFeatureFactory.ratioOfUppercaseCharsToAllChars())
-        .feature("ratioOfUppercaseCharsToLowercaseChars", textFeatureFactory.ratioOfUppercaseCharsToLowercaseChars())
-        .feature("lengthOfLongestConsecutiveSequenceOfSingleChar", textFeatureFactory.lengthOfLongestConsecutiveSequenceOfSingleChar())
+        // Text
+        .feature("digitRatio", textFeatureFactory.ratioOfNumericalCharsToAllChars())
+        .feature("alphanumericRatio", textFeatureFactory.ratioOfAlphanumericCharsToAllChars())
+        .feature("uppercaseRatio", textFeatureFactory.ratioOfUppercaseCharsToAllChars())
+        .feature("uppercaseToLowercaseRatio", textFeatureFactory.ratioOfUppercaseCharsToLowercaseChars())
+        .feature("longCharSeq", textFeatureFactory.lengthOfLongestConsecutiveSequenceOfSingleChar())
         .feature("lengthOfLongestToken", textFeatureFactory.lengthOfLongestToken())
-        .feature("averageRelativeFrequencyOfNewAddedWords", textFeatureFactory.averageRelativeFrequencyOfNewAddedWords())
+        .feature("newWordFrequency", textFeatureFactory.newWordFrequency())
         .feature("refChangeRatio", textFeatureFactory.refChangeRatio())
 
+        // Byte
         .feature("previousLength", byteFeatureFactory.previousLength())
         .feature("sizeChange", byteFeatureFactory.sizeChange())
         .feature("sizeRatio", byteFeatureFactory.sizeRatio())

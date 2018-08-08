@@ -90,12 +90,12 @@ class TableFeatureFactory {
     return new RankChange();
   }
 
-  Feature tableClipCount() {
-    return parameters -> SyntaxChecker.checkTableClipCount(TableContentExtractor.getContent(parameters));
+  Feature tableClipRatio() {
+    return parameters -> SyntaxChecker.tableClipRatio(TableContentExtractor.getContent(parameters));
   }
 
-  Feature openAndCloseSyntaxCount() {
-    return parameters -> SyntaxChecker.checkOpenAndCloseSyntaxCount(TableContentExtractor.getContent(parameters));
+  Feature openAndCloseSyntaxRatio() {
+    return parameters -> SyntaxChecker.openAndCloseSyntaxRatio(TableContentExtractor.getContent(parameters));
   }
 
   Feature sizePerCellChangeRatio() {

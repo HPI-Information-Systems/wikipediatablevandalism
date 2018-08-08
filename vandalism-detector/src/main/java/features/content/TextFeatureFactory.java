@@ -136,7 +136,7 @@ class TextFeatureFactory {
     };
   }
 
-  Feature averageRelativeFrequencyOfNewAddedWords() {
+  Feature newWordFrequency() {
     return parameters -> {
       val currentWordOccurrence = WordsExtractor
           .extractWords(TableContentExtractor.getContent(parameters));

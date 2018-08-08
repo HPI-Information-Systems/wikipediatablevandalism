@@ -467,8 +467,8 @@ class SyntaxCheckerTest {
 
   @Test
   void testCheckTableClipCount() {
-    val clipCount = SyntaxChecker.checkTableClipCount(testContent);
-    assertThat(clipCount).isEqualTo(0);
+    val clipCount = SyntaxChecker.tableClipRatio(testContent);
+    assertThat(clipCount).isEqualTo(1);
   }
 
   @Test
@@ -637,8 +637,8 @@ class SyntaxCheckerTest {
 
   @Test
   void testCheckOpenAndCloseSyntaxCount() {
-    val clipCount = SyntaxChecker.checkOpenAndCloseSyntaxCount(testContent);
-    assertThat(clipCount).isEqualTo(0);
+    val clipCount = SyntaxChecker.openAndCloseSyntaxRatio(testContent);
+    assertThat(clipCount).isEqualTo(1);
   }
 
 }
