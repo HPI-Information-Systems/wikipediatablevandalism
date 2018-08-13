@@ -3,7 +3,7 @@ package features.content;
 import com.google.common.collect.Multisets;
 import com.google.common.math.Stats;
 import features.Feature;
-import features.content.util.RefChangeRatio;
+import features.content.util.RefChange;
 import features.content.util.TableContentExtractor;
 import java.util.ArrayList;
 import java.util.List;
@@ -158,7 +158,11 @@ class TextFeatureFactory {
   }
 
   Feature refChangeRatio() {
-    return new RefChangeRatio();
+    return RefChange::getRatio;
+  }
+
+  Feature refCount() {
+    return RefChange::getCount;
   }
 
 }

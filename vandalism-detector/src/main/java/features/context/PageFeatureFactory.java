@@ -44,7 +44,7 @@ class PageFeatureFactory {
         .getTime(parameters.getRevision(), Lists.reverse(parameters.getPreviousRevisions()));
   }
 
-  Feature revertCount() {
+  Feature revertRatio() {
     return parameters -> {
       int revertCount = 0;
       for (val previousRevision : parameters.getPreviousRevisions()) {
@@ -52,7 +52,12 @@ class PageFeatureFactory {
           ++revertCount;
         }
       }
-      return revertCount;
+
+      if (parameters.getPreviousRevisions().size() == 0) {
+        return 0;
+      }
+
+      return revertCount / parameters.getPreviousRevisions().size();
     };
   }
 

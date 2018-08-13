@@ -1,18 +1,16 @@
 package features.content.util.table;
 
-import features.Feature;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.val;
 import model.FeatureParameters;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
-public class EmptyCellChangeRatio implements Feature {
+public class EmptyCellChange {
 
   static final Pattern EMPTY_CELL_PATTERN = Pattern.compile("TBA|-|\\s*");
 
-  @Override
-  public double getValue(FeatureParameters parameters) {
+  static public double getRatio(FeatureParameters parameters) {
     double currentEmptyCellCount = 0;
     double previousEmptyCellCount = 0;
     if (parameters.getRelevantMatch() != null) {
@@ -28,7 +26,14 @@ public class EmptyCellChangeRatio implements Feature {
     return (previousEmptyCellCount - currentEmptyCellCount) / previousEmptyCellCount;
   }
 
-  private double getEmptyCellCount(WikiTable table) {
+  static public double getCount(FeatureParameters parameters) {
+    if (parameters.getRelevantMatch() != null) {
+      return getEmptyCellCount(parameters.getRelevantMatch().getCurrentTable());
+    }
+    return 0;
+  }
+
+  static private double getEmptyCellCount(WikiTable table) {
     double emptyCellCount = 0;
     for (val row : table.getRows()) {
       for (val cell : row.getValues()) {

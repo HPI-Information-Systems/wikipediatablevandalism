@@ -10,28 +10,20 @@ public class SyntaxChecker {
   static Pattern TABLE_OPEN_WIKI = Pattern.compile("\\{\\|");
   static Pattern TABLE_CLOSE_WIKI = Pattern.compile("\\|}");
 
-  public static double tableClipRatio(String content) {
-    double openClipCount = 0;
+  public static double getTableClipCount(String content) {
+    double clipCount = 0;
     val matcherOpenWiki = TABLE_OPEN_WIKI.matcher(content);
     val matcherOpenHTML = TABLE_OPEN_HTML.matcher(content);
     while (matcherOpenWiki.find() || matcherOpenHTML.find()) {
-      ++openClipCount;
+      ++clipCount;
     }
-    double closeClipCount = 0;
     val matcherCloseWiki = TABLE_CLOSE_WIKI.matcher(content);
     val matcherCloseHTML = TABLE_CLOSE_HTML.matcher(content);
     while (matcherCloseWiki.find() || matcherCloseHTML.find()) {
-      ++closeClipCount;
+      --clipCount;
     }
 
-    if (closeClipCount == 0) {
-      if (openClipCount == 0) {
-        return 1;
-      }
-      return 2;
-    }
-
-    return openClipCount / closeClipCount;
+    return clipCount;
   }
 
   static Pattern REF_HTML_OPEN = Pattern.compile("<ref(.*?)>", Pattern.DOTALL);
@@ -62,9 +54,9 @@ public class SyntaxChecker {
   static Pattern COMMENT_CLOSE = Pattern.compile("-->");
   static Pattern HEADING = Pattern.compile("==");
 
-  public static double openAndCloseSyntaxRatio(String content) {
+  public static double getOpenAndCloseSyntaxCount(String content) {
 
-    double openSyntaxCount = 0;
+    double syntaxCount = 0;
     val matcherOpenRefHTML = REF_HTML_OPEN.matcher(content);
     val matcherOpenRefWiki = REF_WIKI_OPEN.matcher(content);
     val matcherOpenLink = LINK_OPEN.matcher(content);
@@ -81,10 +73,9 @@ public class SyntaxChecker {
         || matcherOpenMath.find() || matcherOpenSuperscript.find() || matcherOpenSubscript.find()
         || matcherOpenPoem.find() || matcherOpenCode.find() || matcherOpenBlockquote.find()
         || matcherOpenDiv.find() || matcherOpenStackText.find() || matcherOpenComment.find()) {
-      ++openSyntaxCount;
+      ++syntaxCount;
     }
 
-    double closeSyntaxCount = 0;
     val matcherCloseRefHTML = REF_HTML_CLOSE.matcher(content);
     val matcherCloseRefWiki = REF_WIKI_CLOSE.matcher(content);
     //val matcherLinkClose = LINK_CLOSE.matcher(content);
@@ -101,7 +92,7 @@ public class SyntaxChecker {
         || matcherCloseMath.find() || matcherCloseSuperscript.find() || matcherCloseSubscript.find()
         || matcherClosePoem.find() || matcherCloseCode.find() || matcherCloseBlockquote.find()
         || matcherCloseDiv.find() || matcherCloseStackText.find() || matcherCloseComment.find()) {
-      ++closeSyntaxCount;
+      --syntaxCount;
     }
 
     int boldItalicAndHeadingCount = 0;
@@ -110,7 +101,7 @@ public class SyntaxChecker {
     while (matcherBoldItalic.find() || matcherHeading.find()) {
       ++boldItalicAndHeadingCount;
     }
-    openSyntaxCount += boldItalicAndHeadingCount % 2; // good when even
+    syntaxCount += boldItalicAndHeadingCount % 2; // good when even
 
     int tocCount = 0;
     val matcherTOC = TABLE_OF_CONTENTS.matcher(content);
@@ -118,17 +109,10 @@ public class SyntaxChecker {
       ++tocCount;
     }
     if (tocCount > 1) {
-      openSyntaxCount += tocCount - 1; // add too much table of contents as bad
+      syntaxCount += tocCount - 1; // add too much table of contents as bad
     }
 
-    if (closeSyntaxCount == 0) {
-      if (openSyntaxCount == 0) {
-        return 1;
-      }
-      return 2;
-    }
-
-    return openSyntaxCount / closeSyntaxCount;
+    return syntaxCount;
   }
 
 }

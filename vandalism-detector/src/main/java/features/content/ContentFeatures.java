@@ -29,10 +29,12 @@ public class ContentFeatures {
         .feature("columnCountChange", tableFeatureFactory.columnCount())
         .feature("sharedCellRatio", tableFeatureFactory.sharedCellRatio())
         .feature("rankChange", tableFeatureFactory.rankChange())
-        .feature("tableClipRatio", tableFeatureFactory.tableClipRatio())
-        .feature("syntaxRatio", tableFeatureFactory.openAndCloseSyntaxRatio())
+        .feature("tableClipCount", tableFeatureFactory.tableClipCount())
+        .feature("syntaxCount", tableFeatureFactory.openAndCloseSyntaxCount())
         .feature("sizePerCellChangeRatio", tableFeatureFactory.sizePerCellChangeRatio())
+        .feature("sizePerCell", tableFeatureFactory.sizePerCell())
         .feature("emptyCellChangeRatio", tableFeatureFactory.emptyCellRatio())
+        .feature("emptyCellCount", tableFeatureFactory.emptyCellCount())
 
         // Language
         .feature("personalPronounFrequencyInComment", languageFeatureFactory.personalPronounFrequencyInComment())
@@ -70,6 +72,7 @@ public class ContentFeatures {
         .feature("lengthOfLongestToken", textFeatureFactory.lengthOfLongestToken())
         .feature("newWordFrequency", textFeatureFactory.newWordFrequency())
         .feature("refChangeRatio", textFeatureFactory.refChangeRatio())
+        .feature("refCount", textFeatureFactory.refCount())
 
         // Byte
         .feature("previousLength", byteFeatureFactory.previousLength())

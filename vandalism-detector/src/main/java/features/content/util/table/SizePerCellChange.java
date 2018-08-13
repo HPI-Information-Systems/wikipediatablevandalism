@@ -1,15 +1,13 @@
 package features.content.util.table;
 
-import features.Feature;
 import model.FeatureParameters;
 import util.BasicUtils;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
-public class SizePerCellChangeRatio implements Feature {
+public class SizePerCellChange {
 
-  @Override
-  public double getValue(FeatureParameters parameters) {
+  static public double getRatio(FeatureParameters parameters) {
     double currentSizePerCell = 0;
     double previousSizePerCell = 0;
     if (parameters.getRelevantMatch() != null) {
@@ -27,7 +25,15 @@ public class SizePerCellChangeRatio implements Feature {
     return (currentSizePerCell - previousSizePerCell) / previousSizePerCell;
   }
 
-  private double getSizePerCell(WikiTable table, MyRevisionType revision) {
+  static public double getSizePerCell(FeatureParameters parameters) {
+    if (parameters.getRelevantMatch() != null) {
+      return getSizePerCell(parameters.getRelevantMatch().getCurrentTable(),
+          parameters.getRevision());
+    }
+    return 0;
+  }
+
+  static private double getSizePerCell(WikiTable table, MyRevisionType revision) {
     double size = BasicUtils.parsedLength(revision.getParsed());
     double totalCellCount = table.getRows().size() * table.getColumns().size();
     if (totalCellCount == 0) {

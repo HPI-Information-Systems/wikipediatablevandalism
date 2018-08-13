@@ -2,10 +2,10 @@ package features.content;
 
 import features.Feature;
 import features.content.util.TableContentExtractor;
-import features.content.util.table.EmptyCellChangeRatio;
+import features.content.util.table.EmptyCellChange;
 import features.content.util.table.RankChange;
 import features.content.util.table.SharedCellRatio;
-import features.content.util.table.SizePerCellChangeRatio;
+import features.content.util.table.SizePerCellChange;
 import features.content.util.table.SyntaxChecker;
 import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
@@ -95,20 +95,28 @@ class TableFeatureFactory {
     return new RankChange();
   }
 
-  Feature tableClipRatio() {
-    return parameters -> SyntaxChecker.tableClipRatio(TableContentExtractor.getContent(parameters));
+  Feature tableClipCount() {
+    return parameters -> SyntaxChecker.getTableClipCount(TableContentExtractor.getContent(parameters));
   }
 
-  Feature openAndCloseSyntaxRatio() {
-    return parameters -> SyntaxChecker.openAndCloseSyntaxRatio(TableContentExtractor.getContent(parameters));
+  Feature openAndCloseSyntaxCount() {
+    return parameters -> SyntaxChecker.getOpenAndCloseSyntaxCount(TableContentExtractor.getContent(parameters));
   }
 
   Feature sizePerCellChangeRatio() {
-    return new SizePerCellChangeRatio();
+    return SizePerCellChange::getRatio;
+  }
+
+  Feature sizePerCell() {
+    return SizePerCellChange::getSizePerCell;
   }
 
   Feature emptyCellRatio() {
-    return new EmptyCellChangeRatio();
+    return EmptyCellChange::getRatio;
+  }
+
+  Feature emptyCellCount() {
+    return EmptyCellChange::getCount;
   }
 
 }

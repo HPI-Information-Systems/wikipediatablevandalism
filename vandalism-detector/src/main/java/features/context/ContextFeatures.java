@@ -38,7 +38,7 @@ public class ContextFeatures {
         .feature("timeSinceLastArticleEdit", pageFeatureFactory.timeSinceLastArticleEdit())
         .feature("timeSinceLastArticleEditBySameContributor", pageFeatureFactory.timeSinceLastArticleEditBySameContributor())
         .feature("timeSinceFirstArticleEdit", pageFeatureFactory.timeSinceFirstArticleEditBySameContributor())
-        .feature("revertCount", pageFeatureFactory.revertCount())
+        .feature("revertRatio", pageFeatureFactory.revertRatio())
         .feature("editRatio", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
         .feature("contributorRevertCount", pageFeatureFactory.contributorRevertedBeforeInThatArticleCount())
         .feature("timeSinceReverted", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())

@@ -1,17 +1,15 @@
 package features.content.util;
 
-import features.Feature;
 import java.util.regex.Pattern;
 import lombok.val;
 import model.FeatureParameters;
 
-public class RefChangeRatio implements Feature {
+public class RefChange {
 
   static Pattern REF_HTML = Pattern.compile("<ref(.*?)>.*?</ref>", Pattern.DOTALL);
   static Pattern REF_WIKI_SYNTAX = Pattern.compile("\\[\\[ref:.*?]]", Pattern.DOTALL);
 
-  @Override
-  public double getValue(FeatureParameters parameters) {
+  static public double getRatio(FeatureParameters parameters) {
     double currentRefCount = getRefCount(TableContentExtractor.getContent(parameters));
     double previousRefCount = getRefCount(TableContentExtractor.getPreviousContent(parameters));
     if (previousRefCount == 0) {
@@ -23,7 +21,11 @@ public class RefChangeRatio implements Feature {
     return (currentRefCount - previousRefCount) / previousRefCount;
   }
 
-  private double getRefCount(String content) {
+  static public double getCount(FeatureParameters parameters) {
+    return getRefCount(TableContentExtractor.getContent(parameters));
+  }
+
+  static private double getRefCount(String content) {
     double refCount = 0;
     val htmlMatcher = REF_HTML.matcher(content);
     val wikiSyntaxMatcher = REF_WIKI_SYNTAX.matcher(content);
