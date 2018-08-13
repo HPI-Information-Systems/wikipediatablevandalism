@@ -79,8 +79,8 @@ class PageFeatureFactory {
     };
   }
 
-  Feature contributorRevertedBeforeInThatArticleCount() {
-    return ContributorRevertedBeforeInThatArticle::getRevertedCount;
+  Feature contributorRevertedBeforeInThatArticleRatio() {
+    return ContributorRevertedBeforeInThatArticle::getRevertedRatio;
   }
 
   Feature timeSinceContributorRevertedBeforeInThatArticle() {

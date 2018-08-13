@@ -40,7 +40,7 @@ public class ContextFeatures {
         .feature("timeSinceFirstArticleEdit", pageFeatureFactory.timeSinceFirstArticleEditBySameContributor())
         .feature("revertRatio", pageFeatureFactory.revertRatio())
         .feature("editRatio", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
-        .feature("contributorRevertCount", pageFeatureFactory.contributorRevertedBeforeInThatArticleCount())
+        .feature("contributorRevertRatio", pageFeatureFactory.contributorRevertedBeforeInThatArticleRatio())
         .feature("timeSinceReverted", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())
         .feature("articleTemperatureAll", pageFeatureFactory.articleTemperatureAll())
         .feature("articleTemperatureYear", pageFeatureFactory.articleTemperatureYear())

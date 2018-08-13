@@ -9,13 +9,18 @@ import wikixmlsplit.datastructures.MyRevisionType;
 
 public class ContributorRevertedBeforeInThatArticle {
 
-  public static double getRevertedCount(final FeatureParameters parameters) {
+  public static double getRevertedRatio(final FeatureParameters parameters) {
     int revertedRevisionCount = 0;
     List<String> searchedBefore = new ArrayList<>();
     val allRevisions = createAllRevisions(parameters);
 
+    double contributorRevisions = 0;
     for (val currentRevision : allRevisions) {
       // not search for already searched sha1 value
+      if (BasicUtils.hasSameContributor(currentRevision, parameters.getRevision())) {
+        ++contributorRevisions;
+      }
+
       if (searchedBefore.contains(currentRevision.getSha1())) {
         continue;
       }
@@ -30,7 +35,11 @@ public class ContributorRevertedBeforeInThatArticle {
       revertedRevisionCount += revertedRevisionsBySameContributor.size();
     }
 
-    return revertedRevisionCount;
+    if (contributorRevisions == 0) {
+      return 0;
+    }
+
+    return revertedRevisionCount / contributorRevisions;
   }
 
   public static double getTimeSinceLastReverted(final FeatureParameters parameters) {
