@@ -26,12 +26,21 @@ public class RevisionTagParser {
     for (final CSVRecord record : parser) {
       int revisionId = Integer.valueOf(record.get(0));
       int revisionPageId = Integer.valueOf(record.get(1));
-      int tagId = Integer.valueOf(record.get(2));
       val pageRevision = PageRevision.builder()
           .revisionId(revisionId)
           .pageId(revisionPageId)
           .build();
-      val tag = new Tag(tagId);
+
+      final Tag tag;
+      if (record.size() == 3) {
+        // Parsing contents of the join table revisiontag(revision_id, revision_page_id, tag_id)
+        int tagId = Integer.valueOf(record.get(2));
+        tag = new Tag(tagId);
+      } else {
+        // Parsing parts of a corpus dump, e.g., from allcreatedtables(id, page_id, table_count, ...)
+        tag = null;
+      }
+
       pageRevisions.add(new RevisionTag(pageRevision, tag));
 
     }

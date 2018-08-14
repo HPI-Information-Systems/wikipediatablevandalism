@@ -2,7 +2,6 @@ package features;
 
 import static java.util.Objects.requireNonNull;
 
-import com.google.common.base.Preconditions;
 import features.output.Output;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,6 @@ class FeatureSink {
 
   void accept(final MyRevisionType revision, final List<Tag> tags,
       final Map<String, Object> featureMapping) {
-    Preconditions.checkState(!tags.isEmpty(), "Empty tags");
 
     final List<Object> featureValues = new ArrayList<>(featureMapping.size());
     for (final String name : pack.getNames()) {
@@ -46,12 +44,17 @@ class FeatureSink {
       featureValues.add(value);
     }
 
-    for (Tag tag : tags) {
-      List<Object> record = new ArrayList<>(featureValues.size() + 2);
-      record.addAll(featureValues);
+    if (tags.isEmpty()) {
+      List<Object> record = new ArrayList<>(featureValues);
       record.add(revision.getId());
-      record.add(tag.getTagId());
       output.accept(record);
+    } else {
+      for (Tag tag : tags) {
+        List<Object> record = new ArrayList<>(featureValues);
+        record.add(revision.getId());
+        record.add(tag.getTagId());
+        output.accept(record);
+      }
     }
   }
 }
