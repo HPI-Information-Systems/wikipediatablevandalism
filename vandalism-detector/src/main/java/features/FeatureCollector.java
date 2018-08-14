@@ -52,7 +52,9 @@ public class FeatureCollector {
     val matching = matchingFacade.obtainMatching(page, maxRevisionId);
 
     for (val revisionIdWithTags : groupByRevision.entrySet()) {
-      final List<Tag> tags = revisionIdWithTags.getValue().stream().map(RevisionTag::getTag)
+      final List<Tag> tags = revisionIdWithTags.getValue().stream()
+          .filter(revisionTag -> revisionTag.getTag() != null)
+          .map(RevisionTag::getTag)
           .collect(toList());
       final MyRevisionType revision = PageUtil.findRevision(page, revisionIdWithTags.getKey());
       accept(tags, page, revision, matching);

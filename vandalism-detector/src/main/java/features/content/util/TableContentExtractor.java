@@ -5,9 +5,9 @@ import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import model.FeatureParameters;
-import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
-import util.BasicUtils;
 import util.AttributeUtil;
+import util.BasicUtils;
+import util.CommentPreprocessor;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.Attribute;
 import wikixmlsplit.renderer.wikitable.WikiTable;
@@ -21,33 +21,28 @@ public class TableContentExtractor {
 
   @Nonnull
   public static String getContent(final FeatureParameters parameters) {
-    return extractToString(parameters.getRevision(), BasicUtils.getCurrentTables(parameters));
+    return extractToString(parameters.getUserComment(), BasicUtils.getCurrentTables(parameters));
   }
 
   @Nonnull
   public static String getPreviousContent(final FeatureParameters parameters) {
-    return extractToString(parameters.getPreviousRevision(),
-        BasicUtils.getPreviousTables(parameters));
+    final MyRevisionType revision = parameters.getPreviousRevision();
+    final String comment = revision == null ?
+        null : CommentPreprocessor.extractUserComment(revision.getComment());
+    return extractToString(comment, BasicUtils.getPreviousTables(parameters));
   }
 
-  private static String extractToString(@Nullable final MyRevisionType revision,
+  private static String extractToString(@Nullable final String comment,
       final List<WikiTable> tables) {
 
     final StringBuilder content = new StringBuilder(128);
 
-    if (revision != null) {
-      writeCommentContent(content, revision.getComment());
+    if (comment != null) {
+      content.append(comment).append(SEP);
     }
 
     writeTableContents(content, tables);
     return content.toString();
-  }
-
-  private static void writeCommentContent(final StringBuilder content, final CommentType comment) {
-    if (comment == null || comment.getValue() == null) {
-      return;
-    }
-    content.append(comment.getValue()).append(SEP);
   }
 
   private static void writeTableContents(final StringBuilder content,

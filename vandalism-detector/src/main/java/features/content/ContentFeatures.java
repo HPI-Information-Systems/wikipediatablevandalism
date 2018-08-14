@@ -35,6 +35,7 @@ public class ContentFeatures {
         .feature("sizePerCell", tableFeatureFactory.sizePerCell())
         .feature("emptyCellChangeRatio", tableFeatureFactory.emptyCellRatio())
         .feature("emptyCellCount", tableFeatureFactory.emptyCellCount())
+        .feature("addedInvalidAttributes", tableFeatureFactory.addedInvalidAttributes())
 
         // Language
         .feature("personalPronounFrequencyInComment", languageFeatureFactory.personalPronounFrequencyInComment())
@@ -80,7 +81,7 @@ public class ContentFeatures {
         .feature("sizeRatio", byteFeatureFactory.sizeRatio())
         .feature("LZWCompressionRate", byteFeatureFactory.LZWCompressionRate())
         .feature("KLDOfCharDistribution", byteFeatureFactory.KLDOfCharDistribution())
-        .feature("commentLength", byteFeatureFactory.commentLength())
+        .feature("rawCommentLength", byteFeatureFactory.rawCommentLength())
         .feature("userCommentLength", byteFeatureFactory.userCommentLength())
 
         .feature("hasNumericOutlierInColumns", tableFeatureFactory.hasNumericOutlierInColumns())

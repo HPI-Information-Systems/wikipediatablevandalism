@@ -63,4 +63,8 @@ public class AttributeUtil {
         .collect(toSet());
   }
 
+  public static boolean isValidAttribute(final Attribute attribute) {
+    return ATTRIBUTE_NAMES.contains(attribute.getKey());
+  }
+
 }
