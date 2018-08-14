@@ -35,6 +35,7 @@ public class ContentFeatures {
         .feature("sizePerCell", tableFeatureFactory.sizePerCell())
         .feature("emptyCellChangeRatio", tableFeatureFactory.emptyCellRatio())
         .feature("emptyCellCount", tableFeatureFactory.emptyCellCount())
+        .feature("addedInvalidAttributes", tableFeatureFactory.addedInvalidAttributes())
 
         // Language
         .feature("personalPronounFrequencyInComment", languageFeatureFactory.personalPronounFrequencyInComment())

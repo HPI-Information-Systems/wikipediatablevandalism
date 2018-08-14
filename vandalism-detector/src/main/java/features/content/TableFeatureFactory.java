@@ -10,6 +10,7 @@ import features.content.util.table.SyntaxChecker;
 import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
 import features.content.util.typing.DataTypeDependentFeatureFactory;
+import features.content.wikisyntax.AddedInvalidAttributes;
 import lombok.experimental.Delegate;
 import lombok.val;
 
@@ -117,6 +118,10 @@ class TableFeatureFactory {
 
   Feature emptyCellCount() {
     return EmptyCellChange::getCount;
+  }
+
+  Feature addedInvalidAttributes() {
+    return new AddedInvalidAttributes();
   }
 
 }
