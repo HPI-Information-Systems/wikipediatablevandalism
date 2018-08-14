@@ -44,7 +44,7 @@ class PageFeatureFactory {
         .getTime(parameters.getRevision(), Lists.reverse(parameters.getPreviousRevisions()));
   }
 
-  Feature revertRatio() {
+  Feature revertCount() { // wie oft gab es die aktuelle revision schonmal, > 1 means is revert
     return parameters -> {
       int revertCount = 0;
       for (val previousRevision : parameters.getPreviousRevisions()) {
@@ -52,12 +52,7 @@ class PageFeatureFactory {
           ++revertCount;
         }
       }
-
-      if (parameters.getPreviousRevisions().size() == 0) {
-        return 0;
-      }
-
-      return revertCount / parameters.getPreviousRevisions().size();
+      return revertCount;
     };
   }
 
@@ -109,6 +104,10 @@ class PageFeatureFactory {
 
   Feature articleTemperatureHour() {
     return ArticleTemperature::getHour;
+  }
+
+  Feature articleTemperatureRatio() {
+    return ArticleTemperature::getRatioHourToMonth;
   }
 
 }

@@ -10,13 +10,13 @@ class WikiSyntaxPatternListTest {
 
   @Test
   void findItalicText() {
-    val matcher = WikiSyntaxPatternList.BOLD_ITALIC.matcher("'' this is italic''");
+    val matcher = WikiSyntaxPatternList.ITALIC.matcher("'' this is italic''");
     assertThat(matcher.find()).isTrue();
   }
 
   @Test
   void findBoldText() {
-    val matcher = WikiSyntaxPatternList.BOLD_ITALIC.matcher("'''this is bold'''");
+    val matcher = WikiSyntaxPatternList.BOLD.matcher("'''this is bold'''");
     assertThat(matcher.find()).isTrue();
   }
 
@@ -40,7 +40,7 @@ class WikiSyntaxPatternListTest {
   }
 
   @Test
-  void findtchUnclosedMathFormula() {
+  void findUnclosedMathFormula() {
     val matcher = WikiSyntaxPatternList.MATH_FORMULA
         .matcher("<math display=\"inline\">L^2([a,b])<math>");
     assertThat(matcher.find()).isFalse();
@@ -104,12 +104,6 @@ class WikiSyntaxPatternListTest {
   }
 
   @Test
-  void findTextStackedToTheRight() {
-    val matcher = WikiSyntaxPatternList.STACK_TEXT.matcher("This text is {{stack|stacked on the right}}");
-    assertThat(matcher.find()).isTrue();
-  }
-
-  @Test
   void findTableOfBlockquote() {
     val matcher = WikiSyntaxPatternList.BLOCKQUOTE.matcher("<blockquote>"
         + "The '''blockquote''' tag will indent both margins when needed instead of the left margin only as the colon does."
@@ -169,8 +163,14 @@ class WikiSyntaxPatternListTest {
   }
 
   @Test
-  void findLinks() {
-    val matcher = WikiSyntaxPatternList.LINKS.matcher("[[test]]");
+  void findHorizontalRuleWiki() {
+    val matcher = WikiSyntaxPatternList.HORIZONTAL_RULE_WIKI.matcher("----");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findHorizontalRuleHTML() {
+    val matcher = WikiSyntaxPatternList.HORIZONTAL_RULE_HTML.matcher("<hr />");
     assertThat(matcher.find()).isTrue();
   }
 

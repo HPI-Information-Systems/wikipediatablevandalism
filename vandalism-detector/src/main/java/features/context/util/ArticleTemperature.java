@@ -9,7 +9,7 @@ public class ArticleTemperature {
   //everything in minutes
   private static double MIN = 1;
   private static double HOUR = MIN * 60;
-  private static double DAY = HOUR * 25;
+  private static double DAY = HOUR * 24;
   private static double WEEK = DAY * 7;
   private static double MONTH = DAY * 30;
   private static double YEAR = MONTH * 12;
@@ -46,6 +46,10 @@ public class ArticleTemperature {
 
   public static double getHour(FeatureParameters parameters) {
     return get(parameters, HOUR);
+  }
+
+  public static double getRatioHourToMonth(FeatureParameters parameters) {
+    return getHour(parameters) / getMonth(parameters);
   }
 
   /**

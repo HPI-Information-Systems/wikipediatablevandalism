@@ -95,10 +95,6 @@ class TableFeatureFactory {
     return new RankChange();
   }
 
-  Feature tableClipCount() {
-    return parameters -> SyntaxChecker.getTableClipCount(TableContentExtractor.getContent(parameters));
-  }
-
   Feature openAndCloseSyntaxCount() {
     return parameters -> SyntaxChecker.getOpenAndCloseSyntaxCount(TableContentExtractor.getContent(parameters));
   }

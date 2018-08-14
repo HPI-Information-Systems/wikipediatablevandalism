@@ -38,7 +38,7 @@ public class ContextFeatures {
         .feature("timeSinceLastArticleEdit", pageFeatureFactory.timeSinceLastArticleEdit())
         .feature("timeSinceLastArticleEditBySameContributor", pageFeatureFactory.timeSinceLastArticleEditBySameContributor())
         .feature("timeSinceFirstArticleEdit", pageFeatureFactory.timeSinceFirstArticleEditBySameContributor())
-        .feature("revertRatio", pageFeatureFactory.revertRatio())
+        .feature("revertCount", pageFeatureFactory.revertCount())
         .feature("editRatio", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
         .feature("contributorRevertRatio", pageFeatureFactory.contributorRevertedBeforeInThatArticleRatio())
         .feature("timeSinceReverted", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())
@@ -48,6 +48,7 @@ public class ContextFeatures {
         .feature("articleTemperatureWeek", pageFeatureFactory.articleTemperatureWeek())
         .feature("articleTemperatureDay", pageFeatureFactory.articleTemperatureDay())
         .feature("articleTemperatureHour", pageFeatureFactory.articleTemperatureHour())
+        .feature("articleTemperatureRatio", pageFeatureFactory.articleTemperatureRatio())
 
         .build();
   }

@@ -29,7 +29,7 @@ public class ContentFeatures {
         .feature("columnCountChange", tableFeatureFactory.columnCount())
         .feature("sharedCellRatio", tableFeatureFactory.sharedCellRatio())
         .feature("rankChange", tableFeatureFactory.rankChange())
-        .feature("tableClipCount", tableFeatureFactory.tableClipCount())
+        //.feature("tableClipCount", tableFeatureFactory.tableClipCount())
         .feature("syntaxCount", tableFeatureFactory.openAndCloseSyntaxCount())
         .feature("sizePerCellChangeRatio", tableFeatureFactory.sizePerCellChangeRatio())
         .feature("sizePerCell", tableFeatureFactory.sizePerCell())
