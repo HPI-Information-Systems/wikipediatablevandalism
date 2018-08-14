@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve, average_precision_score, auc, roc_curve
+from sklearn.feature_selection import mutual_info_classif
 
 def plot_confusion_matrix(y_true, y_pred):
     vandalism_count = y_true.value_counts()[True]
@@ -76,4 +77,16 @@ def plot_feature_importance(clf, feature_labels):
     plt.bar(x_pos, feature_importance, align='center')
     plt.xticks(x_pos, feature_labels, rotation='vertical')
     plt.ylabel('Feature Importance')
+    plt.show()
+
+
+def plot_information_gain(X, y):
+    feature_labels = X.columns
+    information_gain = mutual_info_classif(X, y)
+    x_pos = np.arange(len(information_gain))
+
+    plt.gcf().set_size_inches(14, 6)
+    plt.bar(x_pos, information_gain, align='center')
+    plt.xticks(x_pos, feature_labels, rotation='vertical')
+    plt.ylabel('Information Gain')
     plt.show()
