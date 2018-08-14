@@ -174,4 +174,172 @@ class WikiSyntaxPatternListTest {
     assertThat(matcher.find()).isTrue();
   }
 
+  @Test
+  void findInternalLinks() {
+    val matcher = WikiSyntaxPatternList.LINKS_INTERN.matcher("[[test]]");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findExternalLinks() {
+    val matcher = WikiSyntaxPatternList.LINKS_EXTERN.matcher("https://www.test.de/test");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findRefs1() {
+    val matcher = WikiSyntaxPatternList.REFS.matcher("<ref name=\"test\">test</ref>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findRefs2() {
+    val matcher = WikiSyntaxPatternList.REFS.matcher("<ref name=\"test\" />");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findReflist() {
+    val matcher = WikiSyntaxPatternList.REF_LIST.matcher("<references />");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findNowiki1() {
+    val matcher = WikiSyntaxPatternList.NOWIKI.matcher("<nowiki>test</nowiki>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findNowiki2() {
+    val matcher = WikiSyntaxPatternList.NOWIKI.matcher("<nowiki />");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findNoinclude() {
+    val matcher = WikiSyntaxPatternList.NOINCLUDE.matcher("<noinclude>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findIncludeonly() {
+    val matcher = WikiSyntaxPatternList.INCLUDEONLY.matcher("<includeonly>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findOnlyinclude() {
+    val matcher = WikiSyntaxPatternList.ONLYINCLUDE.matcher("<onlyinclude>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findDl() {
+    val matcher = WikiSyntaxPatternList.DL.matcher("<dl>test</dl>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findDt() {
+    val matcher = WikiSyntaxPatternList.DT.matcher("<dt>test</dt>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findDd() {
+    val matcher = WikiSyntaxPatternList.DD.matcher("<dd>test</dd>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findScore() {
+    val matcher = WikiSyntaxPatternList.SCORE.matcher("<score>test</score>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findBreak1() {
+    val matcher = WikiSyntaxPatternList.BR.matcher("<br>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findBreak2() {
+    val matcher = WikiSyntaxPatternList.BR.matcher("<br />");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findBreak() {
+    val matcher = WikiSyntaxPatternList.BR.matcher("<br>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findS() {
+    val matcher = WikiSyntaxPatternList.S.matcher("<s>test</s>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findU() {
+    val matcher = WikiSyntaxPatternList.U.matcher("<u>test</u>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findDel() {
+    val matcher = WikiSyntaxPatternList.DEL.matcher("<del>test</del>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findIns() {
+    val matcher = WikiSyntaxPatternList.INS.matcher("<ins>test</ins>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findPre() {
+    val matcher = WikiSyntaxPatternList.PRE.matcher("<pre name=\"test\">test</pre>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findBig() {
+    val matcher = WikiSyntaxPatternList.BIG.matcher("<big name=\"test\">test</big>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findSmall() {
+    val matcher = WikiSyntaxPatternList.SMALL.matcher("<small name=\"test\">test</small>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findSyntaxhighlight() {
+    val matcher = WikiSyntaxPatternList.SYNTAXHIGHLIGHT.matcher("<syntaxhighlight name=\"test\">test</syntaxhighlight>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findSpan() {
+    val matcher = WikiSyntaxPatternList.SPAN.matcher("<span name=\"test\">test</span>");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findCurlyBraces1() {
+    val matcher = WikiSyntaxPatternList.CURLY_BRACES.matcher("{{test}}");
+    assertThat(matcher.find()).isTrue();
+  }
+
+  @Test
+  void findCurlyBraces2() {
+    val matcher = WikiSyntaxPatternList.CURLY_BRACES.matcher("{{{test}}}");
+    assertThat(matcher.find()).isTrue();
+  }
+
 }

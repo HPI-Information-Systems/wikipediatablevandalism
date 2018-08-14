@@ -14,7 +14,7 @@ import util.WordListUtil;
 
 class SyntaxCheckerTest {
 
-  final String filename = "syntax_test.txt";
+  private final String filename = "syntax_test.txt";
   private String testContent = "";
 
   @BeforeEach
@@ -395,7 +395,6 @@ class SyntaxCheckerTest {
     val matcher = SyntaxChecker.HEADING3.matcher("===");
     assertThat(matcher.find()).isTrue();
   }
-
 
   @Test
   void findHeading4() {
