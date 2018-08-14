@@ -4,6 +4,7 @@ import static util.PageUtil.getRevisionIndex;
 
 import com.google.common.collect.Lists;
 import java.util.List;
+import javax.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;
 import matching.row.RowMatchResult;
@@ -12,7 +13,9 @@ import matching.table.TableMatch;
 import matching.table.TableMatchResult;
 import matching.table.TableMatchService;
 import model.FeatureParameters;
+import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
 import util.BasicUtils;
+import util.CommentPreprocessor;
 import util.PageUtil;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
@@ -36,6 +39,8 @@ class FeatureParametersFactory {
         .result(tableMatchResult)
         .relevantMatch(selectedMatch)
         .rowMatchResult(getRowMatching(selectedMatch))
+        .userComment(extractUserComment(revision.getComment()))
+        .rawComment(absentCommentToEmptyString(revision.getComment()))
         .build();
   }
 
@@ -75,5 +80,16 @@ class FeatureParametersFactory {
     val rowMatchService = new RowMatchService();
     return match == null ? null :
         rowMatchService.matchRows(match.getPreviousTable(), match.getCurrentTable());
+  }
+
+  private String extractUserComment(@Nullable final CommentType comment) {
+    return CommentPreprocessor.extractUserComment(comment);
+  }
+
+  private String absentCommentToEmptyString(@Nullable final CommentType comment) {
+    if (CommentPreprocessor.isBlank(comment)) {
+      return "";
+    }
+    return comment.getValue();
   }
 }

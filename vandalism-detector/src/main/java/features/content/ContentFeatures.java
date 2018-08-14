@@ -80,7 +80,7 @@ public class ContentFeatures {
         .feature("sizeRatio", byteFeatureFactory.sizeRatio())
         .feature("LZWCompressionRate", byteFeatureFactory.LZWCompressionRate())
         .feature("KLDOfCharDistribution", byteFeatureFactory.KLDOfCharDistribution())
-        .feature("commentLength", byteFeatureFactory.commentLength())
+        .feature("rawCommentLength", byteFeatureFactory.rawCommentLength())
         .feature("userCommentLength", byteFeatureFactory.userCommentLength())
 
         .feature("hasNumericOutlierInColumns", tableFeatureFactory.hasNumericOutlierInColumns())

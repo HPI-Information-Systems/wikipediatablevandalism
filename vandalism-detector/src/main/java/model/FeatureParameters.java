@@ -22,6 +22,12 @@ public class FeatureParameters {
   private TableMatch relevantMatch;
   private RowMatchResult rowMatchResult;
 
+  /** Preprocessed userComment; auto-generated content excluded */
+  private String userComment;
+
+  /** Original userComment; non-null; may contain auto-generated content */
+  private String rawComment;
+
   @Nullable
   public MyRevisionType getPreviousRevision() {
     return previousRevision;

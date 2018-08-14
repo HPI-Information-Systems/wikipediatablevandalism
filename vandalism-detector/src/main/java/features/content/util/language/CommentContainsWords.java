@@ -20,12 +20,7 @@ public class CommentContainsWords implements Feature {
 
   @Override
   public double getValue(final FeatureParameters parameters) {
-    if (parameters.getRevision().getComment() == null ||
-        StringUtils.isEmpty(parameters.getRevision().getComment().getValue())) {
-      return 0;
-    }
-
-    val comment = parameters.getRevision().getComment().getValue();
+    val comment = parameters.getUserComment();
     val containsWord = words.stream()
         .map(StemmerUtils::stem)
         .anyMatch(word -> StringUtils.containsIgnoreCase(comment, word));
