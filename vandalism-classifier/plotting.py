@@ -65,3 +65,15 @@ def plot_roc(y_true, y_predict_proba):
     plt.xlabel('False Positive Rate')
     plt.show()
     print('Receiver Operation Characteristic AUC', roc_auc)
+
+
+def plot_feature_importance(clf, feature_labels):
+    # Feature importance (weights in random forrest)
+    feature_importance = clf.feature_importances_
+    x_pos = np.arange(len(feature_importance))
+
+    plt.gcf().set_size_inches(14, 6)
+    plt.bar(x_pos, feature_importance, align='center')
+    plt.xticks(x_pos, feature_labels, rotation='vertical')
+    plt.ylabel('Feature Importance')
+    plt.show()
