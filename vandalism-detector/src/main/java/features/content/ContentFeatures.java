@@ -30,7 +30,7 @@ public class ContentFeatures {
         .feature("sharedCellRatio", tableFeatureFactory.sharedCellRatio())
         .feature("rankChange", tableFeatureFactory.rankChange())
         //.feature("tableClipCount", tableFeatureFactory.tableClipCount())
-        .feature("syntaxCount", tableFeatureFactory.openAndCloseSyntaxCount())
+        //.feature("syntaxCount", tableFeatureFactory.openAndCloseSyntaxCount())
         .feature("sizePerCellChangeRatio", tableFeatureFactory.sizePerCellChangeRatio())
         .feature("sizePerCell", tableFeatureFactory.sizePerCell())
         .feature("emptyCellChangeRatio", tableFeatureFactory.emptyCellRatio())
