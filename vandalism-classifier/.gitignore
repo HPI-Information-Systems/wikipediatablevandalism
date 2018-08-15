@@ -1,4 +1,1 @@
-*.pyc
-*.png
-.idea/
-.vscode
+.ipynb_checkpoints
