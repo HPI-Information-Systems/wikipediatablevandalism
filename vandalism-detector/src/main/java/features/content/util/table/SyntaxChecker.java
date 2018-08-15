@@ -5,64 +5,64 @@ import lombok.val;
 
 public class SyntaxChecker {
 
-  static Pattern BOLD = Pattern.compile("\'\'"); // even
-  static Pattern ITALIC = Pattern.compile("\'\'\'"); // even
-  static Pattern BOLD_ITALIC = Pattern.compile("\'\'\'\'\'"); // even
+  static Pattern BOLD = Pattern.compile("(\'\')"); // even
+  static Pattern ITALIC = Pattern.compile("(\'\'\')"); // even
+  static Pattern BOLD_ITALIC = Pattern.compile("(\'\'\'\'\')"); // even
   static Pattern REF_HTML_OPEN = Pattern.compile("(<ref(.*?)>)", Pattern.DOTALL);
-  static Pattern REF_HTML_CLOSE = Pattern.compile("</ref>");
-  static Pattern LINK_EXTERN_OPEN = Pattern.compile("\\[");
-  static Pattern LINK_EXTERN_CLOSE = Pattern.compile("]");
-  static Pattern CURLY_BRACES_OPEN = Pattern.compile("\\{");
-  static Pattern CURLY_BRACES_CLOSE = Pattern.compile("}");
+  static Pattern REF_HTML_CLOSE = Pattern.compile("(</ref>)");
+  static Pattern LINK_EXTERN_OPEN = Pattern.compile("(\\[)");
+  static Pattern LINK_EXTERN_CLOSE = Pattern.compile("(])");
+  static Pattern CURLY_BRACES_OPEN = Pattern.compile("(\\{)");
+  static Pattern CURLY_BRACES_CLOSE = Pattern.compile("(})");
   static Pattern MATH_FORMULA_OPEN = Pattern.compile("(<math(.*?)>)", Pattern.DOTALL);
-  static Pattern MATH_FORMULA_CLOSE = Pattern.compile("</math>");
+  static Pattern MATH_FORMULA_CLOSE = Pattern.compile("(</math>)");
   static Pattern SPAN_OPEN = Pattern.compile("(<span(.*?)>)", Pattern.DOTALL);
-  static Pattern SPAN_CLOSE = Pattern.compile("</span>");
+  static Pattern SPAN_CLOSE = Pattern.compile("(</span>)");
   static Pattern SYNTAXHIGHLIGHT_OPEN = Pattern.compile("(<syntaxhighlight(.*?)>)", Pattern.DOTALL);
-  static Pattern SYNTAXHIGHLIGHT_CLOSE = Pattern.compile("</syntaxhighlight>");
+  static Pattern SYNTAXHIGHLIGHT_CLOSE = Pattern.compile("(</syntaxhighlight>)");
   static Pattern SMALL_OPEN = Pattern.compile("(<small(.*?)>)", Pattern.DOTALL);
-  static Pattern SMALL_CLOSE = Pattern.compile("</small>");
+  static Pattern SMALL_CLOSE = Pattern.compile("(</small>)");
   static Pattern BIG_OPEN = Pattern.compile("(<big(.*?)>)", Pattern.DOTALL);
-  static Pattern BIG_CLOSE = Pattern.compile("</big>");
+  static Pattern BIG_CLOSE = Pattern.compile("(</big>)");
   static Pattern DIV_OPEN = Pattern.compile("(<div(.*?)>)", Pattern.DOTALL);
-  static Pattern DIV_CLOSE = Pattern.compile("</div>");
+  static Pattern DIV_CLOSE = Pattern.compile("(</div>)");
   static Pattern POEM_OPEN = Pattern.compile("(<poem(.*?)>)", Pattern.DOTALL);
-  static Pattern POEM_CLOSE = Pattern.compile("</poem>");
-  static Pattern PRE_OPEN = Pattern.compile("<pre>");
-  static Pattern PRE_CLOSE = Pattern.compile("</pre>");
-  static Pattern SUPERSCRIPT_OPEN = Pattern.compile("<sup>");
-  static Pattern SUPERSCRIPT_CLOSE = Pattern.compile("</sup>");
-  static Pattern S_OPEN = Pattern.compile("<s>");
-  static Pattern S_CLOSE = Pattern.compile("</s>");
-  static Pattern U_OPEN = Pattern.compile("<u>");
-  static Pattern U_CLOSE = Pattern.compile("</u>");
-  static Pattern DEL_OPEN = Pattern.compile("<del>");
-  static Pattern DEL_CLOSE = Pattern.compile("</del>");
-  static Pattern INS_OPEN = Pattern.compile("<ins>");
-  static Pattern INS_CLOSE = Pattern.compile("</ins>");
-  static Pattern SUBSCRIPT_OPEN = Pattern.compile("<sub>");
-  static Pattern SUBSCRIPT_CLOSE = Pattern.compile("</sub>");
-  static Pattern CODE_OPEN = Pattern.compile("<code>");
-  static Pattern CODE_CLOSE = Pattern.compile("</code>");
-  static Pattern BLOCKQUOTE_OPEN = Pattern.compile("<blockquote>");
-  static Pattern BLOCKQUOTE_CLOSE = Pattern.compile("</blockquote>");
-  static Pattern COMMENT_OPEN = Pattern.compile("<!--");
-  static Pattern COMMENT_CLOSE = Pattern.compile("-->");
-  static Pattern NOWIKI_OPEN = Pattern.compile("<nowiki>");
-  static Pattern NOWIKI_CLOSE = Pattern.compile("</nowiki>");
-  static Pattern DL_OPEN = Pattern.compile("<dl>");
-  static Pattern DL_CLOSE = Pattern.compile("</dl>");
-  static Pattern DT_OPEN = Pattern.compile("<dt>");
-  static Pattern DT_CLOSE = Pattern.compile("</dt>");
-  static Pattern DD_OPEN = Pattern.compile("<dd>");
-  static Pattern DD_CLOSE = Pattern.compile("</dd>");
-  static Pattern SCORE_OPEN = Pattern.compile("<score>");
-  static Pattern SCORE_CLOSE = Pattern.compile("</score>");
-  static Pattern HEADING2 = Pattern.compile("=="); // even
-  static Pattern HEADING3 = Pattern.compile("==="); // even
-  static Pattern HEADING4 = Pattern.compile("===="); // even
-  static Pattern HEADING5 = Pattern.compile("====="); // even
-  static Pattern HEADING6 = Pattern.compile("======"); // even
+  static Pattern POEM_CLOSE = Pattern.compile("(</poem>)");
+  static Pattern PRE_OPEN = Pattern.compile("(<pre>)");
+  static Pattern PRE_CLOSE = Pattern.compile("(</pre>)");
+  static Pattern SUPERSCRIPT_OPEN = Pattern.compile("(<sup>)");
+  static Pattern SUPERSCRIPT_CLOSE = Pattern.compile("(</sup>)");
+  static Pattern S_OPEN = Pattern.compile("(<s>)");
+  static Pattern S_CLOSE = Pattern.compile("(</s>)");
+  static Pattern U_OPEN = Pattern.compile("(<u>)");
+  static Pattern U_CLOSE = Pattern.compile("(</u>)");
+  static Pattern DEL_OPEN = Pattern.compile("(<del>)");
+  static Pattern DEL_CLOSE = Pattern.compile("(</del>)");
+  static Pattern INS_OPEN = Pattern.compile("(<ins>)");
+  static Pattern INS_CLOSE = Pattern.compile("(</ins>)");
+  static Pattern SUBSCRIPT_OPEN = Pattern.compile("(<sub>)");
+  static Pattern SUBSCRIPT_CLOSE = Pattern.compile("(</sub>)");
+  static Pattern CODE_OPEN = Pattern.compile("(<code>)");
+  static Pattern CODE_CLOSE = Pattern.compile("(</code>)");
+  static Pattern BLOCKQUOTE_OPEN = Pattern.compile("(<blockquote>)");
+  static Pattern BLOCKQUOTE_CLOSE = Pattern.compile("(</blockquote>)");
+  static Pattern COMMENT_OPEN = Pattern.compile("(<!--)");
+  static Pattern COMMENT_CLOSE = Pattern.compile("(-->)");
+  static Pattern NOWIKI_OPEN = Pattern.compile("(<nowiki>)");
+  static Pattern NOWIKI_CLOSE = Pattern.compile("(</nowiki>)");
+  static Pattern DL_OPEN = Pattern.compile("(<dl>)");
+  static Pattern DL_CLOSE = Pattern.compile("(</dl>)");
+  static Pattern DT_OPEN = Pattern.compile("(<dt>)");
+  static Pattern DT_CLOSE = Pattern.compile("(</dt>)");
+  static Pattern DD_OPEN = Pattern.compile("(<dd>)");
+  static Pattern DD_CLOSE = Pattern.compile("(</dd>)");
+  static Pattern SCORE_OPEN = Pattern.compile("(<score>)");
+  static Pattern SCORE_CLOSE = Pattern.compile("(</score>)");
+  static Pattern HEADING2 = Pattern.compile("(==)"); // even
+  static Pattern HEADING3 = Pattern.compile("(===)"); // even
+  static Pattern HEADING4 = Pattern.compile("(====)"); // even
+  static Pattern HEADING5 = Pattern.compile("(=====)"); // even
+  static Pattern HEADING6 = Pattern.compile("(======)"); // even
 
   public static double getOpenAndCloseSyntaxCount(String content) {
 
