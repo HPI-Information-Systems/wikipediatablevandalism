@@ -13,6 +13,7 @@ import features.content.util.typing.DataTypeDependentFeatureFactory;
 import features.content.wikisyntax.AddedInvalidAttributes;
 import lombok.experimental.Delegate;
 import lombok.val;
+import util.BasicUtils;
 
 class TableFeatureFactory {
 
@@ -46,14 +47,15 @@ class TableFeatureFactory {
     };
   }
 
-  Feature unmatchedTables() {
+  Feature unmatchedTableRatio() {
     return parameters -> {
-      final double removedTableCount = parameters.getResult().getRemovedTables().size();
-      final double currentTableCount = parameters.getResult().getMatches().size() + parameters.getResult().getAddedTables().size();
-      if (currentTableCount == 0) {
-        return 1;
+      // Of X previous existing tables, Y % were removed
+      final int previousTableCount = BasicUtils.getPreviousTables(parameters).size();
+      final int removedTables = parameters.getResult().getRemovedTables().size();
+      if (removedTables == 0) {
+        return 0;
       }
-      return (currentTableCount - removedTableCount) / currentTableCount;
+      return (double) removedTables / previousTableCount;
     };
   }
 
@@ -97,7 +99,8 @@ class TableFeatureFactory {
   }
 
   Feature openAndCloseSyntaxCount() {
-    return parameters -> SyntaxChecker.getOpenAndCloseSyntaxCount(TableContentExtractor.getContent(parameters));
+    return parameters -> SyntaxChecker
+        .getOpenAndCloseSyntaxCount(TableContentExtractor.getContent(parameters));
   }
 
   Feature sizePerCellChangeRatio() {

@@ -22,7 +22,7 @@ public class ContentFeatures {
         .feature("currentRowCount", tableFeatureFactory.currentRowCount())
         .feature("currentColumnCount", tableFeatureFactory.currentColumnCount())
         .feature("currentCellCount", tableFeatureFactory.currentCellCount())
-        .feature("unmatchedTableRatio", tableFeatureFactory.unmatchedTables())
+        .feature("unmatchedTableRatio", tableFeatureFactory.unmatchedTableRatio())
         .feature("unmatchedRowRatio", tableFeatureFactory.unmatchedRows())
         .feature("cellCountChange", tableFeatureFactory.cellCount())
         .feature("rowCountChange", tableFeatureFactory.rowCount())
