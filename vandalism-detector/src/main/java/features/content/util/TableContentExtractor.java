@@ -19,17 +19,24 @@ public class TableContentExtractor {
 
   private static final String SEP = " ";
 
+  /**
+   * All text features should be able to capture all user-generated content within the current
+   * revision. For instance character ratios: they operate on textual additions. Replicating all
+   * character ratios once for content and once for comment is probably not meaningful.
+   */
   @Nonnull
-  public static String getContent(final FeatureParameters parameters) {
+  public static String getContentWithComment(final FeatureParameters parameters) {
     return extractToString(parameters.getUserComment(), BasicUtils.getCurrentTables(parameters));
   }
 
   @Nonnull
+  public static String getContent(final FeatureParameters parameters) {
+    return extractToString(null, BasicUtils.getCurrentTables(parameters));
+  }
+
+  @Nonnull
   public static String getPreviousContent(final FeatureParameters parameters) {
-    final MyRevisionType revision = parameters.getPreviousRevision();
-    final String comment = revision == null ?
-        null : CommentPreprocessor.extractUserComment(revision.getComment());
-    return extractToString(comment, BasicUtils.getPreviousTables(parameters));
+    return extractToString(null, BasicUtils.getPreviousTables(parameters));
   }
 
   private static String extractToString(@Nullable final String comment,

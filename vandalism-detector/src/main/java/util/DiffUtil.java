@@ -76,7 +76,7 @@ public class DiffUtil {
 
   public static String insertedText(FeatureParameters parameters) {
     val diffMatchPatch = new DiffMatchPatchUtil();
-    val content = TableContentExtractor.getContent(parameters);
+    val content = TableContentExtractor.getContentWithComment(parameters);
     val previousContent = TableContentExtractor.getPreviousContent(parameters);
     return diffMatchPatch.diffCompute(previousContent, content, true, 0)
         .stream()

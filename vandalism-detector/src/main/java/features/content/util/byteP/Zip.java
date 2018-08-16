@@ -27,7 +27,7 @@ public class Zip implements Feature {
 
   @Override
   public double getValue(FeatureParameters parameters) {
-    val tableContents = TableContentExtractor.getContent(parameters);
+    val tableContents = TableContentExtractor.getContentWithComment(parameters);
     if (StringUtils.isBlank(tableContents)) {
       return 0;
     }
