@@ -11,6 +11,7 @@ import lombok.val;
 import matching.table.TableMatch;
 import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
+import tools.TablePredicate;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
@@ -38,10 +39,14 @@ public class BasicUtils {
     if (parsed == null) {
       return 0;
     }
+
     int totalLength = 0;
     for (String string : parsed) {
-      totalLength += string.length();
+      if (TablePredicate.INSTANCE.test(string)) {
+        totalLength += string.length();
+      }
     }
+
     return totalLength;
   }
 

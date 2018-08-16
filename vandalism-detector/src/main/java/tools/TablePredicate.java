@@ -20,7 +20,9 @@ import wikixmlsplit.datastructures.MyRevisionType;
  *
  * @see wikixmlsplit.renderer.wikitable.WikiTable#constructNewObjects(MyRevisionType, List, boolean)
  */
-class TablePredicate implements Predicate<String> {
+public final class TablePredicate implements Predicate<String> {
+
+  public static TablePredicate INSTANCE = new TablePredicate();
 
   /**
    * Attribute name to encode the contained type.
@@ -31,7 +33,7 @@ class TablePredicate implements Predicate<String> {
 
   private final List<String> relevantTypeNames;
 
-  TablePredicate() {
+  private TablePredicate() {
     relevantTypeNames = getRelevantTypeNames();
   }
 

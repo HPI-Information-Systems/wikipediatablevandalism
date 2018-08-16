@@ -13,8 +13,6 @@ import wikixmlsplit.datastructures.MyRevisionType;
 @Slf4j
 public class RevisionChecker {
 
-  private final TablePredicate tablePredicate = new TablePredicate();
-
   public boolean checkRevisionFeasible(final MyPageType page, final MyRevisionType revision) {
     final MyRevisionType previous = PageUtil.findPreviousRevision(page, revision);
     if (previous == null) {
@@ -31,6 +29,6 @@ public class RevisionChecker {
   }
 
   private boolean isTableInvolved(final Collection<String> parsed) {
-    return parsed.stream().anyMatch(tablePredicate);
+    return parsed.stream().anyMatch(TablePredicate.INSTANCE);
   }
 }
