@@ -157,8 +157,12 @@ class TextFeatureFactory {
     };
   }
 
-  Feature refChangeRatio() {
-    return RefChange::getRatio;
+  Feature refRemovedRatio() {
+    return RefChange::getRemovedRatio;
+  }
+
+  Feature refAddedRatio() {
+    return RefChange::getAddedRatio;
   }
 
   Feature refCount() {

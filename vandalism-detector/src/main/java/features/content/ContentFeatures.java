@@ -72,7 +72,8 @@ public class ContentFeatures {
         .feature("longCharSeq", textFeatureFactory.lengthOfLongestConsecutiveSequenceOfSingleChar())
         .feature("lengthOfLongestToken", textFeatureFactory.lengthOfLongestToken())
         .feature("newWordFrequency", textFeatureFactory.newWordFrequency())
-        .feature("refChangeRatio", textFeatureFactory.refChangeRatio())
+        .feature("refAddedRatio", textFeatureFactory.refAddedRatio())
+        .feature("refRemovedRatio", textFeatureFactory.refRemovedRatio())
         .feature("refCount", textFeatureFactory.refCount())
 
         // Byte
