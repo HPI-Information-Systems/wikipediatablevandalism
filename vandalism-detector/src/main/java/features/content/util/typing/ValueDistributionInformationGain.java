@@ -52,7 +52,7 @@ public class ValueDistributionInformationGain implements Feature {
 
     double[] prob = new double[distribution.length];
     for (int i = 0; i < distribution.length; ++i) {
-      prob[i] = distribution[i] / sum;
+      prob[i] = sum > 0 ? distribution[i] / sum : 0;
     }
     return prob;
   }

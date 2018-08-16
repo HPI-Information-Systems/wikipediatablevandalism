@@ -16,5 +16,4 @@ public class DataTypeDependentFeatureFactory {
   public Feature dataTypeDistributionInformationGain() {
     return new ValueDistributionInformationGain(new ValueDistributionUtil());
   }
-
 }
