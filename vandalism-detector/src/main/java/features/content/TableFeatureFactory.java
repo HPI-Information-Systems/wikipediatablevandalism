@@ -59,22 +59,21 @@ class TableFeatureFactory {
     };
   }
 
-  Feature unmatchedRows() {
+  Feature unmatchedRowRatio() {
     return parameters -> {
-      if (parameters.getRowMatchResult() == null) {
-        return 1d;
-      }
-
-      final double matchedRowCount = parameters.getRowMatchResult().getMatches().size();
-      double totalRowCount = 0;
-      if (parameters.getRelevantMatch() != null) {
-        totalRowCount = parameters.getRelevantMatch().getCurrentTable().getRows().size();
-      }
-      if (totalRowCount == 0) {
+      // Or X previous existing rows, Y % were removed
+      val result = parameters.getRowMatchResult();
+      if (result == null) {
+        // There has been no relevant match and thus no rows to match.
         return 0;
       }
 
-      return (totalRowCount - matchedRowCount) / totalRowCount;
+      final int previousRows = result.getMatches().size() + result.getDeletedRows().size();
+      final int removedRows = result.getDeletedRows().size();
+      if (removedRows == 0) {
+        return 0;
+      }
+      return (double) removedRows / previousRows;
     };
   }
 

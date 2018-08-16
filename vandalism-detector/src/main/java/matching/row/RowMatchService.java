@@ -27,8 +27,14 @@ public class RowMatchService {
       final RowMatch match = getBestMatch(row, current.getRows());
       if (match != null && match.getSimilarity() >= SIMILARITY_THRESHOLD) {
         result.match(match);
+      } else {
+        result.deletedRow(row);
       }
     }
+
+    final List<Row> added = new ArrayList<>(current.getRows());
+    added.removeAll(previous.getRows());
+    result.addedRows(added);
 
     return result.build();
   }
