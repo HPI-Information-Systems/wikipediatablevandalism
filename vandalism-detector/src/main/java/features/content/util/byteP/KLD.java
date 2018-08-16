@@ -1,62 +1,82 @@
 package features.content.util.byteP;
 
+import static com.google.common.primitives.Chars.asList;
+
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
-import features.Feature;
+import com.google.common.primitives.Chars;
 import features.content.util.TableContentExtractor;
-import lombok.val;
 import model.FeatureParameters;
 
-public class KLD implements Feature {
+public class KLD {
 
-  @Override
-  public double getValue(FeatureParameters parameters) {
-    return KLD.calculateKLDOfAddedChars(TableContentExtractor.getPreviousContent(parameters), TableContentExtractor.getContent(parameters));
+  public static double kldOfAddedChars(final FeatureParameters parameters) {
+    return calculateKLDOfAddedChars(
+        TableContentExtractor.getPreviousContent(parameters),
+        TableContentExtractor.getContent(parameters));
+  }
+
+  public static double kld(final FeatureParameters parameters) {
+    return calculateKLD(
+        TableContentExtractor.getPreviousContent(parameters),
+        TableContentExtractor.getContent(parameters));
   }
 
   @VisibleForTesting
-  static Double calculateKLDOfAddedChars(final String before, final String current) {
-    Multiset<Character> beforeCharDistributionMultiSet = HashMultiset.create();
-    Multiset<Character> currentCharDistributionMultiSet = HashMultiset.create();
-    for (char c : before.toCharArray()) {
-      beforeCharDistributionMultiSet.add(c);
-    }
-    for (char c : current.toCharArray()) {
-      currentCharDistributionMultiSet.add(c);
-    }
-    val addedCharDistributionMultiSet = Multisets
-        .difference(currentCharDistributionMultiSet, beforeCharDistributionMultiSet);
-    return calculateKLD(beforeCharDistributionMultiSet, addedCharDistributionMultiSet);
+  static double calculateKLDOfAddedChars(final String before, final String current) {
+    final Multiset<Character> charsBefore = toMultiset(before);
+    final Multiset<Character> charsCurrent = toMultiset(current);
+    final Multiset<Character> charsAdded = Multisets.difference(charsCurrent, charsBefore);
+    return kld(charsBefore, charsAdded);
   }
 
-  /*
-      PTc) = probability of character in charDistributionMultiSetTest
-      PQ(c) = probability of character in charDistributionMultiSetBasic
-      KLD = sum for all chars c in charDistributionMultiSetTest -> PT(c) * log2 (PT(c) / QT(c))
-   */
-  private static Double calculateKLD(final Multiset<Character> charDistributionMultiSetBasic,
-      final Multiset<Character> charDistributionMultiSetTest) {
-    Double result = 0.0;
-    for (val c : charDistributionMultiSetTest.elementSet()) {
-      Double pt =
-          (double) charDistributionMultiSetTest.count(c) / charDistributionMultiSetTest.size();
-      Double qt = Double.MIN_VALUE; // when char not contained in basic, assume minimal possible probability
-      if (charDistributionMultiSetBasic.contains(c)) {
-        qt = (double) charDistributionMultiSetBasic.count(c) / charDistributionMultiSetBasic
-            .size();
-      }
-      Double ptDivQt = pt / qt;
-      if (ptDivQt == Double.POSITIVE_INFINITY) {
-        ptDivQt = Double.MAX_VALUE;
-      }
-      if (ptDivQt == Double.NEGATIVE_INFINITY) {
-        ptDivQt = -Double.MAX_VALUE;
-      }
-      result += pt * (Math.log(ptDivQt) / Math.log(2)); // log2 because of bit representation
-    }
-    return result;
+  @VisibleForTesting
+  static double calculateKLD(final String before, final String current) {
+    final Multiset<Character> charsBefore = toMultiset(before);
+    final Multiset<Character> charsCurrent = toMultiset(current);
+    return kld(charsBefore, charsCurrent);
   }
 
+  private static Multiset<Character> toMultiset(final String value) {
+    return HashMultiset.create(asList(value.toCharArray()));
+  }
+
+
+  private static double kld(final Multiset<Character> previous, final Multiset<Character> current) {
+    final char[] chars = Chars.toArray(current.elementSet());
+
+    final double[] probCurrent = prob(chars, current);
+    final double[] probPrevious = prob(chars, resample(chars, previous));
+
+    double sum = 0;
+    for (int index = 0; index < chars.length; ++index) {
+      if (probPrevious[index] == 0) {
+        continue;
+      }
+
+      final double v = probCurrent[index] / probPrevious[index];
+      sum += (v * Math.log(v) / Math.log(2));
+    }
+    return sum;
+  }
+
+  private static Multiset<Character> resample(final char[] chars, final Multiset<Character> set) {
+    final Multiset<Character> subset = HashMultiset.create(set);
+    subset.retainAll(asList(chars));
+    return subset;
+  }
+
+  private static double[] prob(final char[] toTest, final Multiset<Character> chars) {
+    final double[] prob = new double[toTest.length];
+    if (chars.isEmpty()) {
+      return prob;
+    }
+
+    for (int index = 0; index < toTest.length; ++index) {
+      prob[index] = (double) chars.count(toTest[index]) / chars.size();
+    }
+    return prob;
+  }
 }

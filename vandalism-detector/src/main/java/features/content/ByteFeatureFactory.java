@@ -41,8 +41,12 @@ class ByteFeatureFactory {
     return new Zip();
   }
 
-  Feature KLDOfCharDistribution() {
-    return new KLD();
+  Feature kldOfAddedCharDistribution() {
+    return KLD::kldOfAddedChars;
+  }
+
+  Feature kldOfCharDistribution() {
+    return KLD::kld;
   }
 
   Feature rawCommentLength() {

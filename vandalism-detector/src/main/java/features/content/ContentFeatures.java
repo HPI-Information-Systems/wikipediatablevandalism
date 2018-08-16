@@ -80,7 +80,8 @@ public class ContentFeatures {
         .feature("sizeChange", byteFeatureFactory.sizeChange())
         .feature("sizeRatio", byteFeatureFactory.sizeRatio())
         .feature("LZWCompressionRate", byteFeatureFactory.LZWCompressionRate())
-        .feature("KLDOfCharDistribution", byteFeatureFactory.KLDOfCharDistribution())
+        .feature("kldOfAddedCharDistribution", byteFeatureFactory.kldOfAddedCharDistribution())
+        .feature("kldOfCharDistribution", byteFeatureFactory.kldOfCharDistribution())
         .feature("rawCommentLength", byteFeatureFactory.rawCommentLength())
         .feature("userCommentLength", byteFeatureFactory.userCommentLength())
 
