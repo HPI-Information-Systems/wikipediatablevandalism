@@ -8,6 +8,7 @@ public class SuperlativePatternList {
 
   // Basic patterns to find comparatives and superlatives
   // From: https://dictionary.cambridge.org/grammar/british-grammar/comparatives-and-superlatives/comparison-adjectives-bigger-biggest-more-interesting
+  // Below is greedy only within word boundaries.
   private static Set<Pattern> PATTERNS = ImmutableSet.of(
       Pattern.compile("\\b(\\w*est)\\b"),
       Pattern.compile("\\b(\\w*er)\\b")
