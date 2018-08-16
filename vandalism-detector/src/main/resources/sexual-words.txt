@@ -28,7 +28,6 @@ anus
 areola
 arousal
 assault
-availability
 bacteria
 bacterial
 bagging
@@ -79,7 +78,6 @@ clitoris
 closeted
 cock
 coitus
-come
 comprehensive
 conception
 condom
@@ -110,7 +108,6 @@ date
 defects
 dental
 depo-provera
-device
 diaphragm
 dick
 dilation
@@ -140,7 +137,6 @@ engorge
 epididymis
 erection
 estrogen
-exam
 expiration
 expression
 fallopian
@@ -225,7 +221,6 @@ lgbtq
 libido
 lice
 ligation
-love
 lubricant
 lubrication
 lust
@@ -245,7 +240,6 @@ menopause
 menses
 menstrual
 menstruation
-method
 mifepristone
 minor
 miscarriage
@@ -269,9 +263,6 @@ nut
 nuvaring
 off
 opening
-opt-in
-opt-out
-or
 oral
 orgasm
 orgy
@@ -402,7 +393,6 @@ uterus
 vagina
 vaginal
 vaginosis
-values
 vasectomy
 vasocongestion
 vcf
@@ -412,7 +402,6 @@ virgin
 virginity
 virus
 vulva
-waiting
 warts
 wet
 whore
