@@ -128,4 +128,44 @@ class TableFeatureFactory {
     return new AddedInvalidAttributes();
   }
 
+  Feature isTableAdded() {
+    return parameters -> parameters.getResult().getAddedTables().isEmpty() ? 0 : 1;
+  }
+
+  Feature addedTableCount() {
+    return parameters -> parameters.getResult().getAddedTables().size();
+  }
+
+  Feature isTableModified() {
+    return parameters -> {
+      for (val match : parameters.getResult().getMatches()) {
+        boolean identical = match.getPreviousTable().equals(match.getCurrentTable());
+        if (!identical) {
+          return 1;
+        }
+      }
+      return 0;
+    };
+  }
+
+  Feature modifiedTableCount() {
+    return parameters -> {
+      int modified = 0;
+      for (val match : parameters.getResult().getMatches()) {
+        boolean identical = match.getPreviousTable().equals(match.getCurrentTable());
+        if (!identical) {
+          ++modified;
+        }
+      }
+      return modified;
+    };
+  }
+
+  Feature isTableDeleted() {
+    return parameters -> parameters.getResult().getRemovedTables().isEmpty() ? 0 : 1;
+  }
+
+  Feature deletedTableCount() {
+    return parameters -> parameters.getResult().getRemovedTables().size();
+  }
 }

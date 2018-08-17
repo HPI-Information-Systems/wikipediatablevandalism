@@ -39,6 +39,13 @@ public class ContentFeatures {
         .feature("emptyCellCount", table.emptyCellCount())
         .feature("addedInvalidAttributes", table.addedInvalidAttributes())
 
+        .feature("isTableAdded", table.isTableAdded())
+        .feature("addedTableCount", table.addedTableCount())
+        .feature("isTableModified", table.isTableModified())
+        .feature("modifiedTableCount", table.modifiedTableCount())
+        .feature("isTableDeleted", table.isTableDeleted())
+        .feature("deletedTableCount", table.deletedTableCount())
+
         // Language
         .feature("personalPronounInComment", language.personalPronounInComment())
         .feature("personalPronounFrequencyInComment", language.personalPronounFrequencyInComment())
