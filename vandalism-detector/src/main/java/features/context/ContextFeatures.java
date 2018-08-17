@@ -32,6 +32,12 @@ public class ContextFeatures {
         .feature("authorRankOfLast200Edits", edit.authorRankOfLast200Edits())
         .feature("authorRankOneMonth", edit.authorRankOfLastMonth())
         .feature("authorRankOfLast200EditsOfOneMonth", edit.authorRankOfLast200EditsOfOneMonth())
+        .feature("distinctAuthorCountOfLast5Edits", edit.distinctAuthorCountOfLast5Edits())
+        .feature("distinctAuthorCountOfLast20Edits", edit.distinctAuthorCountOfLast20Edits())
+        .feature("distinctAuthorCountOfLast80Edits", edit.distinctAuthorCountOfLast80Edits())
+        .feature("distinctAuthorCountOfLastHour", edit.distinctAuthorCountOfLastHour())
+        .feature("distinctAuthorCountOfLastTwoHours", edit.distinctAuthorCountOfLastTwoHours())
+        .feature("distinctAuthorCountOfLast24Hours", edit.distinctAuthorCountOfLast24Hours())
 
         // Page
         .feature("hasPreviousSameContributor", page.hasPreviousSameContributor())
