@@ -1,6 +1,7 @@
 package model;
 
 import java.util.List;
+import java.util.Optional;
 import javax.annotation.Nullable;
 import lombok.Builder;
 import lombok.Value;
@@ -51,4 +52,9 @@ public class FeatureParameters {
   public boolean hasRelevantMatch() {
     return relevantMatch != null;
   }
+
+  public Optional<TableMatch> getMatch() {
+    return Optional.ofNullable(relevantMatch);
+  }
+
 }

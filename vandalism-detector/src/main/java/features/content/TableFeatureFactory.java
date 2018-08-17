@@ -1,10 +1,10 @@
 package features.content;
 
 import features.Feature;
+import features.content.util.table.AverageCellSizeChange;
 import features.content.util.table.EmptyCellChange;
 import features.content.util.table.RankChange;
 import features.content.util.table.SharedCellRatio;
-import features.content.util.table.SizePerCellChange;
 import features.content.util.table.SyntaxChecker;
 import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
@@ -100,12 +100,16 @@ class TableFeatureFactory {
     return parameters -> SyntaxChecker.getOpenAndCloseSyntaxCount(parameters.getContent());
   }
 
-  Feature sizePerCellChangeRatio() {
-    return SizePerCellChange::getRatio;
+  Feature averageCellSizeIncrease() {
+    return AverageCellSizeChange::averageCellSizeIncrease;
   }
 
-  Feature sizePerCell() {
-    return SizePerCellChange::getSizePerCell;
+  Feature averageCellSizeDecrease() {
+    return AverageCellSizeChange::averageCellSizeDecrease;
+  }
+
+  Feature averageCellSize() {
+    return AverageCellSizeChange::averageCellSize;
   }
 
   Feature addedEmptyCellRatio() {
