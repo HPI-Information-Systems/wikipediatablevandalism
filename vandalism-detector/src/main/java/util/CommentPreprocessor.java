@@ -8,12 +8,13 @@ import org.sweble.wikitext.dumpreader.export_0_10.CommentType;
 public class CommentPreprocessor {
 
   /**
-   * If the user did not leave a comment, sometimes the headline of the section that was edited is
-   * included in the revision comment by default.
+   * Sometimes the headline of the section that was edited is included in the revision comment by
+   * default. We do not assume that users voluntarily type section headlines in C-style comments
+   * next to their remark.
    *
    * Example: https://en.wikipedia.org/w/index.php?diff=235131990; Comment was &#47;* Cycles *&#47;
    */
-  private static final Pattern GENERATED_COMMENT = Pattern.compile("^\\/\\*.*\\*\\/$");
+  private static final Pattern GENERATED_STUB = Pattern.compile("^\\/\\*.*?\\*\\/");
 
   /**
    * Filter auto-generated content containing user names etc.
@@ -29,7 +30,7 @@ public class CommentPreprocessor {
       return "";
     }
 
-    return comment.getValue();
+    return removeStub(comment);
   }
 
   public static boolean isBlank(@Nullable final CommentType comment) {
@@ -37,7 +38,10 @@ public class CommentPreprocessor {
   }
 
   public static boolean isGenerated(final CommentType comment) {
-    return COMMENT_TAG.matcher(comment.getValue()).find() ||
-        GENERATED_COMMENT.matcher(comment.getValue()).matches();
+    return COMMENT_TAG.matcher(comment.getValue()).find();
+  }
+
+  public static String removeStub(final CommentType comment) {
+    return GENERATED_STUB.matcher(comment.getValue()).replaceFirst("");
   }
 }
