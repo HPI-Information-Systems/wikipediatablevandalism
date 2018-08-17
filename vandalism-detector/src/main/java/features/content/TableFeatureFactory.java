@@ -1,7 +1,6 @@
 package features.content;
 
 import features.Feature;
-import features.content.util.TableContentExtractor;
 import features.content.util.table.EmptyCellChange;
 import features.content.util.table.RankChange;
 import features.content.util.table.SharedCellRatio;
@@ -98,8 +97,7 @@ class TableFeatureFactory {
   }
 
   Feature openAndCloseSyntaxCount() {
-    return parameters -> SyntaxChecker
-        .getOpenAndCloseSyntaxCount(TableContentExtractor.getContent(parameters));
+    return parameters -> SyntaxChecker.getOpenAndCloseSyntaxCount(parameters.getContent());
   }
 
   Feature sizePerCellChangeRatio() {

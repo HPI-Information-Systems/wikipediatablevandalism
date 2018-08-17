@@ -4,7 +4,6 @@ import static util.CellExtractor.extractCells;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Multiset;
-import features.content.util.TableContentExtractor;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -76,8 +75,8 @@ public class DiffUtil {
 
   public static String insertedText(FeatureParameters parameters) {
     val diffMatchPatch = new DiffMatchPatchUtil();
-    val content = TableContentExtractor.getContentWithComment(parameters);
-    val previousContent = TableContentExtractor.getPreviousContent(parameters);
+    val previousContent = parameters.getPreviousContent();
+    val content = parameters.getContentWithComment();
     return diffMatchPatch.diffCompute(previousContent, content, true, 0)
         .stream()
         .filter(diff -> diff.operation == Operation.INSERT)

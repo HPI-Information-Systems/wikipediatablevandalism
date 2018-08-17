@@ -2,7 +2,6 @@ package features.content.util.byteP;
 
 import com.google.common.annotations.VisibleForTesting;
 import features.Feature;
-import features.content.util.TableContentExtractor;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -27,7 +26,7 @@ public class Zip implements Feature {
 
   @Override
   public double getValue(FeatureParameters parameters) {
-    val tableContents = TableContentExtractor.getContentWithComment(parameters);
+    val tableContents = parameters.getContentWithComment();
     if (StringUtils.isBlank(tableContents)) {
       return 0;
     }

@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.xml.datatype.DatatypeConstants;
 import lombok.val;
 import matching.table.TableMatch;
+import matching.table.TableMatchResult;
 import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
 import tools.TablePredicate;
@@ -69,9 +70,13 @@ public class BasicUtils {
 
   @Nonnull
   public static List<WikiTable> getCurrentTables(final FeatureParameters parameters) {
-    val matchingResult = parameters.getResult();
-    final List<WikiTable> tables = new ArrayList<>(matchingResult.getAddedTables());
-    for (final TableMatch match : matchingResult.getMatches()) {
+    return getCurrentTables(parameters.getResult());
+  }
+
+  @Nonnull
+  public static List<WikiTable> getCurrentTables(final TableMatchResult result) {
+    final List<WikiTable> tables = new ArrayList<>(result.getAddedTables());
+    for (final TableMatch match : result.getMatches()) {
       tables.add(match.getCurrentTable());
     }
     return tables;
@@ -79,9 +84,13 @@ public class BasicUtils {
 
   @Nonnull
   public static List<WikiTable> getPreviousTables(final FeatureParameters parameters) {
-    val matchingResult = parameters.getResult();
-    final List<WikiTable> tables = new ArrayList<>(matchingResult.getRemovedTables());
-    for (final TableMatch match : matchingResult.getMatches()) {
+    return getPreviousTables(parameters.getResult());
+  }
+
+  @Nonnull
+  public static List<WikiTable> getPreviousTables(final TableMatchResult result) {
+    final List<WikiTable> tables = new ArrayList<>(result.getRemovedTables());
+    for (final TableMatch match : result.getMatches()) {
       tables.add(match.getPreviousTable());
     }
     return tables;

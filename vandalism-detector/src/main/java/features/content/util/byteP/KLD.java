@@ -7,21 +7,16 @@ import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.Multisets;
 import com.google.common.primitives.Chars;
-import features.content.util.TableContentExtractor;
 import model.FeatureParameters;
 
 public class KLD {
 
   public static double kldOfAddedChars(final FeatureParameters parameters) {
-    return calculateKLDOfAddedChars(
-        TableContentExtractor.getPreviousContent(parameters),
-        TableContentExtractor.getContent(parameters));
+    return calculateKLDOfAddedChars(parameters.getPreviousContent(), parameters.getContent());
   }
 
   public static double kld(final FeatureParameters parameters) {
-    return calculateKLD(
-        TableContentExtractor.getPreviousContent(parameters),
-        TableContentExtractor.getContent(parameters));
+    return calculateKLD(parameters.getPreviousContent(), parameters.getContent());
   }
 
   @VisibleForTesting

@@ -4,11 +4,7 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import model.FeatureParameters;
 import util.AttributeUtil;
-import util.BasicUtils;
-import util.CommentPreprocessor;
-import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.Attribute;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
@@ -25,18 +21,13 @@ public class TableContentExtractor {
    * character ratios once for content and once for comment is probably not meaningful.
    */
   @Nonnull
-  public static String getContentWithComment(final FeatureParameters parameters) {
-    return extractToString(parameters.getUserComment(), BasicUtils.getCurrentTables(parameters));
+  public static String getContentWithComment(final String comment, final List<WikiTable> tables) {
+    return extractToString(comment, tables);
   }
 
   @Nonnull
-  public static String getContent(final FeatureParameters parameters) {
-    return extractToString(null, BasicUtils.getCurrentTables(parameters));
-  }
-
-  @Nonnull
-  public static String getPreviousContent(final FeatureParameters parameters) {
-    return extractToString(null, BasicUtils.getPreviousTables(parameters));
+  public static String getContent(final List<WikiTable> tables) {
+    return extractToString(null, tables);
   }
 
   private static String extractToString(@Nullable final String comment,

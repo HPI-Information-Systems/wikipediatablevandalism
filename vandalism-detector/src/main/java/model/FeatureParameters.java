@@ -32,6 +32,12 @@ public class FeatureParameters {
    */
   private String rawComment;
 
+  private String contentWithComment;
+
+  private String content;
+
+  private String previousContent;
+
   @Nullable
   public MyRevisionType getPreviousRevision() {
     return previousRevision;

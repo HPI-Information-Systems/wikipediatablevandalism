@@ -4,7 +4,6 @@ import com.google.common.collect.Multisets;
 import com.google.common.math.Stats;
 import features.Feature;
 import features.content.util.RefChange;
-import features.content.util.TableContentExtractor;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.val;
@@ -138,10 +137,8 @@ class TextFeatureFactory {
 
   Feature newWordFrequency() {
     return parameters -> {
-      val currentWordOccurrence = WordsExtractor
-          .extractWords(TableContentExtractor.getContent(parameters));
-      val previousWordOccurrence = WordsExtractor
-          .extractWords(TableContentExtractor.getPreviousContent(parameters));
+      val currentWordOccurrence = WordsExtractor.extractWords(parameters.getContent());
+      val previousWordOccurrence = WordsExtractor.extractWords(parameters.getPreviousContent());
       val addedWordOccurrence = Multisets.difference(currentWordOccurrence, previousWordOccurrence);
       if (addedWordOccurrence.isEmpty() || previousWordOccurrence.isEmpty()) {
         return -1;

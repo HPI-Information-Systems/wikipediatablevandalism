@@ -3,6 +3,7 @@ package features;
 import static util.PageUtil.getRevisionIndex;
 
 import com.google.common.collect.Lists;
+import features.content.util.TableContentExtractor;
 import java.util.List;
 import javax.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,7 @@ import util.PageUtil;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
+import wikixmlsplit.renderer.wikitable.WikiTable;
 
 @Slf4j
 class FeatureParametersFactory {
@@ -30,17 +32,32 @@ class FeatureParametersFactory {
     val tableMatchResult = getTableMatching(page, revision, matching);
     val selectedMatch = selectMatch(tableMatchResult);
     final List<MyRevisionType> previousRevisions = previousRevisions(page, revision);
+    final String userComment = extractUserComment(revision.getComment());
+
+    final List<WikiTable> currentTables = BasicUtils.getCurrentTables(tableMatchResult);
+    final List<WikiTable> previousTables = BasicUtils.getPreviousTables(tableMatchResult);
 
     return FeatureParameters.builder()
+        // Meta
         .page(page)
         .revision(revision)
         .previousRevision(BasicUtils.getPreviousRevision(previousRevisions))
         .previousRevisions(previousRevisions)
+
+        // Matching
         .result(tableMatchResult)
         .relevantMatch(selectedMatch)
         .rowMatchResult(getRowMatching(selectedMatch))
-        .userComment(extractUserComment(revision.getComment()))
+
+        // Comments
+        .userComment(userComment)
         .rawComment(absentCommentToEmptyString(revision.getComment()))
+
+        // Content
+        .contentWithComment(TableContentExtractor.getContentWithComment(userComment, currentTables))
+        .content(TableContentExtractor.getContent(currentTables))
+        .previousContent(TableContentExtractor.getContent(previousTables))
+
         .build();
   }
 
