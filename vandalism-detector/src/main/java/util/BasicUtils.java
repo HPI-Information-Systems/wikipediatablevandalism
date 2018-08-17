@@ -12,7 +12,6 @@ import matching.table.TableMatch;
 import matching.table.TableMatchResult;
 import model.FeatureParameters;
 import org.sweble.wikitext.dumpreader.export_0_10.ContributorType;
-import tools.TablePredicate;
 import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
@@ -34,21 +33,6 @@ public class BasicUtils {
 
   public static boolean isAnonymous(final ContributorType contributor) {
     return contributor.getUsername() == null;
-  }
-
-  public static int parsedLength(final List<String> parsed) {
-    if (parsed == null) {
-      return 0;
-    }
-
-    int totalLength = 0;
-    for (String string : parsed) {
-      if (TablePredicate.INSTANCE.test(string)) {
-        totalLength += string.length();
-      }
-    }
-
-    return totalLength;
   }
 
   public static MyRevisionType getPreviousRevision(final List<MyRevisionType> previousRevisions) {
