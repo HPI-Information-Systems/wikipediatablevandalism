@@ -80,7 +80,8 @@ public class ContentFeatures {
         // Byte
         .feature("previousLength", byteFeatureFactory.previousLength())
         .feature("sizeChange", byteFeatureFactory.sizeChange())
-        .feature("sizeRatio", byteFeatureFactory.sizeRatio())
+        .feature("addedSizeRatio", byteFeatureFactory.addSizeRatio())
+        .feature("removedSizeRatio", byteFeatureFactory.removedSizeRatio())
         .feature("LZWCompressionRate", byteFeatureFactory.LZWCompressionRate())
         .feature("kldOfAddedCharDistribution", byteFeatureFactory.kldOfAddedCharDistribution())
         .feature("kldOfCharDistribution", byteFeatureFactory.kldOfCharDistribution())
