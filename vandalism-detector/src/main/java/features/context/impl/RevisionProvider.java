@@ -9,7 +9,7 @@ import util.predicates.OlderThan;
 import wikixmlsplit.datastructures.MyRevisionType;
 
 @FunctionalInterface
-interface RevisionProvider {
+public interface RevisionProvider {
 
   List<MyRevisionType> get(FeatureParameters parameters);
 

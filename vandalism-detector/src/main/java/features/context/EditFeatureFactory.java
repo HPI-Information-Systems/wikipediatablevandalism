@@ -1,11 +1,12 @@
 package features.context;
 
 import features.Feature;
-import features.context.impl.AuthorRankFeatureFactory;
+import features.context.impl.AuthorRank;
 import features.context.impl.LocalizedTime;
+import features.context.impl.RevisionProvider;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.temporal.ChronoField;
-import lombok.experimental.Delegate;
 import lombok.val;
 import util.BasicUtils;
 import util.IpGeoLocator;
@@ -18,9 +19,6 @@ class EditFeatureFactory {
 
   private final IpGeoLocator locator = new IpGeoLocator();
   private final LocationToTimeZoneConverter locationConverter = new LocationToTimeZoneConverter();
-
-  @Delegate
-  private final AuthorRankFeatureFactory authorRank = new AuthorRankFeatureFactory();
 
   /**
    * @return the hours since midnight
@@ -60,6 +58,22 @@ class EditFeatureFactory {
     return parameters -> parameters.getRevision().getComment() != null
         && parameters.getRevision().getComment().getDeleted() != null
         ? 1 : 0;
+  }
+
+  Feature authorRank() {
+    return new AuthorRank(RevisionProvider.all());
+  }
+
+  Feature authorRankOfLast200Edits() {
+    return new AuthorRank(RevisionProvider.lastN(200));
+  }
+
+  Feature authorRankOfLastMonth() {
+    return new AuthorRank(RevisionProvider.maxAge(Period.ofDays(30)));
+  }
+
+  Feature authorRankOfLast200EditsOfOneMonth() {
+    return new AuthorRank(RevisionProvider.lastNWithMaxAge(200, Period.ofDays(30)));
   }
 
 }
