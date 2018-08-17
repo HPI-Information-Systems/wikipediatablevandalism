@@ -33,7 +33,8 @@ public class ContentFeatures {
         //.feature("syntaxCount", tableFeatureFactory.openAndCloseSyntaxCount())
         .feature("sizePerCellChangeRatio", tableFeatureFactory.sizePerCellChangeRatio())
         .feature("sizePerCell", tableFeatureFactory.sizePerCell())
-        .feature("emptyCellChangeRatio", tableFeatureFactory.emptyCellRatio())
+        .feature("addedEmptyCellRatio", tableFeatureFactory.addedEmptyCellRatio())
+        .feature("removedEmptyCellRatio", tableFeatureFactory.removedEmptyCellRatio())
         .feature("emptyCellCount", tableFeatureFactory.emptyCellCount())
         .feature("addedInvalidAttributes", tableFeatureFactory.addedInvalidAttributes())
 

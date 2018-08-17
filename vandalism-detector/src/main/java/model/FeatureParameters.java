@@ -22,10 +22,14 @@ public class FeatureParameters {
   private TableMatch relevantMatch;
   private RowMatchResult rowMatchResult;
 
-  /** Preprocessed userComment; auto-generated content excluded */
+  /**
+   * Preprocessed userComment; auto-generated content excluded
+   */
   private String userComment;
 
-  /** Original userComment; non-null; may contain auto-generated content */
+  /**
+   * Original userComment; non-null; may contain auto-generated content
+   */
   private String rawComment;
 
   @Nullable
@@ -36,5 +40,9 @@ public class FeatureParameters {
   @Nullable
   public TableMatch getRelevantMatch() {
     return relevantMatch;
+  }
+
+  public boolean hasRelevantMatch() {
+    return relevantMatch != null;
   }
 }

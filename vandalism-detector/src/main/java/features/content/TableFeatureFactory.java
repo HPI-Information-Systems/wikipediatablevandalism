@@ -110,8 +110,12 @@ class TableFeatureFactory {
     return SizePerCellChange::getSizePerCell;
   }
 
-  Feature emptyCellRatio() {
-    return EmptyCellChange::getRatio;
+  Feature addedEmptyCellRatio() {
+    return EmptyCellChange::addedRatio;
+  }
+
+  Feature removedEmptyCellRatio() {
+    return EmptyCellChange::removeRatio;
   }
 
   Feature emptyCellCount() {

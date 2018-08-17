@@ -1,9 +1,9 @@
 package features.content.util;
 
-import com.google.common.annotations.VisibleForTesting;
 import java.util.regex.Pattern;
 import lombok.val;
 import model.FeatureParameters;
+import util.RatioUtil;
 
 /**
  * Model changes in references (article sources).
@@ -20,45 +20,18 @@ public class RefChange {
    * X % of references have been removed
    */
   public static double getRemovedRatio(FeatureParameters parameters) {
-    double currentRefCount = getRefCount(TableContentExtractor.getContent(parameters));
-    double previousRefCount = getRefCount(TableContentExtractor.getPreviousContent(parameters));
-    return getRemovedRatio(previousRefCount, currentRefCount);
-  }
-
-  @VisibleForTesting
-  static double getRemovedRatio(final double previousRefCount, final double currentRefCount) {
-    if (previousRefCount == 0) {
-      return 0;
-    }
-
-    double removedRefCount = previousRefCount - currentRefCount;
-    return Math.max(0, removedRefCount) / previousRefCount;
+    double previous = getRefCount(TableContentExtractor.getPreviousContent(parameters));
+    double current = getRefCount(TableContentExtractor.getContent(parameters));
+    return RatioUtil.removed(previous, current);
   }
 
   /**
    * There has been an x-fold increase in references.
    */
   public static double getAddedRatio(FeatureParameters parameters) {
-    double currentRefCount = getRefCount(TableContentExtractor.getContent(parameters));
-    double previousRefCount = getRefCount(TableContentExtractor.getPreviousContent(parameters));
-    return getAddedRatio(previousRefCount, currentRefCount);
-  }
-
-  @VisibleForTesting
-  static double getAddedRatio(final double previousRefCount, final double currentRefCount) {
-    if (currentRefCount == 0) {
-      return 0;
-    }
-
-    if (previousRefCount == 0) {
-      return 1;
-    }
-
-    double addedRefCount = currentRefCount - previousRefCount;
-    if (addedRefCount > 0) {
-      return 1 + addedRefCount / previousRefCount;
-    }
-    return 0;
+    double previous = getRefCount(TableContentExtractor.getPreviousContent(parameters));
+    double current = getRefCount(TableContentExtractor.getContent(parameters));
+    return RatioUtil.added(previous, current);
   }
 
   /**
