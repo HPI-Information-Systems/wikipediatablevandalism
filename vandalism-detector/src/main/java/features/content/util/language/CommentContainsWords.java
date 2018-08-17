@@ -5,7 +5,6 @@ import java.util.Set;
 import lombok.val;
 import model.FeatureParameters;
 import org.apache.commons.lang3.StringUtils;
-import util.StemmerUtils;
 
 /**
  * Boolean feature to show if a comment mentions a word.
@@ -22,7 +21,6 @@ public class CommentContainsWords implements Feature {
   public double getValue(final FeatureParameters parameters) {
     val comment = parameters.getUserComment();
     val containsWord = words.stream()
-        .map(StemmerUtils::stem)
         .anyMatch(word -> StringUtils.containsIgnoreCase(comment, word));
     return containsWord ? 1 : 0;
   }
