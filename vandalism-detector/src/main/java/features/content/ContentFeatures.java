@@ -68,6 +68,7 @@ public class ContentFeatures {
         .feature("redirectInComment", language.redirectInComment())
         .feature("replaceInComment", language.replaceInComment())
         .feature("goodFaithInComment", language.goodFaithInComment())
+        .feature("personalPronounInComment", language.personalPronounInComment())
 
         // Text
         .feature("digitRatio", text.ratioOfNumericalCharsToAllChars())
