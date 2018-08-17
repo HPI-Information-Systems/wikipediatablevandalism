@@ -168,4 +168,32 @@ class TableFeatureFactory {
   Feature deletedTableCount() {
     return parameters -> parameters.getResult().getRemovedTables().size();
   }
+
+  Feature areMultipleTablesChanged() {
+    return parameters -> {
+      int modified = 0;
+      for (val match : parameters.getResult().getMatches()) {
+        val identical = match.getPreviousTable().equals(match.getCurrentTable());
+        if (!identical) {
+          ++modified;
+        }
+
+        if (modified == 2) {
+          return 1;
+        }
+      }
+      return 0;
+    };
+  }
+
+  Feature isTableReplacement() {
+    return parameters -> {
+      int removed = parameters.getResult().getRemovedTables().size();
+      int added = parameters.getResult().getAddedTables().size();
+      if (removed == added) {
+        return 1;
+      }
+      return 0;
+    };
+  }
 }

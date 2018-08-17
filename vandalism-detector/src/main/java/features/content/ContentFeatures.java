@@ -45,6 +45,8 @@ public class ContentFeatures {
         .feature("modifiedTableCount", table.modifiedTableCount())
         .feature("isTableDeleted", table.isTableDeleted())
         .feature("deletedTableCount", table.deletedTableCount())
+        .feature("areMultipleTablesChanged", table.areMultipleTablesChanged())
+        .feature("isTableReplacement", table.isTableReplacement())
 
         // Language
         .feature("personalPronounInComment", language.personalPronounInComment())
