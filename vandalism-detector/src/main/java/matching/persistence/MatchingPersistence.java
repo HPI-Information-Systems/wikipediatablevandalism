@@ -3,6 +3,7 @@ package matching.persistence;
 import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.pool.KryoPool;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
@@ -22,11 +23,11 @@ import wikixmlsplit.datastructures.MyPageType;
 class MatchingPersistence {
 
   private final Arguments arguments;
-  private final Kryo kryo;
+  private final KryoPool pool;
 
   MatchingPersistence(final Arguments arguments) {
     this.arguments = arguments;
-    kryo = KryoUtil.createKryo();
+    pool = new KryoPool.Builder(KryoUtil::createKryo).softReferences().build();
   }
 
   boolean isMatchingAvailable(final MyPageType page) {
@@ -92,18 +93,24 @@ class MatchingPersistence {
   }
 
   private void write(final PersistedMatching matching, final Path path) {
+    Kryo kryo = pool.borrow();
     try (Output output = new Output(Files.newOutputStream(path))) {
       kryo.writeObject(output, matching);
     } catch (final IOException e) {
       throw new UncheckedIOException(e);
+    } finally {
+      pool.release(kryo);
     }
   }
 
   private PersistedMatching read(final Path path) {
+    Kryo kryo = pool.borrow();
     try (Input input = new Input(Files.newInputStream(path))) {
       return kryo.readObject(input, PersistedMatching.class);
     } catch (final IOException e) {
       throw new UncheckedIOException(e);
+    } finally {
+      pool.release(kryo);
     }
   }
 }
