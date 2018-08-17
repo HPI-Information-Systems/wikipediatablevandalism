@@ -1,3 +1,5 @@
+from collections import Counter
+
 def undersample(y_fold, weight_no_vandalism, weight_vandalism):
     train_counts = Counter(y_fold)
     no_vandalism_count = train_counts[0]
