@@ -25,16 +25,36 @@ import features.content.util.language.wordlists.VulgarWordList;
 
 class LanguageFeatureFactory {
 
+  Feature personalPronounInComment() {
+    return new CommentContainsWords(PronounWordList.getAll());
+  }
+
   Feature personalPronounFrequencyInComment() {
-    return CommentWordFrequency.ofMatchedWords(PronounWordList.getWords()).stem(false).build();
+    return CommentWordFrequency.ofMatchedWords(PronounWordList.getAll()).stem(false).build();
   }
 
   Feature personalPronounFrequencyInTable() {
-    return TableWordFrequency.ofMatchedWords(PronounWordList.getWords()).stem(false).build();
+    return TableWordFrequency.ofMatchedWords(PronounWordList.getAll()).stem(false).build();
   }
 
   Feature personalPronounImpactInTable() {
-    return TableWordImpact.ofMatchedWords(PronounWordList.getWords()).stem(false).build();
+    return TableWordImpact.ofMatchedWords(PronounWordList.getAll()).stem(false).build();
+  }
+
+  Feature singularPersonalPronounInComment() {
+    return new CommentContainsWords(PronounWordList.getSingular());
+  }
+
+  Feature singularPersonalPronounFrequencyInComment() {
+    return CommentWordFrequency.ofMatchedWords(PronounWordList.getSingular()).stem(false).build();
+  }
+
+  Feature singularPersonalPronounFrequencyInTable() {
+    return TableWordFrequency.ofMatchedWords(PronounWordList.getSingular()).stem(false).build();
+  }
+
+  Feature singularPersonalPronounImpactInTable() {
+    return TableWordImpact.ofMatchedWords(PronounWordList.getSingular()).stem(false).build();
   }
 
   Feature vulgarWordFrequencyInComment() {
@@ -142,10 +162,4 @@ class LanguageFeatureFactory {
   Feature goodFaithInComment() {
     return new CommentContainsWords(GoodFaithWordList.getWords());
   }
-
-
-  Feature personalPronounInComment() {
-    return new CommentContainsWords(PronounWordList.getWords());
-  }
-
 }

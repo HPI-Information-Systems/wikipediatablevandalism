@@ -40,9 +40,19 @@ public class ContentFeatures {
         .feature("addedInvalidAttributes", table.addedInvalidAttributes())
 
         // Language
+        .feature("personalPronounInComment", language.personalPronounInComment())
         .feature("personalPronounFrequencyInComment", language.personalPronounFrequencyInComment())
         .feature("personalPronounFrequencyInTable", language.personalPronounFrequencyInTable())
         .feature("personalPronounImpactInTable", language.personalPronounImpactInTable())
+
+        .feature("singularPersonalPronounInComment", language.singularPersonalPronounInComment())
+        .feature("singularPersonalPronounFrequencyInComment",
+            language.singularPersonalPronounFrequencyInComment())
+        .feature("singularPersonalPronounFrequencyInTable",
+            language.singularPersonalPronounFrequencyInTable())
+        .feature("singularPersonalPronounImpactInTable",
+            language.singularPersonalPronounImpactInTable())
+
         .feature("vulgarWordFrequencyInComment", language.vulgarWordFrequencyInComment())
         .feature("vulgarWordFrequencyInTables", language.vulgarWordFrequencyInTables())
         .feature("vulgarWordImpactInTables", language.vulgarWordImpactInTables())
@@ -68,7 +78,6 @@ public class ContentFeatures {
         .feature("redirectInComment", language.redirectInComment())
         .feature("replaceInComment", language.replaceInComment())
         .feature("goodFaithInComment", language.goodFaithInComment())
-        .feature("personalPronounInComment", language.personalPronounInComment())
 
         // Text
         .feature("digitRatio", text.ratioOfNumericalCharsToAllChars())
