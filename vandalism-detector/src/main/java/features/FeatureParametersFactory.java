@@ -2,8 +2,9 @@ package features;
 
 import static util.PageUtil.getRevisionIndex;
 
-import com.google.common.collect.Lists;
 import features.content.util.TableContentExtractor;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
@@ -65,9 +66,12 @@ class FeatureParametersFactory {
       final MyRevisionType revision) {
 
     val revisionIndex = getRevisionIndex(page, revision);
-    val n = revisionIndex; // TODO currently all previousRevisions
-    return Lists.reverse(page.getRevisions().subList(revisionIndex - n,
-        revisionIndex)); // reverse list -> index = 0 is the previous revision, index = 1 is the one before, etc.;
+    final List<MyRevisionType> revisions = new ArrayList<>(
+        page.getRevisions().subList(0, revisionIndex));
+
+    // reverse list -> index = 0 is the previous revision, index = 1 is the one before, etc.
+    Collections.reverse(revisions);
+    return revisions;
   }
 
   private TableMatch selectMatch(final TableMatchResult matches) {
