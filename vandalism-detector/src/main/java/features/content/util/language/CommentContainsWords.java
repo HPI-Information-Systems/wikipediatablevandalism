@@ -1,10 +1,10 @@
 package features.content.util.language;
 
 import features.Feature;
+import java.util.HashSet;
 import java.util.Set;
-import lombok.val;
 import model.FeatureParameters;
-import org.apache.commons.lang3.StringUtils;
+import util.WordsExtractor;
 
 /**
  * Boolean feature to show if a comment mentions a word.
@@ -19,9 +19,9 @@ public class CommentContainsWords implements Feature {
 
   @Override
   public double getValue(final FeatureParameters parameters) {
-    val comment = parameters.getUserComment();
-    val containsWord = words.stream()
-        .anyMatch(word -> StringUtils.containsIgnoreCase(comment, word));
-    return containsWord ? 1 : 0;
+    final String comment = parameters.getUserComment();
+    final Set<String> commentWords = new HashSet<>(WordsExtractor.extractWords(comment));
+    commentWords.retainAll(words);
+    return commentWords.isEmpty() ? 0 : 1;
   }
 }
