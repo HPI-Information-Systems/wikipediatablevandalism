@@ -24,14 +24,15 @@ def save_model(tag_id, clf, train_scores, grid_search):
     meta = {
         'tag_id': tag_id,
         'git_hash': get_git_revision_hash(),
-        'class_weight': params['class_weight'],
         'n_estimators': params['n_estimators'],
+        'ratio': params['ratio'],
         'train_scores': {k: v.tolist() for k, v in train_scores.items()},
         'grid_search': {
             'params': grid_search.cv_results_['params'],
             'mean_test_recall': grid_search.cv_results_['mean_test_recall'].tolist(),
             'mean_test_precision': grid_search.cv_results_['mean_test_precision'].tolist(),
             'mean_test_f1': grid_search.cv_results_['mean_test_f1'].tolist(),
+            'mean_test_f1': grid_search.cv_results_['mean_test_f1_micro'].tolist(),
             'mean_test_roc_auc': grid_search.cv_results_['mean_test_roc_auc'].tolist()
         }
     }
