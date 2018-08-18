@@ -40,21 +40,34 @@ public class KLD {
 
 
   private static double kld(final Multiset<Character> previous, final Multiset<Character> current) {
+    if (previous.equals(current)) {
+      return 0;
+    }
+
     final char[] chars = Chars.toArray(current.elementSet());
 
     final double[] probCurrent = prob(chars, current);
     final double[] probPrevious = prob(chars, resample(chars, previous));
 
+    final double previousMinProbability = getNonZeroMin(probPrevious) / 2;
+
     double sum = 0;
     for (int index = 0; index < chars.length; ++index) {
-      if (probPrevious[index] == 0) {
-        continue;
-      }
-
-      final double v = probCurrent[index] / probPrevious[index];
+      final double v = probCurrent[index] /
+          (probPrevious[index] == 0 ? previousMinProbability : probPrevious[index]);
       sum += (v * Math.log(v) / Math.log(2));
     }
     return sum;
+  }
+
+  private static double getNonZeroMin(final double[] values) {
+    double min = Double.MAX_VALUE;
+    for (double v : values) {
+      if (v > 0 && v < min) {
+        min = v;
+      }
+    }
+    return (min == Double.MAX_VALUE) ? 0.01 : min;
   }
 
   private static Multiset<Character> resample(final char[] chars, final Multiset<Character> set) {

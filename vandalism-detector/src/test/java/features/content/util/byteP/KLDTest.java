@@ -51,7 +51,7 @@ class KLDTest {
     @Test
     void KLDAddNonsense() {
       val divergence = KLD.calculateKLDOfAddedChars(basicString, addNonsenseString);
-      assertThat(divergence).isCloseTo(41.0, Offset.offset(1.0));
+      assertThat(divergence).isCloseTo(152.0, Offset.offset(1.0));
     }
 
     @Test
@@ -79,7 +79,7 @@ class KLDTest {
     @Test
     void KLDAddNonsense() {
       val divergence = KLD.calculateKLD(basicString, addNonsenseString);
-      assertThat(divergence).isCloseTo(27.0, Offset.offset(1.0));
+      assertThat(divergence).isCloseTo(74.0, Offset.offset(1.0));
     }
 
     @Test
