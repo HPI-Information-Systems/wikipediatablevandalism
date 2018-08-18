@@ -19,13 +19,16 @@ def save_model(tag_id, clf, train_scores, grid_search):
     model_path = os.path.join(MODEL_DIR, 'tag_%d.pkl' % tag_id)
     joblib.dump(clf, model_path)
 
+    ratio = params['ratio'] if type(params['ratio']) is str else params['ratio'].__name__
+
     # Dump meta data
     params = clf.get_params()
     meta = {
         'tag_id': tag_id,
         'git_hash': get_git_revision_hash(),
         'n_estimators': params['n_estimators'],
-        'ratio': params['ratio'],
+        'max_features': params['max_features'],
+        'ratio': ratio,
         'train_scores': {k: v.tolist() for k, v in train_scores.items()},
         'grid_search': {
             'params': grid_search.cv_results_['params'],
