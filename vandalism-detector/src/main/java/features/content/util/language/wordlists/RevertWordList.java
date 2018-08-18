@@ -14,7 +14,8 @@ public class RevertWordList {
       "rv",
       "rvv",
       "undo",
-      "undid"
+      "undid",
+      "rvrt"
   ));
 
   public static Set<String> getWords() {
