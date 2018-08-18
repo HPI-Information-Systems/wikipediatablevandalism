@@ -1,5 +1,6 @@
 package model;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.annotation.Nullable;
@@ -42,6 +43,10 @@ public class FeatureParameters {
   @Nullable
   public MyRevisionType getPreviousRevision() {
     return previousRevision;
+  }
+
+  public List<MyRevisionType> getPreviousRevisions() {
+    return new ArrayList<>(previousRevisions);
   }
 
   @Nullable
