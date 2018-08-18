@@ -4,6 +4,7 @@ import java.util.Collection;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import util.PageUtil;
+import wikixmlsplit.api.TablePredicate;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
