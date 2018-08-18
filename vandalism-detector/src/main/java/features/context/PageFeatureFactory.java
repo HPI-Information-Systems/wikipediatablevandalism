@@ -2,9 +2,14 @@ package features.context;
 
 import com.google.common.collect.Lists;
 import features.Feature;
-import features.context.util.ArticleTemperature;
+import features.context.impl.ArticleTemperature;
+import features.context.impl.AuthorDiversity;
+import features.context.impl.AuthorRank;
+import features.context.impl.RevisionProvider;
 import features.context.util.ContributorRevertedBeforeInThatArticle;
 import features.context.util.TimeSinceFirstRevisionBySameContributor;
+import java.time.Duration;
+import java.time.Period;
 import lombok.val;
 import util.BasicUtils;
 
@@ -127,6 +132,46 @@ class PageFeatureFactory {
 
   Feature articleTemperatureRatio() {
     return ArticleTemperature::getRatioHourToMonth;
+  }
+
+  Feature authorRank() {
+    return new AuthorRank(RevisionProvider.all());
+  }
+
+  Feature authorRankOfLast200Edits() {
+    return new AuthorRank(RevisionProvider.lastN(200));
+  }
+
+  Feature authorRankOfLastMonth() {
+    return new AuthorRank(RevisionProvider.maxAge(Period.ofDays(30)));
+  }
+
+  Feature authorRankOfLast200EditsOfOneMonth() {
+    return new AuthorRank(RevisionProvider.lastNWithMaxAge(200, Period.ofDays(30)));
+  }
+
+  Feature distinctAuthorCountOfLast5Edits() {
+    return new AuthorDiversity(RevisionProvider.lastN(5));
+  }
+
+  Feature distinctAuthorCountOfLast20Edits() {
+    return new AuthorDiversity(RevisionProvider.lastN(20));
+  }
+
+  Feature distinctAuthorCountOfLast80Edits() {
+    return new AuthorDiversity(RevisionProvider.lastN(80));
+  }
+
+  Feature distinctAuthorCountOfLastHour() {
+    return new AuthorDiversity(RevisionProvider.maxAge(Duration.ofHours(1)));
+  }
+
+  Feature distinctAuthorCountOfLastTwoHours() {
+    return new AuthorDiversity(RevisionProvider.maxAge(Duration.ofHours(2)));
+  }
+
+  Feature distinctAuthorCountOfLast24Hours() {
+    return new AuthorDiversity(RevisionProvider.maxAge(Duration.ofDays(1)));
   }
 
 }
