@@ -32,7 +32,7 @@ def save_model(tag_id, clf, train_scores, grid_search):
             'mean_test_recall': grid_search.cv_results_['mean_test_recall'].tolist(),
             'mean_test_precision': grid_search.cv_results_['mean_test_precision'].tolist(),
             'mean_test_f1': grid_search.cv_results_['mean_test_f1'].tolist(),
-            'mean_test_f1': grid_search.cv_results_['mean_test_f1_micro'].tolist(),
+            'mean_test_f1': grid_search.cv_results_['mean_test_f1_vandalism'].tolist(),
             'mean_test_roc_auc': grid_search.cv_results_['mean_test_roc_auc'].tolist()
         }
     }
