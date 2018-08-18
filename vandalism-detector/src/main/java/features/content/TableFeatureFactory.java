@@ -8,16 +8,16 @@ import features.content.util.table.SharedCellRatio;
 import features.content.util.table.SyntaxChecker;
 import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
-import features.content.util.typing.DataTypeDependentFeatureFactory;
+import features.content.util.typing.DataTypeInference;
+import features.content.util.typing.Outlier;
+import features.content.util.typing.ValueDistributionInformationGain;
+import features.content.util.typing.ValueDistributionUtil;
 import features.content.wikisyntax.AddedInvalidAttributes;
-import lombok.experimental.Delegate;
 import lombok.val;
 import util.BasicUtils;
+import wikixmlsplit.renderer.wikitable.WikiTable;
 
 class TableFeatureFactory {
-
-  @Delegate
-  private final DataTypeDependentFeatureFactory withTypes = new DataTypeDependentFeatureFactory();
 
   Feature currentRowCount() {
     return parameters -> {
@@ -195,5 +195,17 @@ class TableFeatureFactory {
       }
       return 0;
     };
+  }
+
+  public Feature hasNumericOutlierInColumns() {
+    return new Outlier(WikiTable::getColumns, new DataTypeInference());
+  }
+
+  public Feature hasNumericOutlierInRows() {
+    return new Outlier(WikiTable::getRows, new DataTypeInference());
+  }
+
+  public Feature dataTypeDistributionInformationGain() {
+    return new ValueDistributionInformationGain(new ValueDistributionUtil());
   }
 }

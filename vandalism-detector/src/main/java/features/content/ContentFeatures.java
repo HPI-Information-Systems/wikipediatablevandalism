@@ -1,7 +1,6 @@
 package features.content;
 
 import features.FeaturePack;
-import features.content.util.typing.DataTypeDependentFeatureFactory;
 import features.content.wikisyntax.TemplateUseFeatures;
 import lombok.val;
 
@@ -113,8 +112,7 @@ public class ContentFeatures {
 
         .feature("hasNumericOutlierInColumns", table.hasNumericOutlierInColumns())
         .feature("hasNumericOutlierInRows", table.hasNumericOutlierInRows())
-        .feature("tableDataTypeInformationGain",
-            new DataTypeDependentFeatureFactory().dataTypeDistributionInformationGain())
+        .feature("tableDataTypeInformationGain", table.dataTypeDistributionInformationGain())
 
         .build()
         .combineWith(TemplateUseFeatures.get().getFeatures());

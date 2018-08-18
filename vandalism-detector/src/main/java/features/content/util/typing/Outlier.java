@@ -23,7 +23,7 @@ import wikixmlsplit.renderer.wikitable.WikiTable;
 @RequiredArgsConstructor
 public class Outlier implements Feature {
 
-  interface RowProvider {
+  public interface RowProvider {
 
     List<Row> getValue(WikiTable table);
   }
