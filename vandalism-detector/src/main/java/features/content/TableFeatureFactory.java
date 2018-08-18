@@ -139,27 +139,15 @@ class TableFeatureFactory {
 
   Feature isTableModified() {
     return parameters -> {
-      for (val match : parameters.getResult().getMatches()) {
-        boolean identical = match.getPreviousTable().equals(match.getCurrentTable());
-        if (!identical) {
-          return 1;
-        }
+      if (parameters.getChangedTables().isEmpty()) {
+        return 0;
       }
-      return 0;
+      return 1;
     };
   }
 
   Feature modifiedTableCount() {
-    return parameters -> {
-      int modified = 0;
-      for (val match : parameters.getResult().getMatches()) {
-        boolean identical = match.getPreviousTable().equals(match.getCurrentTable());
-        if (!identical) {
-          ++modified;
-        }
-      }
-      return modified;
-    };
+    return parameters -> parameters.getChangedTables().size();
   }
 
   Feature isTableDeleted() {
@@ -172,16 +160,8 @@ class TableFeatureFactory {
 
   Feature areMultipleTablesChanged() {
     return parameters -> {
-      int modified = 0;
-      for (val match : parameters.getResult().getMatches()) {
-        val identical = match.getPreviousTable().equals(match.getCurrentTable());
-        if (!identical) {
-          ++modified;
-        }
-
-        if (modified == 2) {
-          return 1;
-        }
+      if (parameters.getChangedTables().size() >= 2) {
+        return 1;
       }
       return 0;
     };

@@ -52,8 +52,8 @@ public class TableGeometry implements Feature {
   public double getValue(final FeatureParameters parameters) {
     val results = parameters.getResult();
 
-    final List<Double> sizeChanges = new ArrayList<>(results.getMatches().size());
-    for (val result : results.getMatches()) {
+    final List<Double> sizeChanges = new ArrayList<>();
+    for (val result : parameters.getChangedTables()) {
       sizeChanges.add(getSizeChange(result));
     }
 

@@ -18,7 +18,7 @@ public class SharedCellRatio implements Feature {
   @Override
   public double getValue(final FeatureParameters parameters) {
     final List<Double> values = new ArrayList<>();
-    for (val match : parameters.getResult().getMatches()) {
+    for (val match : parameters.getChangedTables()) {
       values.add(processMatch(match));
     }
 

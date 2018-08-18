@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.xml.datatype.DatatypeConstants;
 import lombok.val;
 import matching.table.TableMatch;
@@ -35,6 +36,7 @@ public class BasicUtils {
     return contributor.getUsername() == null;
   }
 
+  @Nullable
   public static MyRevisionType getPreviousRevision(final List<MyRevisionType> previousRevisions) {
     if (previousRevisions == null || previousRevisions.size() == 0) {
       return null;
@@ -52,11 +54,41 @@ public class BasicUtils {
     return Objects.equals(revision1.getContributor().getId(), revision2.getContributor().getId());
   }
 
+  /**
+   * @return the current state of all tables which underwent modification in this edit
+   */
+  @Nonnull
+  public static List<WikiTable> getCurrentChangedTables(final FeatureParameters parameters) {
+    final List<WikiTable> changed = new ArrayList<>();
+    for (final TableMatch match : parameters.getChangedTables()) {
+      changed.add(match.getCurrentTable());
+    }
+    return changed;
+  }
+
+  /**
+   * @return the previous state of all tables which underwent modification in this edit
+   */
+  @Nonnull
+  public static List<WikiTable> getPreviousChangedTables(final FeatureParameters parameters) {
+    final List<WikiTable> changed = new ArrayList<>();
+    for (final TableMatch match : parameters.getChangedTables()) {
+      changed.add(match.getPreviousTable());
+    }
+    return changed;
+  }
+
+  /**
+   * @return all tables which are currently visible on the page, including edited and added tables
+   */
   @Nonnull
   public static List<WikiTable> getCurrentTables(final FeatureParameters parameters) {
     return getCurrentTables(parameters.getResult());
   }
 
+  /**
+   * @return all tables which are currently visible on the page, including edited and added tables
+   */
   @Nonnull
   public static List<WikiTable> getCurrentTables(final TableMatchResult result) {
     final List<WikiTable> tables = new ArrayList<>(result.getAddedTables());
@@ -66,11 +98,19 @@ public class BasicUtils {
     return tables;
   }
 
+  /**
+   * @return all tables of the previous revision, including prior states of edited tables and the
+   * ones that are now deleted
+   */
   @Nonnull
   public static List<WikiTable> getPreviousTables(final FeatureParameters parameters) {
     return getPreviousTables(parameters.getResult());
   }
 
+  /**
+   * @return all tables of the previous revision, including prior states of edited tables and the
+   * ones that are now deleted
+   */
   @Nonnull
   public static List<WikiTable> getPreviousTables(final TableMatchResult result) {
     final List<WikiTable> tables = new ArrayList<>(result.getRemovedTables());
@@ -80,6 +120,9 @@ public class BasicUtils {
     return tables;
   }
 
+  /**
+   * @return the minutes in between to revisions
+   */
   public static long getTimeDuration(final MyRevisionType currentRevision,
       final MyRevisionType previousRevision) {
     val currentRevisionTime = currentRevision.getDate().toInstant();

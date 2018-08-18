@@ -17,22 +17,22 @@ public class DiffUtil {
 
   public static Multiset<String> diffWords(final FeatureParameters parameters) {
     return diffWords(
-        BasicUtils.getPreviousTables(parameters),
-        BasicUtils.getCurrentTables(parameters)
+        BasicUtils.getPreviousChangedTables(parameters),
+        BasicUtils.getCurrentChangedTables(parameters)
     );
   }
 
   public static Multiset<String> diffTokens(final FeatureParameters parameters) {
     return diffTokens(
-        BasicUtils.getPreviousTables(parameters),
-        BasicUtils.getCurrentTables(parameters)
+        BasicUtils.getPreviousChangedTables(parameters),
+        BasicUtils.getCurrentChangedTables(parameters)
     );
   }
 
   public static Multiset<Cell> diffCells(final FeatureParameters parameters) {
     return diffCells(
-        BasicUtils.getPreviousTables(parameters),
-        BasicUtils.getCurrentTables(parameters)
+        BasicUtils.getPreviousChangedTables(parameters),
+        BasicUtils.getCurrentChangedTables(parameters)
     );
   }
 

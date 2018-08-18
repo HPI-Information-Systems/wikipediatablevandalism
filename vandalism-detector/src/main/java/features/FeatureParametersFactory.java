@@ -30,8 +30,9 @@ class FeatureParametersFactory {
   FeatureParameters create(final MyPageType page, final MyRevisionType revision,
       final Matching matching) {
 
-    val tableMatchResult = getTableMatching(page, revision, matching);
-    val selectedMatch = selectMatch(tableMatchResult);
+    final TableMatchResult tableMatchResult = getTableMatching(page, revision, matching);
+    final List<TableMatch> changedTables = changedTables(tableMatchResult);
+    final TableMatch selectedMatch = changedTables.isEmpty() ? null : changedTables.get(0);
     final List<MyRevisionType> previousRevisions = previousRevisions(page, revision);
     final String userComment = extractUserComment(revision.getComment());
 
@@ -50,6 +51,8 @@ class FeatureParametersFactory {
         .result(tableMatchResult)
         .relevantMatch(selectedMatch)
         .rowMatchResult(getRowMatching(selectedMatch))
+        .matchedTables(tableMatchResult.getMatches())
+        .changedTables(changedTables)
 
         // Comments
         .userComment(userComment)
@@ -75,20 +78,19 @@ class FeatureParametersFactory {
     return revisions;
   }
 
-  private TableMatch selectMatch(final TableMatchResult matches) {
-    if (matches.getMatches().isEmpty()) {
-      return null;
-    }
-
-    for (final TableMatch m : matches.getMatches()) {
-      if (!m.getPreviousTable().equals(m.getCurrentTable())) {
-        // TODO consider similarity < 1
-        return m;
+  private List<TableMatch> changedTables(final TableMatchResult result) {
+    final List<TableMatch> changed = new ArrayList<>();
+    for (final TableMatch match : result.getMatches()) {
+      // TODO consider similarity < 1
+      if (!match.getPreviousTable().equals(match.getCurrentTable())) {
+        changed.add(match);
       }
     }
 
-    log.warn("All matched tables identical");
-    return null;
+    if (changed.isEmpty()) {
+      log.warn("All matched tables identical");
+    }
+    return changed;
   }
 
   private TableMatchResult getTableMatching(final MyPageType page, final MyRevisionType revision,

@@ -59,7 +59,7 @@ public class OutlierToPreviousCellValue implements Feature {
   }
 
   private boolean hasCellOutlier(final FeatureParameters parameters) {
-    for (final TableMatch match : parameters.getResult().getMatches()) {
+    for (final TableMatch match : parameters.getChangedTables()) {
 
       if (match.getPreviousTable().equals(match.getCurrentTable())) {
         continue;

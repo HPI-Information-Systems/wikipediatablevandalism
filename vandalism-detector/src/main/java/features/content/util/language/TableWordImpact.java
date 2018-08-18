@@ -32,8 +32,8 @@ public class TableWordImpact implements Feature {
 
   @Override
   public double getValue(final FeatureParameters parameters) {
-    val words = wordsOf(BasicUtils.getCurrentTables(parameters));
-    val previousWords = wordsOf(BasicUtils.getPreviousTables(parameters));
+    val words = wordsOf(BasicUtils.getCurrentChangedTables(parameters));
+    val previousWords = wordsOf(BasicUtils.getPreviousChangedTables(parameters));
 
     val previousMatches = getMatches(previousWords, this.words, this.isMatching);
     val matches = getMatches(words, this.words, this.isMatching);

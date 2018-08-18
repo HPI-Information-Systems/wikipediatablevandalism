@@ -21,9 +21,22 @@ public class FeatureParameters {
   private MyRevisionType revision;
   private MyRevisionType previousRevision;
   private List<MyRevisionType> previousRevisions;
+
   private Matching matching;
   private TableMatchResult result;
+  /**
+   * One selected tabular edit for features which are meaningful only for one transposed table;
+   * might be null if the edit only adds or removes tables (or both).
+   */
   private TableMatch relevantMatch;
+  /**
+   * All matched tables, may include identical ones if they remained unchanged
+   */
+  private List<TableMatch> matchedTables;
+  /**
+   * Subset of matched tables, which actually underwent modification (excludes identical matches)
+   */
+  private List<TableMatch> changedTables;
   private RowMatchResult rowMatchResult;
 
   /**
