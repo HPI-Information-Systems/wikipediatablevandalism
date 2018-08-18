@@ -2,6 +2,12 @@ package util;
 
 public class RatioUtil {
 
+  @FunctionalInterface
+  public interface Method {
+
+    double apply(double previous, double current);
+  }
+
   /**
    * Compute the added ratio X: {@code prev * X = current}.
    *

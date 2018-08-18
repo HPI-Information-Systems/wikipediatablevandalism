@@ -52,12 +52,21 @@ public class ContextFeatures {
         .feature("authorRankOfLast200Edits", page.authorRankOfLast200Edits())
         .feature("authorRankOneMonth", page.authorRankOfLastMonth())
         .feature("authorRankOfLast200EditsOfOneMonth", page.authorRankOfLast200EditsOfOneMonth())
+
         .feature("distinctAuthorCountOfLast5Edits", page.distinctAuthorCountOfLast5Edits())
         .feature("distinctAuthorCountOfLast20Edits", page.distinctAuthorCountOfLast20Edits())
         .feature("distinctAuthorCountOfLast80Edits", page.distinctAuthorCountOfLast80Edits())
         .feature("distinctAuthorCountOfLastHour", page.distinctAuthorCountOfLastHour())
         .feature("distinctAuthorCountOfLastTwoHours", page.distinctAuthorCountOfLastTwoHours())
         .feature("distinctAuthorCountOfLast24Hours", page.distinctAuthorCountOfLast24Hours())
+
+        .feature("editActivityIncreaseOfTwoHours", page.editActivityIncreaseOfTwoHours())
+        .feature("editActivityIncreaseOfOneDay", page.editActivityIncreaseOfOneDay())
+        .feature("editActivityIncreaseOfOneWeek", page.editActivityIncreaseOfOneWeek())
+
+        .feature("editActivityDecreaseOfTwoHours", page.editActivityDecreaseOfTwoHours())
+        .feature("editActivityDecreaseOfOneDay", page.editActivityDecreaseOfOneDay())
+        .feature("editActivityDecreaseOfOneWeek", page.editActivityDecreaseOfOneWeek())
 
         .build();
   }

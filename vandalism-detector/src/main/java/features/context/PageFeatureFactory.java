@@ -5,6 +5,7 @@ import features.Feature;
 import features.context.impl.ArticleTemperature;
 import features.context.impl.AuthorDiversity;
 import features.context.impl.AuthorRank;
+import features.context.impl.EditActivity;
 import features.context.impl.RevisionProvider;
 import features.context.util.ContributorRevertedBeforeInThatArticle;
 import features.context.util.TimeSinceFirstRevisionBySameContributor;
@@ -174,4 +175,27 @@ class PageFeatureFactory {
     return new AuthorDiversity(RevisionProvider.maxAge(Duration.ofDays(1)));
   }
 
+  Feature editActivityIncreaseOfTwoHours() {
+    return EditActivity.increaseComparingDurationOf(Duration.ofHours(2));
+  }
+
+  Feature editActivityIncreaseOfOneDay() {
+    return EditActivity.increaseComparingDurationOf(Duration.ofDays(1));
+  }
+
+  Feature editActivityIncreaseOfOneWeek() {
+    return EditActivity.increaseComparingDurationOf(Duration.ofDays(7));
+  }
+
+  Feature editActivityDecreaseOfTwoHours() {
+    return EditActivity.decreaseComparingDurationOf(Duration.ofHours(2));
+  }
+
+  Feature editActivityDecreaseOfOneDay() {
+    return EditActivity.decreaseComparingDurationOf(Duration.ofDays(1));
+  }
+
+  Feature editActivityDecreaseOfOneWeek() {
+    return EditActivity.decreaseComparingDurationOf(Duration.ofDays(7));
+  }
 }
