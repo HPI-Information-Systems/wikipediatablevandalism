@@ -9,6 +9,7 @@ import lombok.Value;
 import matching.row.RowMatchResult;
 import matching.table.TableMatch;
 import matching.table.TableMatchResult;
+import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
@@ -20,6 +21,7 @@ public class FeatureParameters {
   private MyRevisionType revision;
   private MyRevisionType previousRevision;
   private List<MyRevisionType> previousRevisions;
+  private Matching matching;
   private TableMatchResult result;
   private TableMatch relevantMatch;
   private RowMatchResult rowMatchResult;

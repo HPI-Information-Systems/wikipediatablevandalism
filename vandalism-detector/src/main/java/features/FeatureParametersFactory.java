@@ -46,6 +46,7 @@ class FeatureParametersFactory {
         .previousRevisions(previousRevisions)
 
         // Matching
+        .matching(matching)
         .result(tableMatchResult)
         .relevantMatch(selectedMatch)
         .rowMatchResult(getRowMatching(selectedMatch))
