@@ -10,6 +10,7 @@ import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
 import features.content.util.typing.DataTypeInference;
 import features.content.util.typing.Outlier;
+import features.content.util.typing.OutlierToPreviousCellValue;
 import features.content.util.typing.ValueDistributionInformationGain;
 import features.content.util.typing.ValueDistributionUtil;
 import features.content.wikisyntax.AddedInvalidAttributes;
@@ -197,15 +198,19 @@ class TableFeatureFactory {
     };
   }
 
-  public Feature hasNumericOutlierInColumns() {
+  Feature hasNumericOutlierInColumns() {
     return new Outlier(WikiTable::getColumns, new DataTypeInference());
   }
 
-  public Feature hasNumericOutlierInRows() {
+  Feature hasNumericOutlierInRows() {
     return new Outlier(WikiTable::getRows, new DataTypeInference());
   }
 
-  public Feature dataTypeDistributionInformationGain() {
+  Feature dataTypeDistributionInformationGain() {
     return new ValueDistributionInformationGain(new ValueDistributionUtil());
+  }
+
+  Feature hasNumericOutlierInChangedCellValues() {
+    return new OutlierToPreviousCellValue();
   }
 }

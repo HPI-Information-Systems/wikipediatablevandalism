@@ -112,6 +112,8 @@ public class ContentFeatures {
 
         .feature("hasNumericOutlierInColumns", table.hasNumericOutlierInColumns())
         .feature("hasNumericOutlierInRows", table.hasNumericOutlierInRows())
+        .feature("hasNumericOutlierInChangedCellValues",
+            table.hasNumericOutlierInChangedCellValues())
         .feature("tableDataTypeInformationGain", table.dataTypeDistributionInformationGain())
 
         .build()
