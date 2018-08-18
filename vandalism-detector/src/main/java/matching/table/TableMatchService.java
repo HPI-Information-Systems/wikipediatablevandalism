@@ -30,13 +30,14 @@ public class TableMatchService {
 
     val clusters = matching.getEntries();
     val result = TableMatchResult.builder();
-    for (final List<Entry> cluster : clusters) {
+    for (int clusterIndex = 0; clusterIndex < clusters.size(); ++clusterIndex) {
+      final List<Entry> cluster = clusters.get(clusterIndex);
       if (skipCluster(revision, cluster)) {
         continue;
       }
 
       final ScanResult scanResult = scanner.scanEntries(cluster, revision);
-      addToResult(result, scanResult, revision, previousRevision);
+      addToResult(result, clusterIndex, scanResult, revision, previousRevision);
     }
 
     return result.build();
@@ -69,7 +70,9 @@ public class TableMatchService {
     return tables.get(entry.getPosition());
   }
 
-  private void addToResult(final TableMatchResultBuilder result, final ScanResult scanResult,
+  private void addToResult(final TableMatchResultBuilder result,
+      final int clusterIndex,
+      final ScanResult scanResult,
       final MyRevisionType revision, final MyRevisionType previousRevision) {
 
     switch (scanResult.getType()) {
@@ -82,7 +85,7 @@ public class TableMatchService {
         break;
 
       case ACTIVE:
-        result.match(toMatch(scanResult, revision, previousRevision));
+        result.match(toMatch(clusterIndex, scanResult, revision, previousRevision));
         break;
 
       case ABSENT:
@@ -95,7 +98,9 @@ public class TableMatchService {
     }
   }
 
-  private TableMatch toMatch(final ScanResult result, final MyRevisionType currentRevision,
+  private TableMatch toMatch(final int clusterIndex,
+      final ScanResult result,
+      final MyRevisionType currentRevision,
       final MyRevisionType previousRevision) {
 
     return TableMatch.builder()
@@ -103,6 +108,7 @@ public class TableMatchService {
         .currentTable(getTable(currentRevision, result.getCurrent()))
         .previousRevision(previousRevision.getId())
         .previousTable(getTable(previousRevision, result.getPrevious()))
+        .clusterIndex(clusterIndex)
         .build();
   }
 }
