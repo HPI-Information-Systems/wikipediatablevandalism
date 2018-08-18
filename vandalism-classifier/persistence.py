@@ -19,10 +19,9 @@ def save_model(tag_id, clf, train_scores, grid_search):
     model_path = os.path.join(MODEL_DIR, 'tag_%d.pkl' % tag_id)
     joblib.dump(clf, model_path)
 
-    ratio = params['ratio'] if type(params['ratio']) is str else params['ratio'].__name__
-
     # Dump meta data
     params = clf.get_params()
+    ratio = params['ratio'] if type(params['ratio']) is str else params['ratio'].__name__
     meta = {
         'tag_id': tag_id,
         'git_hash': get_git_revision_hash(),
