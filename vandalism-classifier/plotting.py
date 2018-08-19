@@ -44,14 +44,14 @@ def plot_precision_recall(y_true, y_predict_proba):
     average_precision = average_precision_score(y_true, y_predict_proba)
     pr_auc = auc(recall, precision)
 
-    plt.title('Precision-Recall: Average Precision=  %0.2f' % average_precision)
-    plt.step(recall, precision, color='b', where='post')
+    plt.title('Precision-Recall')
+    plt.step(recall, precision, color='b', where='post', label='AUC = %0.2f' % pr_auc)
     plt.xticks(np.arange(0, 1.1, 0.1))
     plt.yticks(np.arange(0, 1.1, 0.1))
     plt.ylabel('Precision')
     plt.xlabel('Recall')
+    plt.legend(loc='lower right')
     plt.show()
-    print('Precision / Recall AUC', pr_auc)
     
 def plot_roc(y_true, y_predict_proba):
     false_positive_rate, true_positive_rate, thresholds = roc_curve(y_true, y_predict_proba)
@@ -143,7 +143,7 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
     plt.ylim([0.0, 1.05])
     plt.xlabel('Recall')
     plt.ylabel('Precision')
-    plt.title('Precision-Recall for each label')
+    plt.title('Precision-Recall')
     plt.legend(lines, labels, loc=(0, -.38), prop=dict(size=14), bbox_to_anchor=(1.1, 0.4))
     plt.show()
 
@@ -200,6 +200,6 @@ def plot_multilabel_roc(Y_true, Y_predict_proba, tag_names):
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver operating characteristic per tag')
+    plt.title('Receiver Operating Characteristic')
     plt.legend(bbox_to_anchor=(1.1, 1))
     plt.show()
