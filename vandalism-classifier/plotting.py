@@ -90,3 +90,77 @@ def plot_information_gain(X, y):
     plt.xticks(x_pos, feature_labels, rotation='vertical')
     plt.ylabel('Information Gain')
     plt.show()
+
+
+def plot_multilabel_confusion_matrix(Y_true, Y_predict, tag_names):
+    cfn_matrix = confusion_matrix(Y_true.argmax(axis=1), Y_predict.argmax(axis=1))
+    
+    fig = plt.figure(figsize=(15,5))
+    ax = fig.add_subplot(1,2,1)
+    sns.heatmap(cfn_matrix, annot=True, fmt="d", linewidths=0.5, ax=ax,
+                xticklabels=tag_names,
+                yticklabels=tag_names)
+    plt.title('Confusion Matrix')
+    plt.ylabel('Real Classes')
+    plt.xlabel('Predicted Classes')
+    
+    normalized_cfn_matrix = cm = cfn_matrix.astype('float') / cfn_matrix.sum(axis=1)[:, np.newaxis]
+    ax = fig.add_subplot(1,2,2)
+    sns.heatmap(normalized_cfn_matrix, linewidths=0.5, annot=True, ax=ax,
+                xticklabels=tag_names,
+                yticklabels=tag_names)
+    plt.title('Normalized Confusion Matrix')
+    plt.ylabel('Real Classes')
+    plt.xlabel('Predicted Classes')
+    plt.show()
+
+
+def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
+    precision = dict()
+    recall = dict()
+    average_precision = dict()
+
+    for i in range(0, len(Y_true[0])):
+        precision[i], recall[i], _ = precision_recall_curve(Y_true[:, i], Y_predict_proba[:, i])
+        average_precision[i] = average_precision_score(Y_true[:, i], Y_predict_proba[:, i])
+
+    precision["micro"], recall["micro"], _ = precision_recall_curve(Y_true.ravel(),
+                                                                    Y_true.ravel())
+    average_precision["micro"] = average_precision_score(Y_true, Y_predict_proba,
+                                                        average="micro")
+
+    print('Average precision score, micro-averaged over all classes: {0:0.2f}'
+        .format(average_precision["micro"]))
+
+    plt.figure(figsize=(7, 8))
+    f_scores = np.linspace(0.2, 0.8, num=4)
+    lines = []
+    labels = []
+    for f_score in f_scores:
+        x = np.linspace(0.01, 1)
+        y = f_score * x / (2 * x - f_score)
+        l, = plt.plot(x[y >= 0], y[y >= 0], color='gray', alpha=0.2)
+        plt.annotate('f1={0:0.1f}'.format(f_score), xy=(0.9, y[45] + 0.02))
+
+    lines.append(l)
+    labels.append('iso-f1 curves')
+    l, = plt.plot(recall["micro"], precision["micro"], color='gold', lw=2)
+    lines.append(l)
+    labels.append('micro-average Precision-recall (area = {0:0.2f})'
+                ''.format(average_precision["micro"]))
+
+    for i in range(len(tag_names)):
+        l, = plt.plot(recall[i], precision[i], lw=2)
+        lines.append(l)
+        labels.append('Precision-recall for {0} (area = {1:0.2f})'
+                    ''.format(tag_names[i], average_precision[i]))
+
+    fig = plt.gcf()
+    fig.subplots_adjust(bottom=0.25)
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('Recall')
+    plt.ylabel('Precision')
+    plt.title('Precision-Recall for each label')
+    plt.legend(lines, labels, loc=(0, -.38), prop=dict(size=14), bbox_to_anchor=(1.1, 0.4))
+    plt.show()

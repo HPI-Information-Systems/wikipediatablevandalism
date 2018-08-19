@@ -1,4 +1,5 @@
 from sklearn.base import BaseEstimator, TransformerMixin
+import numpy as np
 
 class VandalismEncoder(BaseEstimator, TransformerMixin):
     def __init__(self, tag_ids):
@@ -46,3 +47,26 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
     
     def fit_transform(self, X, y=None):
         return self.transform(X)
+
+
+class TagGrouper(BaseEstimator, TransformerMixin):
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X['all_tags'] = X.groupby(['revision_id'])['tag_id'].apply(list)
+        X = X.drop(['tag_id'], axis=1)
+        return X
+
+    def fit_transform(self, X, y):
+        return self.transform(X)
+
+
+def flatten_multilabel_predict_proba(y_score):
+    result = []
+    for i in range(len(y_score[0])):
+        row = []
+        for l in range(len(y_score)):
+            row.append(y_score[l][i][1]) 
+        result.append(row)
+    return np.array(result)

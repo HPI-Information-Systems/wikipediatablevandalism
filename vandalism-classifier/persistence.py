@@ -21,7 +21,7 @@ def save_model(tag_id, clf, train_scores, grid_search):
 
     # Dump meta data
     params = clf.get_params()
-    ratio = params['ratio'] if type(params['ratio']) is str else params['ratio'].__name__
+    ratio = params['ratio'] if type(params['ratio']) is str else str(params['ratio'].__name__)
     meta = {
         'tag_id': tag_id,
         'git_hash': get_git_revision_hash(),
@@ -43,7 +43,6 @@ def save_model(tag_id, clf, train_scores, grid_search):
     with open(meta_path, 'w') as f:
         json.dump(meta, f)
 
-MODEL_DIR = 'models'
 
 def load_meta(file_name):
     path = os.path.join(MODEL_DIR, file_name + '.meta')
