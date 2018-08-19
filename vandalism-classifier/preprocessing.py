@@ -56,6 +56,7 @@ class TagGrouper(BaseEstimator, TransformerMixin):
     def transform(self, X):
         X['all_tags'] = X.groupby(['revision_id'])['tag_id'].apply(list)
         X = X.drop(['tag_id'], axis=1)
+        X = X.drop_duplicates()
         return X
 
     def fit_transform(self, X, y):

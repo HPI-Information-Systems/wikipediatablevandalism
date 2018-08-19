@@ -3,6 +3,7 @@ import seaborn as sns
 import numpy as np
 from sklearn.metrics import classification_report, confusion_matrix, precision_recall_curve, average_precision_score, auc, roc_curve
 from sklearn.feature_selection import mutual_info_classif
+from scipy import interp
 
 def plot_confusion_matrix(y_true, y_pred):
     vandalism_count = y_true.value_counts()[True]
@@ -114,6 +115,9 @@ def plot_multilabel_confusion_matrix(Y_true, Y_predict, tag_names):
     plt.xlabel('Predicted Classes')
     plt.show()
 
+    print('Classification Report')
+    print(classification_report(Y_true, Y_predict, target_names=tag_names))
+
 
 def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
     precision = dict()
@@ -163,4 +167,61 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
     plt.ylabel('Precision')
     plt.title('Precision-Recall for each label')
     plt.legend(lines, labels, loc=(0, -.38), prop=dict(size=14), bbox_to_anchor=(1.1, 0.4))
+    plt.show()
+
+
+def plot_multilabel_roc(Y_true, Y_predict_proba, tag_names):
+    n_classes = Y_true.shape[1]
+    # Compute ROC curve and ROC area for each class
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(n_classes):
+        fpr[i], tpr[i], _ = roc_curve(Y_true[:, i], Y_predict_proba[:, i])
+        roc_auc[i] = auc(fpr[i], tpr[i])
+
+    # Compute micro-average ROC curve and ROC area
+    fpr["micro"], tpr["micro"], _ = roc_curve(Y_true.ravel(), Y_predict_proba.ravel())
+    roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
+
+    # Compute macro-average ROC curve and ROC area
+    # First aggregate all false positive rates
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(n_classes)]))
+
+    # Then interpolate all ROC curves at this points
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(n_classes):
+        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+
+    # Finally average it and compute AUC
+    mean_tpr /= n_classes
+
+    fpr["macro"] = all_fpr
+    tpr["macro"] = mean_tpr
+    roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+
+    # Plot all ROC curves
+    plt.figure()
+    plt.plot(fpr["micro"], tpr["micro"],
+            label='micro-average ROC curve (area = {0:0.2f})'
+                ''.format(roc_auc["micro"]),
+            color='deeppink', linestyle=':', linewidth=4)
+
+    plt.plot(fpr["macro"], tpr["macro"],
+            label='macro-average ROC curve (area = {0:0.2f})'
+                ''.format(roc_auc["macro"]),
+            color='navy', linestyle=':', linewidth=4)
+
+    for i in range(n_classes):
+        plt.plot(fpr[i], tpr[i],
+                label='ROC curve of class {0} (area = {1:0.2f})'
+                ''.format(tag_names[i], roc_auc[i]))
+
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
+    plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.title('Receiver operating characteristic per tag')
+    plt.legend(bbox_to_anchor=(1.1, 1))
     plt.show()
