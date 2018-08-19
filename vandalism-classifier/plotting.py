@@ -93,29 +93,7 @@ def plot_information_gain(X, y):
     plt.show()
 
 
-def plot_multilabel_confusion_matrix(Y_true, Y_predict, tag_names):
-    cfn_matrix = confusion_matrix(Y_true.argmax(axis=1), Y_predict.argmax(axis=1))
-    
-    fig = plt.figure(figsize=(15,5))
-    ax = fig.add_subplot(1,2,1)
-    sns.heatmap(cfn_matrix, annot=True, fmt="d", linewidths=0.5, ax=ax,
-                xticklabels=tag_names,
-                yticklabels=tag_names)
-    plt.title('Confusion Matrix')
-    plt.ylabel('Real Classes')
-    plt.xlabel('Predicted Classes')
-    
-    normalized_cfn_matrix = cm = cfn_matrix.astype('float') / cfn_matrix.sum(axis=1)[:, np.newaxis]
-    ax = fig.add_subplot(1,2,2)
-    sns.heatmap(normalized_cfn_matrix, linewidths=0.5, annot=True, ax=ax,
-                xticklabels=tag_names,
-                yticklabels=tag_names)
-    plt.title('Normalized Confusion Matrix')
-    plt.ylabel('Real Classes')
-    plt.xlabel('Predicted Classes')
-    plt.show()
-
-    print('Classification Report')
+def plot_multilabel_classification_report(Y_true, Y_predict, tag_names):
     print(classification_report(Y_true, Y_predict, target_names=tag_names))
 
 
