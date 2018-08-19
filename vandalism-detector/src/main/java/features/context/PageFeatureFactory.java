@@ -56,6 +56,25 @@ class PageFeatureFactory {
     };
   }
 
+  Feature prevRevertCount() { // wie oft gab es die vorherige revision schonmal, > 1 means is revert
+    return parameters -> {
+      val previousRevisions = parameters.getPreviousRevisions();
+      if (previousRevisions.size() == 0) {
+        return 0;
+      }
+
+      int prevRevertCount = 0;
+      val previousRevision0 = previousRevisions.get(0);
+      previousRevisions.remove(0);
+      for (val previousRevision : previousRevisions) {
+        if (previousRevision0.getSha1().equals(previousRevision.getSha1())) {
+          ++prevRevertCount;
+        }
+      }
+      return prevRevertCount;
+    };
+  }
+
   Feature ratioOffAllEditsToContributorEdits() {
     return parameters -> {
       val previousRevisions = parameters.getPreviousRevisions();
