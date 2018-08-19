@@ -49,32 +49,32 @@ def save_model(tag_id, clf, train_scores, grid_search):
         json.dump(meta, f)
 
 
-def load_meta(file_name):
-    path = os.path.join(MODEL_DIR, file_name + '.meta')
+def load_meta(file_name, model_dir=MODEL_DIR):
+    path = os.path.join(model_dir, file_name + '.meta')
     with open(path, 'r') as f:
         return json.load(f)
 
-def load_clf(file_name):
-    path = os.path.join(MODEL_DIR, file_name + '.pkl')
+def load_clf(file_name, model_dir=MODEL_DIR):
+    path = os.path.join(model_dir, file_name + '.pkl')
     return joblib.load(path)
 
 def clfs_are_same_version(clfs):
     hashes = [clf['meta']['git_hash'] for tag_id, clf in clfs.items()]
     return len(set(hashes)) <= 1
 
-def load_all_classifiers():
+def load_all_classifiers(model_dir=MODEL_DIR):
     classifiers = {}
     
     files = []
-    for f in os.listdir(MODEL_DIR):
+    for f in os.listdir(model_dir):
         if f.endswith(".pkl"):
             files.append(f)
 
     for file in sorted(files):
         filename = os.path.splitext(file)[0]
         print('Loading model', filename)
-        meta = load_meta(filename)
-        clf = load_clf(filename)
+        meta = load_meta(filename, model_dir)
+        clf = load_clf(filename, model_dir)
         tag_id = meta['tag_id']
         classifiers[tag_id] = {
             'clf': clf,

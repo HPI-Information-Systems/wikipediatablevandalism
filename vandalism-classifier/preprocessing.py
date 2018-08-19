@@ -40,8 +40,9 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         if self.columns != None:
-            # Do not remove 'is_vandalism'
-            self.columns.append('is_vandalism')
+            if 'is_vandalism' not in self.columns:
+                # Do not remove 'is_vandalism'
+                self.columns.append('is_vandalism')
             X = X[self.columns]
         return X
     
