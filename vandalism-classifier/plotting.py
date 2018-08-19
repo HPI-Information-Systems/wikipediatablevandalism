@@ -106,15 +106,7 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
         precision[i], recall[i], _ = precision_recall_curve(Y_true[:, i], Y_predict_proba[:, i])
         average_precision[i] = average_precision_score(Y_true[:, i], Y_predict_proba[:, i])
 
-    precision["micro"], recall["micro"], _ = precision_recall_curve(Y_true.ravel(),
-                                                                    Y_true.ravel())
-    average_precision["micro"] = average_precision_score(Y_true, Y_predict_proba,
-                                                        average="micro")
-
-    print('Average precision score, micro-averaged over all classes: {0:0.2f}'
-        .format(average_precision["micro"]))
-
-    plt.figure(figsize=(7, 8))
+    plt.figure(figsize=(8, 8))
     f_scores = np.linspace(0.2, 0.8, num=4)
     lines = []
     labels = []
@@ -126,15 +118,11 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
 
     lines.append(l)
     labels.append('iso-f1 curves')
-    l, = plt.plot(recall["micro"], precision["micro"], color='gold', lw=2)
-    lines.append(l)
-    labels.append('micro-average Precision-recall (area = {0:0.2f})'
-                ''.format(average_precision["micro"]))
 
     for i in range(len(tag_names)):
         l, = plt.plot(recall[i], precision[i], lw=2)
         lines.append(l)
-        labels.append('Precision-recall for {0} (area = {1:0.2f})'
+        labels.append('{0} (AUC = {1:0.2f})'
                     ''.format(tag_names[i], average_precision[i]))
 
     fig = plt.gcf()
@@ -144,7 +132,7 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
     plt.xlabel('Recall')
     plt.ylabel('Precision')
     plt.title('Precision-Recall')
-    plt.legend(lines, labels, loc=(0, -.38), prop=dict(size=14), bbox_to_anchor=(1.1, 0.4))
+    plt.legend(lines, labels, loc=(0, -.38), bbox_to_anchor=(1.1, 0.4))
     plt.show()
 
 
@@ -179,7 +167,7 @@ def plot_multilabel_roc(Y_true, Y_predict_proba, tag_names):
     roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
 
     # Plot all ROC curves
-    plt.figure()
+    plt.figure(figsize=(8, 8))
     plt.plot(fpr["micro"], tpr["micro"],
             label='micro-average ROC curve (area = {0:0.2f})'
                 ''.format(roc_auc["micro"]),
@@ -192,7 +180,7 @@ def plot_multilabel_roc(Y_true, Y_predict_proba, tag_names):
 
     for i in range(n_classes):
         plt.plot(fpr[i], tpr[i],
-                label='ROC curve of class {0} (area = {1:0.2f})'
+                label='{0} (AUC = {1:0.2f})'
                 ''.format(tag_names[i], roc_auc[i]))
 
     plt.plot([0, 1], [0, 1], 'k--')
