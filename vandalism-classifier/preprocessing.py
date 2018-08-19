@@ -50,6 +50,25 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
         return self.transform(X)
 
 
+class MultilabelFeatureSelector(BaseEstimator, TransformerMixin):        
+    def __init__(self, columns=None):
+        self.columns = columns
+        
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        if self.columns != None:
+            if 'tag_id' not in self.columns:
+                # Do not remove 'is_vandalism'
+                self.columns.append('tag_id')
+            X = X[self.columns]
+        return X
+    
+    def fit_transform(self, X, y=None):
+        return self.transform(X)
+
+
 class TagGrouper(BaseEstimator, TransformerMixin):
     def fit(self, X, y=None):
         return self
