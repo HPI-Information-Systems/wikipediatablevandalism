@@ -21,7 +21,12 @@ def save_model(tag_id, clf, train_scores, grid_search):
 
     # Dump meta data
     params = clf.get_params()
+    # Convert custom estimator function refs to string
     ratio = params['ratio'] if type(params['ratio']) is str else str(params['ratio'].__name__)
+    for i in range(len(grid_search.cv_results_['params'])):
+        r = grid_search.cv_results_['params'][i]['ratio']
+        grid_search.cv_results_['params'][i]['ratio'] = r if type(r) is str else str(r.__name__)
+
     meta = {
         'tag_id': tag_id,
         'git_hash': get_git_revision_hash(),
@@ -38,7 +43,7 @@ def save_model(tag_id, clf, train_scores, grid_search):
             'mean_test_roc_auc': grid_search.cv_results_['mean_test_roc_auc'].tolist()
         }
     }
-
+    
     meta_path = os.path.join(MODEL_DIR, 'tag_%d.meta' % tag_id)
     with open(meta_path, 'w') as f:
         json.dump(meta, f)
