@@ -79,6 +79,7 @@ def plot_feature_importance(clf, feature_labels):
     plt.xticks(x_pos, feature_labels, rotation='vertical')
     plt.ylabel('Feature Importance')
     plt.show()
+    return feature_importance
 
 
 def plot_information_gain(X, y):
@@ -91,6 +92,7 @@ def plot_information_gain(X, y):
     plt.xticks(x_pos, feature_labels, rotation='vertical')
     plt.ylabel('Information Gain')
     plt.show()
+    return information_gain
 
 
 def plot_multilabel_classification_report(Y_true, Y_predict, tag_names):
