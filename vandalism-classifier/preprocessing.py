@@ -1,4 +1,5 @@
 from sklearn.base import BaseEstimator, TransformerMixin
+import numpy as np
 
 class VandalismEncoder(BaseEstimator, TransformerMixin):
     def __init__(self, tag_ids):
@@ -39,10 +40,54 @@ class FeatureSelector(BaseEstimator, TransformerMixin):
 
     def transform(self, X):
         if self.columns != None:
-            # Do not remove 'is_vandalism'
-            self.columns.append('is_vandalism')
+            if 'is_vandalism' not in self.columns:
+                # Do not remove 'is_vandalism'
+                self.columns.append('is_vandalism')
             X = X[self.columns]
         return X
     
     def fit_transform(self, X, y=None):
         return self.transform(X)
+
+
+class MultilabelFeatureSelector(BaseEstimator, TransformerMixin):        
+    def __init__(self, columns=None):
+        self.columns = columns
+        
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        if self.columns != None:
+            if 'tag_id' not in self.columns:
+                # Do not remove 'is_vandalism'
+                self.columns.append('tag_id')
+            X = X[self.columns]
+        return X
+    
+    def fit_transform(self, X, y=None):
+        return self.transform(X)
+
+
+class TagGrouper(BaseEstimator, TransformerMixin):
+    def fit(self, X, y=None):
+        return self
+
+    def transform(self, X):
+        X['all_tags'] = X.groupby(['revision_id'])['tag_id'].apply(list)
+        X = X.drop(['tag_id'], axis=1)
+        X = X.groupby(['revision_id']).first()
+        return X
+
+    def fit_transform(self, X, y):
+        return self.transform(X)
+
+
+def flatten_multilabel_predict_proba(y_score):
+    result = []
+    for i in range(len(y_score[0])):
+        row = []
+        for l in range(len(y_score)):
+            row.append(y_score[l][i][1]) 
+        result.append(row)
+    return np.array(result)

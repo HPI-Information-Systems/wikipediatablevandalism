@@ -21,53 +21,60 @@ def save_model(tag_id, clf, train_scores, grid_search):
 
     # Dump meta data
     params = clf.get_params()
+    # Convert custom estimator function refs to string
+    ratio = params['ratio'] if type(params['ratio']) is str else str(params['ratio'].__name__)
+    for i in range(len(grid_search.cv_results_['params'])):
+        r = grid_search.cv_results_['params'][i]['ratio']
+        grid_search.cv_results_['params'][i]['ratio'] = r if type(r) is str else str(r.__name__)
+
     meta = {
         'tag_id': tag_id,
         'git_hash': get_git_revision_hash(),
-        'class_weight': params['class_weight'],
         'n_estimators': params['n_estimators'],
+        'max_features': params['max_features'],
+        'ratio': ratio,
         'train_scores': {k: v.tolist() for k, v in train_scores.items()},
         'grid_search': {
             'params': grid_search.cv_results_['params'],
             'mean_test_recall': grid_search.cv_results_['mean_test_recall'].tolist(),
             'mean_test_precision': grid_search.cv_results_['mean_test_precision'].tolist(),
             'mean_test_f1': grid_search.cv_results_['mean_test_f1'].tolist(),
+            'mean_test_f1': grid_search.cv_results_['mean_test_f1_vandalism'].tolist(),
             'mean_test_roc_auc': grid_search.cv_results_['mean_test_roc_auc'].tolist()
         }
     }
-
+    
     meta_path = os.path.join(MODEL_DIR, 'tag_%d.meta' % tag_id)
     with open(meta_path, 'w') as f:
         json.dump(meta, f)
 
-MODEL_DIR = 'models'
 
-def load_meta(file_name):
-    path = os.path.join(MODEL_DIR, file_name + '.meta')
+def load_meta(file_name, model_dir=MODEL_DIR):
+    path = os.path.join(model_dir, file_name + '.meta')
     with open(path, 'r') as f:
         return json.load(f)
 
-def load_clf(file_name):
-    path = os.path.join(MODEL_DIR, file_name + '.pkl')
+def load_clf(file_name, model_dir=MODEL_DIR):
+    path = os.path.join(model_dir, file_name + '.pkl')
     return joblib.load(path)
 
 def clfs_are_same_version(clfs):
     hashes = [clf['meta']['git_hash'] for tag_id, clf in clfs.items()]
     return len(set(hashes)) <= 1
 
-def load_all_classifiers():
+def load_all_classifiers(model_dir=MODEL_DIR):
     classifiers = {}
     
     files = []
-    for f in os.listdir(MODEL_DIR):
+    for f in os.listdir(model_dir):
         if f.endswith(".pkl"):
             files.append(f)
 
     for file in sorted(files):
         filename = os.path.splitext(file)[0]
         print('Loading model', filename)
-        meta = load_meta(filename)
-        clf = load_clf(filename)
+        meta = load_meta(filename, model_dir)
+        clf = load_clf(filename, model_dir)
         tag_id = meta['tag_id']
         classifiers[tag_id] = {
             'clf': clf,
