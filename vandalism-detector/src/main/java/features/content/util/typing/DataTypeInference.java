@@ -13,7 +13,7 @@ import javax.annotation.Nullable;
 import lombok.Data;
 import lombok.val;
 
-class DataTypeInference {
+public class DataTypeInference {
 
   enum CellDataType {
     Number,

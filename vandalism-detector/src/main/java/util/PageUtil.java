@@ -5,7 +5,6 @@ import static java.util.stream.Collectors.toList;
 import com.google.common.base.Preconditions;
 import java.math.BigInteger;
 import java.util.Collections;
-import java.util.function.Supplier;
 import javax.annotation.Nullable;
 import lombok.val;
 import wikixmlsplit.datastructures.MyPageType;
@@ -48,9 +47,9 @@ public class PageUtil {
     return Collections.binarySearch(revisionIds, revisionId);
   }
 
-  private static Supplier<String> revisionNotFound(final MyPageType page,
+  private static String revisionNotFound(final MyPageType page,
       final BigInteger revisionId) {
-    return () -> String.format("Revision %s not found in page '%s' (%s)",
+    return String.format("Revision %s not found in page '%s' (%s)",
         revisionId, page.getTitle(), page.getId());
   }
 

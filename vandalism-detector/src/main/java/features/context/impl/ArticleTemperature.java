@@ -1,9 +1,13 @@
-package features.context.util;
+package features.context.impl;
 
 import lombok.val;
 import model.FeatureParameters;
 import util.BasicUtils;
 
+/**
+ * Model article popularity: a rate of edits per hour within a given frame, for instance: 5 edits
+ * per hour per week.
+ */
 public class ArticleTemperature {
 
   //everything in minutes
@@ -21,7 +25,8 @@ public class ArticleTemperature {
     if (previousRevisions.size() == 0) {
       return 0;
     }
-    val maxDuration = BasicUtils.getTimeDuration(parameters.getRevision(), previousRevisions.get(previousRevisions.size()-1)); // return minutes
+    val maxDuration = BasicUtils.getTimeDuration(parameters.getRevision(),
+        previousRevisions.get(previousRevisions.size() - 1)); // return minutes
     if (maxDuration == 0) {
       return 0;
     }
@@ -56,16 +61,16 @@ public class ArticleTemperature {
    * the amount of edits per hour in distinct duration
    */
   private static double get(FeatureParameters parameters, double maxDuration) {
-      int editCount = 0;
-      val previousRevisions = parameters.getPreviousRevisions();
-      for (val previousRevision : previousRevisions) {
-        val duration = BasicUtils.getTimeDuration(parameters.getRevision(), previousRevision);
-        if (duration > maxDuration) {
-          break;
-        }
-        ++editCount;
+    int editCount = 0;
+    val previousRevisions = parameters.getPreviousRevisions();
+    for (val previousRevision : previousRevisions) {
+      val duration = BasicUtils.getTimeDuration(parameters.getRevision(), previousRevision);
+      if (duration > maxDuration) {
+        break;
       }
-      return editCount / (maxDuration / editsPer);
+      ++editCount;
+    }
+    return editCount / (maxDuration / editsPer);
   }
 
 }

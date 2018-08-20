@@ -7,11 +7,14 @@ public class PronounWordList {
 
   // Personal pronouns (1. & 2. person)
   // Downloaded from https://en.oxforddictionaries.com/grammar/pronouns
-  private static final String FILENAME = "personal-pronouns.txt";
+  private static Set<String> ALL = WordListUtil.read("personal-pronouns.txt");
+  private static Set<String> SINGULAR = WordListUtil.read("personal-pronouns-singular.txt");
 
-  private static Set<String> words = WordListUtil.readStemms(FILENAME);
+  public static Set<String> getAll() {
+    return ALL;
+  }
 
-  public static Set<String> getWords() {
-    return words;
+  public static Set<String> getSingular() {
+    return SINGULAR;
   }
 }

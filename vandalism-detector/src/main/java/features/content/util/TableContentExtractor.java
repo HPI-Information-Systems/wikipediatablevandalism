@@ -4,11 +4,7 @@ import java.util.List;
 import java.util.Set;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import model.FeatureParameters;
 import util.AttributeUtil;
-import util.BasicUtils;
-import util.CommentPreprocessor;
-import wikixmlsplit.datastructures.MyRevisionType;
 import wikixmlsplit.renderer.wikitable.Attribute;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
@@ -19,17 +15,19 @@ public class TableContentExtractor {
 
   private static final String SEP = " ";
 
+  /**
+   * All text features should be able to capture all user-generated content within the current
+   * revision. For instance character ratios: they operate on textual additions. Replicating all
+   * character ratios once for content and once for comment is probably not meaningful.
+   */
   @Nonnull
-  public static String getContent(final FeatureParameters parameters) {
-    return extractToString(parameters.getUserComment(), BasicUtils.getCurrentTables(parameters));
+  public static String getContentWithComment(final String comment, final List<WikiTable> tables) {
+    return extractToString(comment, tables);
   }
 
   @Nonnull
-  public static String getPreviousContent(final FeatureParameters parameters) {
-    final MyRevisionType revision = parameters.getPreviousRevision();
-    final String comment = revision == null ?
-        null : CommentPreprocessor.extractUserComment(revision.getComment());
-    return extractToString(comment, BasicUtils.getPreviousTables(parameters));
+  public static String getContent(final List<WikiTable> tables) {
+    return extractToString(null, tables);
   }
 
   private static String extractToString(@Nullable final String comment,

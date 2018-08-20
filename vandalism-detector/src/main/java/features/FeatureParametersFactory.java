@@ -2,7 +2,9 @@ package features;
 
 import static util.PageUtil.getRevisionIndex;
 
-import com.google.common.collect.Lists;
+import features.content.util.TableContentExtractor;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import javax.annotation.Nullable;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +22,7 @@ import util.PageUtil;
 import wikixmlsplit.api.Matching;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
+import wikixmlsplit.renderer.wikitable.WikiTable;
 
 @Slf4j
 class FeatureParametersFactory {
@@ -27,20 +30,39 @@ class FeatureParametersFactory {
   FeatureParameters create(final MyPageType page, final MyRevisionType revision,
       final Matching matching) {
 
-    val tableMatchResult = getTableMatching(page, revision, matching);
-    val selectedMatch = selectMatch(tableMatchResult);
+    final TableMatchResult tableMatchResult = getTableMatching(page, revision, matching);
+    final List<TableMatch> changedTables = changedTables(tableMatchResult);
+    final TableMatch selectedMatch = changedTables.isEmpty() ? null : changedTables.get(0);
     final List<MyRevisionType> previousRevisions = previousRevisions(page, revision);
+    final String userComment = extractUserComment(revision.getComment());
+
+    final List<WikiTable> currentTables = BasicUtils.getCurrentTables(tableMatchResult);
+    final List<WikiTable> previousTables = BasicUtils.getPreviousTables(tableMatchResult);
 
     return FeatureParameters.builder()
+        // Meta
         .page(page)
         .revision(revision)
         .previousRevision(BasicUtils.getPreviousRevision(previousRevisions))
         .previousRevisions(previousRevisions)
+
+        // Matching
+        .matching(matching)
         .result(tableMatchResult)
         .relevantMatch(selectedMatch)
         .rowMatchResult(getRowMatching(selectedMatch))
-        .userComment(extractUserComment(revision.getComment()))
+        .matchedTables(tableMatchResult.getMatches())
+        .changedTables(changedTables)
+
+        // Comments
+        .userComment(userComment)
         .rawComment(absentCommentToEmptyString(revision.getComment()))
+
+        // Content
+        .contentWithComment(TableContentExtractor.getContentWithComment(userComment, currentTables))
+        .content(TableContentExtractor.getContent(currentTables))
+        .previousContent(TableContentExtractor.getContent(previousTables))
+
         .build();
   }
 
@@ -48,25 +70,27 @@ class FeatureParametersFactory {
       final MyRevisionType revision) {
 
     val revisionIndex = getRevisionIndex(page, revision);
-    val n = revisionIndex; // TODO currently all previousRevisions
-    return Lists.reverse(page.getRevisions().subList(revisionIndex - n,
-        revisionIndex)); // reverse list -> index = 0 is the previous revision, index = 1 is the one before, etc.;
+    final List<MyRevisionType> revisions = new ArrayList<>(
+        page.getRevisions().subList(0, revisionIndex));
+
+    // reverse list -> index = 0 is the previous revision, index = 1 is the one before, etc.
+    Collections.reverse(revisions);
+    return revisions;
   }
 
-  private TableMatch selectMatch(final TableMatchResult matches) {
-    if (matches.getMatches().isEmpty()) {
-      return null;
-    }
-
-    for (final TableMatch m : matches.getMatches()) {
-      if (!m.getPreviousTable().equals(m.getCurrentTable())) {
-        // TODO consider similarity < 1
-        return m;
+  private List<TableMatch> changedTables(final TableMatchResult result) {
+    final List<TableMatch> changed = new ArrayList<>();
+    for (final TableMatch match : result.getMatches()) {
+      // TODO consider similarity < 1
+      if (!match.getPreviousTable().equals(match.getCurrentTable())) {
+        changed.add(match);
       }
     }
 
-    log.warn("All matched tables identical");
-    return null;
+    if (changed.isEmpty()) {
+      log.warn("All matched tables identical");
+    }
+    return changed;
   }
 
   private TableMatchResult getTableMatching(final MyPageType page, final MyRevisionType revision,

@@ -2,6 +2,7 @@ package matching.persistence;
 
 import static util.PerformanceUtil.runMeasured;
 
+import java.util.Optional;
 import lombok.val;
 import runner.Arguments;
 import util.PageUtil;
@@ -34,10 +35,11 @@ public class MatchingFacade {
   }
 
   private Matching readOrComputeMatching(final MyPageType page, final int maxRevisionId) {
-    if (persistence.isMatchingAvailable(page)) {
-      return persistence.read(page, maxRevisionId);
-    }
+    final Optional<Matching> matching = persistence.read(page, maxRevisionId);
+    return matching.orElseGet(() -> computeAndPersist(page, maxRevisionId));
+  }
 
+  private Matching computeAndPersist(final MyPageType page, final int maxRevisionId) {
     val matching = computeMatching(page, maxRevisionId);
     persistence.persist(page, matching, maxRevisionId);
     return matching;

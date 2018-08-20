@@ -1,48 +1,58 @@
 package features.content;
 
 import features.Feature;
-import features.content.util.TableContentExtractor;
 import features.content.util.byteP.KLD;
 import features.content.util.byteP.Zip;
-import lombok.val;
-import util.BasicUtils;
+import java.nio.charset.StandardCharsets;
+import util.RatioUtil;
 
 class ByteFeatureFactory {
 
   Feature previousLength() {
-    return parameters -> TableContentExtractor.getPreviousContent(parameters).length();
+    return parameters -> {
+      final String content = parameters.getContent();
+      return kilobytesOf(content);
+    };
   }
 
   Feature sizeChange() {
     return parameters -> {
-      val previousRevision = parameters.getPreviousRevision();
-      int previousRevisionParsedLength = 0;
-      if (previousRevision != null) {
-        previousRevisionParsedLength = BasicUtils.parsedLength(previousRevision.getParsed());
-      }
-      return BasicUtils.parsedLength(parameters.getRevision().getParsed())
-          - previousRevisionParsedLength;
+      final String content = parameters.getContent();
+      final String previousContent = parameters.getPreviousContent();
+      return kilobytesOf(content) - kilobytesOf(previousContent);
     };
   }
 
-  Feature sizeRatio() {
+  Feature addSizeRatio() {
     return parameters -> {
-      val previousRevision = parameters.getPreviousRevision();
-      int previousRevisionParsedLength = 0;
-      if (previousRevision != null) {
-        previousRevisionParsedLength = BasicUtils.parsedLength(previousRevision.getParsed());
-      }
-      return (double) (BasicUtils.parsedLength(parameters.getRevision().getParsed())
-          - previousRevisionParsedLength + 1) / (previousRevisionParsedLength + 1);
+      final long previous = kilobytesOf(parameters.getPreviousContent());
+      final long current = kilobytesOf(parameters.getContent());
+      return RatioUtil.added(previous, current);
     };
+  }
+
+  Feature removedSizeRatio() {
+    return parameters -> {
+      final long previous = kilobytesOf(parameters.getPreviousContent());
+      final long current = kilobytesOf(parameters.getContent());
+      return RatioUtil.removed(previous, current);
+    };
+  }
+
+  private long kilobytesOf(final String string) {
+    return string.getBytes(StandardCharsets.UTF_8).length / 1024;
   }
 
   Feature LZWCompressionRate() {
     return new Zip();
   }
 
-  Feature KLDOfCharDistribution() {
-    return new KLD();
+  Feature kldOfAddedCharDistribution() {
+    return KLD::kldOfAddedChars;
+  }
+
+  Feature kldOfCharDistribution() {
+    return KLD::kld;
   }
 
   Feature rawCommentLength() {

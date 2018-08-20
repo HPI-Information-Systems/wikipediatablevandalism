@@ -25,52 +25,72 @@ import features.content.util.language.wordlists.VulgarWordList;
 
 class LanguageFeatureFactory {
 
+  Feature personalPronounInComment() {
+    return new CommentContainsWords(PronounWordList.getAll());
+  }
+
   Feature personalPronounFrequencyInComment() {
-    return new CommentWordFrequency(PronounWordList.getWords());
+    return CommentWordFrequency.ofMatchedWords(PronounWordList.getAll()).stem(false).build();
   }
 
   Feature personalPronounFrequencyInTable() {
-    return new TableWordFrequency(PronounWordList.getWords());
+    return TableWordFrequency.ofMatchedWords(PronounWordList.getAll()).stem(false).build();
   }
 
   Feature personalPronounImpactInTable() {
-    return new TableWordImpact(PronounWordList.getWords());
+    return TableWordImpact.ofMatchedWords(PronounWordList.getAll()).stem(false).build();
+  }
+
+  Feature singularPersonalPronounInComment() {
+    return new CommentContainsWords(PronounWordList.getSingular());
+  }
+
+  Feature singularPersonalPronounFrequencyInComment() {
+    return CommentWordFrequency.ofMatchedWords(PronounWordList.getSingular()).stem(false).build();
+  }
+
+  Feature singularPersonalPronounFrequencyInTable() {
+    return TableWordFrequency.ofMatchedWords(PronounWordList.getSingular()).stem(false).build();
+  }
+
+  Feature singularPersonalPronounImpactInTable() {
+    return TableWordImpact.ofMatchedWords(PronounWordList.getSingular()).stem(false).build();
   }
 
   Feature vulgarWordFrequencyInComment() {
-    return new CommentWordFrequency(VulgarWordList.getWords());
+    return CommentWordFrequency.ofMatchedWords(VulgarWordList.getWords()).build();
   }
 
   Feature vulgarWordFrequencyInTables() {
-    return new TableWordFrequency(VulgarWordList.getWords());
+    return TableWordFrequency.ofMatchedWords(VulgarWordList.getWords()).build();
   }
 
   Feature vulgarWordImpactInTables() {
-    return new TableWordImpact(VulgarWordList.getWords());
+    return TableWordImpact.ofMatchedWords(VulgarWordList.getWords()).build();
   }
 
   Feature sexualWordFrequencyInComment() {
-    return new CommentWordFrequency(SexualWordList.getWords());
+    return CommentWordFrequency.ofMatchedWords(SexualWordList.getWords()).build();
   }
 
   Feature sexualWordFrequencyInTables() {
-    return new TableWordFrequency(SexualWordList.getWords());
+    return TableWordFrequency.ofMatchedWords(SexualWordList.getWords()).build();
   }
 
   Feature sexualWordImpactInTables() {
-    return new TableWordImpact(SexualWordList.getWords());
+    return TableWordImpact.ofMatchedWords(SexualWordList.getWords()).build();
   }
 
   Feature nonDictionaryWordFrequencyInComment() {
-    return new CommentWordFrequency(DictionaryWordList.getWords(), false);
+    return CommentWordFrequency.ofUnmatchedWords(DictionaryWordList.getWords()).build();
   }
 
   Feature nonDictionaryWordFrequencyInTable() {
-    return new TableWordFrequency(DictionaryWordList.getWords(), false);
+    return TableWordFrequency.ofUnmatchedWords(DictionaryWordList.getWords()).build();
   }
 
   Feature nonDictionaryWordImpactInTable() {
-    return new TableWordImpact(DictionaryWordList.getWords(), false);
+    return TableWordImpact.ofUnmatchedWords(DictionaryWordList.getWords()).build();
   }
 
   Feature wikiSyntaxElementFrequencyInTable() {
@@ -142,5 +162,4 @@ class LanguageFeatureFactory {
   Feature goodFaithInComment() {
     return new CommentContainsWords(GoodFaithWordList.getWords());
   }
-
 }

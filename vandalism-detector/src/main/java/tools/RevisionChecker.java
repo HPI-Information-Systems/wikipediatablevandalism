@@ -4,6 +4,7 @@ import java.util.Collection;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import util.PageUtil;
+import wikixmlsplit.api.TablePredicate;
 import wikixmlsplit.datastructures.MyPageType;
 import wikixmlsplit.datastructures.MyRevisionType;
 
@@ -12,8 +13,6 @@ import wikixmlsplit.datastructures.MyRevisionType;
  */
 @Slf4j
 public class RevisionChecker {
-
-  private final TablePredicate tablePredicate = new TablePredicate();
 
   public boolean checkRevisionFeasible(final MyPageType page, final MyRevisionType revision) {
     final MyRevisionType previous = PageUtil.findPreviousRevision(page, revision);
@@ -31,6 +30,6 @@ public class RevisionChecker {
   }
 
   private boolean isTableInvolved(final Collection<String> parsed) {
-    return parsed.stream().anyMatch(tablePredicate);
+    return parsed.stream().anyMatch(TablePredicate.INSTANCE);
   }
 }

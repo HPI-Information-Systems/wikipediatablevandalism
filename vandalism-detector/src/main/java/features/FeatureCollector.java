@@ -56,8 +56,14 @@ public class FeatureCollector {
           .filter(revisionTag -> revisionTag.getTag() != null)
           .map(RevisionTag::getTag)
           .collect(toList());
-      final MyRevisionType revision = PageUtil.findRevision(page, revisionIdWithTags.getKey());
-      accept(tags, page, revision, matching);
+      
+      try {
+        final MyRevisionType revision = PageUtil.findRevision(page, revisionIdWithTags.getKey());
+        accept(tags, page, revision, matching);
+      } catch (final Exception e) {
+        log.error("Error during feature computation on revision {} of page {} (\"{}\")",
+            revisionIdWithTags.getKey(), page.getId(), page.getTitle(), e);
+      }
     }
 
     WikiTable.resetBagOfWordsCache();

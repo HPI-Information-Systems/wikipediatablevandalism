@@ -1,29 +1,38 @@
 package features.content.util.table;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import lombok.val;
 import model.FeatureParameters;
+import util.RatioUtil;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
 public class EmptyCellChange {
 
   static final Pattern EMPTY_CELL_PATTERN = Pattern.compile("TBA|-|\\s*");
 
-  static public double getRatio(FeatureParameters parameters) {
-    double currentEmptyCellCount = 0;
-    double previousEmptyCellCount = 0;
-    if (parameters.getRelevantMatch() != null) {
-      currentEmptyCellCount = getEmptyCellCount(parameters.getRelevantMatch().getCurrentTable());
-      previousEmptyCellCount = getEmptyCellCount(parameters.getRelevantMatch().getPreviousTable());
+  public static double addedRatio(FeatureParameters parameters) {
+    if (parameters.hasRelevantMatch()) {
+      val match = requireNonNull(parameters.getRelevantMatch());
+      double previousEmptyCellCount = getEmptyCellCount(match.getPreviousTable());
+      double currentEmptyCellCount = getEmptyCellCount(match.getCurrentTable());
+      return RatioUtil.added(previousEmptyCellCount, currentEmptyCellCount);
     }
-    if (previousEmptyCellCount == 0) {
-      if (currentEmptyCellCount == 0) {
-        return 0;
-      }
-      return -1;
+
+    return 0;
+  }
+
+  public static double removeRatio(FeatureParameters parameters) {
+    if (parameters.hasRelevantMatch()) {
+      val match = requireNonNull(parameters.getRelevantMatch());
+      double previousEmptyCellCount = getEmptyCellCount(match.getPreviousTable());
+      double currentEmptyCellCount = getEmptyCellCount(match.getCurrentTable());
+      return RatioUtil.removed(previousEmptyCellCount, currentEmptyCellCount);
     }
-    return (previousEmptyCellCount - currentEmptyCellCount) / previousEmptyCellCount;
+
+    return 0;
   }
 
   static public double getCount(FeatureParameters parameters) {

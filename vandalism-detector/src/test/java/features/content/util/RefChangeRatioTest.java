@@ -22,5 +22,4 @@ class RefChangeRatioTest {
             + "PolitickerME, 14 April 2008.]] 01 Jun 2008");
     assertThat(matcher.find()).isTrue();
   }
-
 }

@@ -5,7 +5,7 @@ import java.util.List;
 import lombok.Data;
 import wikixmlsplit.renderer.wikitable.Cell;
 
-class ValueDistributionUtil {
+public class ValueDistributionUtil {
 
   private final DataTypeInference cellTyper = new DataTypeInference();
 

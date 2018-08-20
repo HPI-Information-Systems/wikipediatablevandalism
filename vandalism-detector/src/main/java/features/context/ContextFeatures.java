@@ -13,43 +13,60 @@ public class ContextFeatures {
   private final FeaturePack features;
 
   private ContextFeatures() {
-    val userFeatureFactory = new UserFeatureFactory();
-    val editFeatureFactory = new EditFeatureFactory();
-    val pageFeatureFactory = new PageFeatureFactory();
+    val user = new UserFeatureFactory();
+    val edit = new EditFeatureFactory();
+    val page = new PageFeatureFactory();
 
     features = FeaturePack.builder()
         // User
-        .feature("isContributorAnonymous", userFeatureFactory.isContributorAnonymous())
-        .feature("isBot", userFeatureFactory.isBot())
+        .feature("isContributorAnonymous", user.isContributorAnonymous())
+        .feature("isBot", user.isBot())
 
         // Edit
-        .feature("timeOfDay", editFeatureFactory.timeOfDay())
-        .feature("localizedTimeOfDay", editFeatureFactory.localizedTimeOfDay())
-        .feature("dayOfWeek", editFeatureFactory.dayOfWeek())
-        .feature("localizedDayOfWeek", editFeatureFactory.localizedDayOfWeek())
-        .feature("isMinorEdit", editFeatureFactory.isMinorEdit())
-        .feature("authorRank", editFeatureFactory.authorRank())
-        .feature("authorRankOfLast200Edits", editFeatureFactory.authorRankOfLast200Edits())
-        .feature("authorRankOneMonth", editFeatureFactory.authorRankOfLastMonth())
-        .feature("authorRankOfLast200EditsOfOneMonth", editFeatureFactory.authorRankOfLast200EditsOfOneMonth())
+        .feature("timeOfDay", edit.timeOfDay())
+        .feature("localizedTimeOfDay", edit.localizedTimeOfDay())
+        .feature("dayOfWeek", edit.dayOfWeek())
+        .feature("localizedDayOfWeek", edit.localizedDayOfWeek())
+        .feature("isMinorEdit", edit.isMinorEdit())
 
         // Page
-        .feature("hasPreviousSameContributor", pageFeatureFactory.hasPreviousSameContributor())
-        .feature("timeSinceLastArticleEdit", pageFeatureFactory.timeSinceLastArticleEdit())
-        .feature("timeSinceLastArticleEditBySameContributor", pageFeatureFactory.timeSinceLastArticleEditBySameContributor())
-        .feature("timeSinceFirstArticleEdit", pageFeatureFactory.timeSinceFirstArticleEditBySameContributor())
-        .feature("revertCount", pageFeatureFactory.revertCount())
-        .feature("prevRevertCount", pageFeatureFactory.prevRevertCount())
-        .feature("editRatio", pageFeatureFactory.ratioOffAllEditsToContributorEdits())
-        .feature("contributorRevertRatio", pageFeatureFactory.contributorRevertedBeforeInThatArticleRatio())
-        .feature("timeSinceReverted", pageFeatureFactory.timeSinceContributorRevertedBeforeInThatArticle())
-        .feature("articleTemperatureAll", pageFeatureFactory.articleTemperatureAll())
-        .feature("articleTemperatureYear", pageFeatureFactory.articleTemperatureYear())
-        .feature("articleTemperatureMonth", pageFeatureFactory.articleTemperatureMonth())
-        .feature("articleTemperatureWeek", pageFeatureFactory.articleTemperatureWeek())
-        .feature("articleTemperatureDay", pageFeatureFactory.articleTemperatureDay())
-        .feature("articleTemperatureHour", pageFeatureFactory.articleTemperatureHour())
-        .feature("articleTemperatureRatio", pageFeatureFactory.articleTemperatureRatio())
+        .feature("hasPreviousSameContributor", page.hasPreviousSameContributor())
+        .feature("timeSinceLastArticleEdit", page.timeSinceLastArticleEdit())
+        .feature("timeSinceLastArticleEditBySameContributor",
+            page.timeSinceLastArticleEditBySameContributor())
+        .feature("timeSinceFirstArticleEdit", page.timeSinceFirstArticleEditBySameContributor())
+        .feature("revertCount", page.revertCount())
+        .feature("prevRevertCount", page.prevRevertCount())
+        .feature("editRatio", page.ratioOffAllEditsToContributorEdits())
+        .feature("contributorRevertRatio", page.contributorRevertedBeforeInThatArticleRatio())
+        .feature("timeSinceReverted", page.timeSinceContributorRevertedBeforeInThatArticle())
+        .feature("articleTemperatureAll", page.articleTemperatureAll())
+        .feature("articleTemperatureYear", page.articleTemperatureYear())
+        .feature("articleTemperatureMonth", page.articleTemperatureMonth())
+        .feature("articleTemperatureWeek", page.articleTemperatureWeek())
+        .feature("articleTemperatureDay", page.articleTemperatureDay())
+        .feature("articleTemperatureHour", page.articleTemperatureHour())
+        .feature("articleTemperatureRatio", page.articleTemperatureRatio())
+
+        .feature("authorRank", page.authorRank())
+        .feature("authorRankOfLast200Edits", page.authorRankOfLast200Edits())
+        .feature("authorRankOneMonth", page.authorRankOfLastMonth())
+        .feature("authorRankOfLast200EditsOfOneMonth", page.authorRankOfLast200EditsOfOneMonth())
+
+        .feature("distinctAuthorCountOfLast5Edits", page.distinctAuthorCountOfLast5Edits())
+        .feature("distinctAuthorCountOfLast20Edits", page.distinctAuthorCountOfLast20Edits())
+        .feature("distinctAuthorCountOfLast80Edits", page.distinctAuthorCountOfLast80Edits())
+        .feature("distinctAuthorCountOfLastHour", page.distinctAuthorCountOfLastHour())
+        .feature("distinctAuthorCountOfLastTwoHours", page.distinctAuthorCountOfLastTwoHours())
+        .feature("distinctAuthorCountOfLast24Hours", page.distinctAuthorCountOfLast24Hours())
+
+        .feature("editActivityIncreaseOfTwoHours", page.editActivityIncreaseOfTwoHours())
+        .feature("editActivityIncreaseOfOneDay", page.editActivityIncreaseOfOneDay())
+        .feature("editActivityIncreaseOfOneWeek", page.editActivityIncreaseOfOneWeek())
+
+        .feature("editActivityDecreaseOfTwoHours", page.editActivityDecreaseOfTwoHours())
+        .feature("editActivityDecreaseOfOneDay", page.editActivityDecreaseOfOneDay())
+        .feature("editActivityDecreaseOfOneWeek", page.editActivityDecreaseOfOneWeek())
 
         .build();
   }

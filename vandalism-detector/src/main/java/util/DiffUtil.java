@@ -4,7 +4,6 @@ import static util.CellExtractor.extractCells;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.Multiset;
-import features.content.util.TableContentExtractor;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,22 +17,22 @@ public class DiffUtil {
 
   public static Multiset<String> diffWords(final FeatureParameters parameters) {
     return diffWords(
-        BasicUtils.getPreviousTables(parameters),
-        BasicUtils.getCurrentTables(parameters)
+        BasicUtils.getPreviousChangedTables(parameters),
+        BasicUtils.getCurrentChangedTables(parameters)
     );
   }
 
   public static Multiset<String> diffTokens(final FeatureParameters parameters) {
     return diffTokens(
-        BasicUtils.getPreviousTables(parameters),
-        BasicUtils.getCurrentTables(parameters)
+        BasicUtils.getPreviousChangedTables(parameters),
+        BasicUtils.getCurrentChangedTables(parameters)
     );
   }
 
   public static Multiset<Cell> diffCells(final FeatureParameters parameters) {
     return diffCells(
-        BasicUtils.getPreviousTables(parameters),
-        BasicUtils.getCurrentTables(parameters)
+        BasicUtils.getPreviousChangedTables(parameters),
+        BasicUtils.getCurrentChangedTables(parameters)
     );
   }
 
@@ -76,8 +75,8 @@ public class DiffUtil {
 
   public static String insertedText(FeatureParameters parameters) {
     val diffMatchPatch = new DiffMatchPatchUtil();
-    val content = TableContentExtractor.getContent(parameters);
-    val previousContent = TableContentExtractor.getPreviousContent(parameters);
+    val previousContent = parameters.getPreviousContent();
+    val content = parameters.getContentWithComment();
     return diffMatchPatch.diffCompute(previousContent, content, true, 0)
         .stream()
         .filter(diff -> diff.operation == Operation.INSERT)

@@ -9,6 +9,18 @@ import matching.table.TableMatch;
 import model.FeatureParameters;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
+/**
+ * Measure changes in table geometry for matches, aka "number of rows added" and similar.
+ *
+ * <p>Previously this feature also took additions and removals into account. This is deemed not
+ * helpful, since inferring sense between "1 - 10 columns added / removed" is much easier than
+ * reasoning about a value range of +-400 (in case entire pages have been blanked / restored /
+ * created).</p>
+ *
+ * <p>Retouching multiple tables may cause the size change to level out, so it is more an edit
+ * tendency (are more cells deleted than added?). Benefit: in case that cells / rows / columns might
+ * be moved in between matched tables, the size change is zero.</p>
+ */
 public class TableGeometry implements Feature {
 
   @Getter
@@ -25,7 +37,7 @@ public class TableGeometry implements Feature {
   }
 
   @FunctionalInterface
-  private interface ValueFunction {
+  interface ValueFunction {
 
     double apply(WikiTable table);
   }
@@ -38,32 +50,11 @@ public class TableGeometry implements Feature {
 
   @Override
   public double getValue(final FeatureParameters parameters) {
-    val precursors = parameters.getPreviousRevisions();
+    val results = parameters.getResult();
 
-    if (precursors.isEmpty()) {
-      return 0;
-    }
-
-    return computeSizeChange(parameters);
-  }
-
-  private double computeSizeChange(final FeatureParameters context) {
-    val results = context.getResult();
-
-    // Matches
-    final List<Double> sizeChanges = new ArrayList<>(results.getMatches().size());
-    for (val result : results.getMatches()) {
+    final List<Double> sizeChanges = new ArrayList<>();
+    for (val result : parameters.getChangedTables()) {
       sizeChanges.add(getSizeChange(result));
-    }
-
-    // Additions
-    for (val addedTable : results.getAddedTables()) {
-      sizeChanges.add(valueFunction.apply(addedTable));
-    }
-
-    // Deletions
-    for (val removedTable : results.getRemovedTables()) {
-      sizeChanges.add(-valueFunction.apply(removedTable));
     }
 
     double result = 0;

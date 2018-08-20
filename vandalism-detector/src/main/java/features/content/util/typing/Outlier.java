@@ -16,10 +16,14 @@ import wikixmlsplit.renderer.wikitable.Cell;
 import wikixmlsplit.renderer.wikitable.Row;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
+/**
+ * For each row or column, find a set of newly introduced values. Then check if those new values fit
+ * into the series of values that remained fixed.
+ */
 @RequiredArgsConstructor
 public class Outlier implements Feature {
 
-  interface RowProvider {
+  public interface RowProvider {
 
     List<Row> getValue(WikiTable table);
   }
@@ -90,7 +94,11 @@ public class Outlier implements Feature {
     return Sets.difference(currentValues, previousValues);
   }
 
-  private boolean isOutlier(final List<Double> values, final double toCheck) {
+  static boolean isOutlier(final List<Double> values, final double toCheck) {
+    if (values.size() < 2) {
+      return false;
+    }
+
     final double mean = Stats.meanOf(values);
     final double deviation = Stats.of(values).populationStandardDeviation();
     final Range<Double> range = Range.closed(mean - 3 * deviation, mean + 3 * deviation);

@@ -30,5 +30,4 @@ class EmptyCellChangeRatioTest {
     val matcher = EmptyCellChange.EMPTY_CELL_PATTERN.matcher("TBA");
     assertThat(matcher.find()).isTrue();
   }
-
 }

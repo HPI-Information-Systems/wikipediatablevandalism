@@ -1,11 +1,13 @@
 package features.content.wikisyntax;
 
+import static features.content.util.language.regex.RegexUtil.countMatches;
 import static java.util.stream.Collectors.toList;
 
 import features.Feature;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Stream;
+import lombok.val;
 import matching.table.TableMatch;
 import model.FeatureParameters;
 import org.apache.commons.collections4.CollectionUtils;
@@ -13,9 +15,7 @@ import wikixmlsplit.renderer.wikitable.Cell;
 import wikixmlsplit.renderer.wikitable.WikiTable;
 
 /**
- * Model impact of number of occurrences of specific template instances. The size of the disjunction
- * should reflect the size of the change no matter if there has been bulk removal, addition, or
- * modification. Latter is of special importance and would be counted twice.
+ * Model impact of number of occurrences of specific template instances.
  */
 abstract class TemplateUseImpact implements Feature {
 
@@ -27,17 +27,17 @@ abstract class TemplateUseImpact implements Feature {
       return 0;
     }
 
-    final List<String> prev = extractTemplatesFromTable(match.getPreviousTable());
-    final List<String> curr = extractTemplatesFromTable(match.getCurrentTable());
-    final Collection<String> diff = CollectionUtils.disjunction(prev, curr);
-    return diff.size();
+    val previousMatches = countTemplatesOf(match.getPreviousTable());
+    val matches = countTemplatesOf(match.getCurrentTable());
+    val previousMatchCount = previousMatches > 0 ? previousMatches : 1;
+    return ((double) (matches - previousMatches) / previousMatchCount);
   }
 
-  protected List<String> extractTemplatesFromTable(final WikiTable table) {
+  protected long countTemplatesOf(final WikiTable table) {
     return table.getRows().stream()
         .flatMap(row -> row.getValues().stream())
         .flatMap(this::extractTemplatesFromCell)
-        .collect(toList());
+        .count();
   }
 
   protected abstract Stream<String> extractTemplatesFromCell(Cell cell);

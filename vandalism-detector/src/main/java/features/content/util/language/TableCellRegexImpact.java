@@ -23,8 +23,8 @@ public class TableCellRegexImpact implements Feature {
 
   @Override
   public double getValue(final FeatureParameters parameters) {
-    val previousCells = extractCells(BasicUtils.getPreviousTables(parameters));
-    val cells = extractCells(BasicUtils.getCurrentTables(parameters));
+    val previousCells = extractCells(BasicUtils.getPreviousChangedTables(parameters));
+    val cells = extractCells(BasicUtils.getCurrentChangedTables(parameters));
 
     val previousValues = previousCells.stream()
         .map(Cell::getValue)

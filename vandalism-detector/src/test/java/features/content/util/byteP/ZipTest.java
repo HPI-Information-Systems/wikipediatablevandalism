@@ -30,12 +30,12 @@ class ZipTest {
   void saneCompressionRatio() {
     final double actual = Zip.getCompressionRatio(value);
 
-    assertThat(actual).isCloseTo(0.75, Offset.offset(0.01));
+    assertThat(actual).isCloseTo(0.66, Offset.offset(0.01));
   }
 
   @Test
   void canCompress() {
-    final byte[] compressed = Zip.compress(value);
+    final byte[] compressed = Zip.compressedZip(value);
     final byte[] uncompressed = uncompress(compressed);
     assertThat(uncompressed).isEqualTo(value.getBytes(Zip.CHARSET));
   }

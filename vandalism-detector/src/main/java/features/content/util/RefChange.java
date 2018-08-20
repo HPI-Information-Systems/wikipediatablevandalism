@@ -3,29 +3,45 @@ package features.content.util;
 import java.util.regex.Pattern;
 import lombok.val;
 import model.FeatureParameters;
+import util.RatioUtil;
 
+/**
+ * Model changes in references (article sources).
+ *
+ * <p>The identity of the reference is deliberately excluded; replacing a source cannot be judged
+ * (except if we had a measure for source credibility).</p>
+ */
 public class RefChange {
 
   static Pattern REF_HTML = Pattern.compile("<ref(.*?)>.*?</ref>", Pattern.DOTALL);
   static Pattern REF_WIKI_SYNTAX = Pattern.compile("\\[\\[ref:.*?]]", Pattern.DOTALL);
 
-  static public double getRatio(FeatureParameters parameters) {
-    double currentRefCount = getRefCount(TableContentExtractor.getContent(parameters));
-    double previousRefCount = getRefCount(TableContentExtractor.getPreviousContent(parameters));
-    if (previousRefCount == 0) {
-      if (currentRefCount == 0) {
-        return 0;
-      }
-      return 1;
-    }
-    return (currentRefCount - previousRefCount) / previousRefCount;
+  /**
+   * X % of references have been removed
+   */
+  public static double getRemovedRatio(FeatureParameters parameters) {
+    double previous = getRefCount(parameters.getPreviousContent());
+    double current = getRefCount(parameters.getContent());
+    return RatioUtil.removed(previous, current);
   }
 
-  static public double getCount(FeatureParameters parameters) {
-    return getRefCount(TableContentExtractor.getContent(parameters));
+  /**
+   * There has been an x-fold increase in references.
+   */
+  public static double getAddedRatio(FeatureParameters parameters) {
+    double previous = getRefCount(parameters.getPreviousContent());
+    double current = getRefCount(parameters.getContent());
+    return RatioUtil.added(previous, current);
   }
 
-  static private double getRefCount(String content) {
+  /**
+   * Article contains currently X references
+   */
+  public static double getCount(FeatureParameters parameters) {
+    return getRefCount(parameters.getContent());
+  }
+
+  private static double getRefCount(String content) {
     double refCount = 0;
     val htmlMatcher = REF_HTML.matcher(content);
     val wikiSyntaxMatcher = REF_WIKI_SYNTAX.matcher(content);
@@ -36,5 +52,4 @@ public class RefChange {
 
     return refCount;
   }
-
 }

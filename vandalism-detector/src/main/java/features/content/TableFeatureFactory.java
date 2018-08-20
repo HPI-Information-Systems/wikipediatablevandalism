@@ -1,23 +1,24 @@
 package features.content;
 
 import features.Feature;
-import features.content.util.TableContentExtractor;
+import features.content.util.table.AverageCellSizeChange;
 import features.content.util.table.EmptyCellChange;
 import features.content.util.table.RankChange;
 import features.content.util.table.SharedCellRatio;
-import features.content.util.table.SizePerCellChange;
 import features.content.util.table.SyntaxChecker;
 import features.content.util.table.TableGeometry;
 import features.content.util.table.TableGeometry.Measure;
-import features.content.util.typing.DataTypeDependentFeatureFactory;
+import features.content.util.typing.DataTypeInference;
+import features.content.util.typing.Outlier;
+import features.content.util.typing.OutlierToPreviousCellValue;
+import features.content.util.typing.ValueDistributionInformationGain;
+import features.content.util.typing.ValueDistributionUtil;
 import features.content.wikisyntax.AddedInvalidAttributes;
-import lombok.experimental.Delegate;
 import lombok.val;
+import util.BasicUtils;
+import wikixmlsplit.renderer.wikitable.WikiTable;
 
 class TableFeatureFactory {
-
-  @Delegate
-  private final DataTypeDependentFeatureFactory withTypes = new DataTypeDependentFeatureFactory();
 
   Feature currentRowCount() {
     return parameters -> {
@@ -46,33 +47,33 @@ class TableFeatureFactory {
     };
   }
 
-  Feature unmatchedTables() {
+  Feature unmatchedTableRatio() {
     return parameters -> {
-      final double removedTableCount = parameters.getResult().getRemovedTables().size();
-      final double currentTableCount = parameters.getResult().getMatches().size() + parameters.getResult().getAddedTables().size();
-      if (currentTableCount == 0) {
-        return 1;
+      // Of X previous existing tables, Y % were removed
+      final int previousTableCount = BasicUtils.getPreviousTables(parameters).size();
+      final int removedTables = parameters.getResult().getRemovedTables().size();
+      if (removedTables == 0) {
+        return 0;
       }
-      return (currentTableCount - removedTableCount) / currentTableCount;
+      return (double) removedTables / previousTableCount;
     };
   }
 
-  Feature unmatchedRows() {
+  Feature unmatchedRowRatio() {
     return parameters -> {
-      if (parameters.getRowMatchResult() == null) {
-        return 1d;
-      }
-
-      final double matchedRowCount = parameters.getRowMatchResult().getMatches().size();
-      double totalRowCount = 0;
-      if (parameters.getRelevantMatch() != null) {
-        totalRowCount = parameters.getRelevantMatch().getCurrentTable().getRows().size();
-      }
-      if (totalRowCount == 0) {
+      // Or X previous existing rows, Y % were removed
+      val result = parameters.getRowMatchResult();
+      if (result == null) {
+        // There has been no relevant match and thus no rows to match.
         return 0;
       }
 
-      return (totalRowCount - matchedRowCount) / totalRowCount;
+      final int previousRows = result.getMatches().size() + result.getDeletedRows().size();
+      final int removedRows = result.getDeletedRows().size();
+      if (removedRows == 0) {
+        return 0;
+      }
+      return (double) removedRows / previousRows;
     };
   }
 
@@ -97,19 +98,27 @@ class TableFeatureFactory {
   }
 
   Feature openAndCloseSyntaxCount() {
-    return parameters -> SyntaxChecker.getOpenAndCloseSyntaxCount(TableContentExtractor.getContent(parameters));
+    return parameters -> SyntaxChecker.getOpenAndCloseSyntaxCount(parameters.getContent());
   }
 
-  Feature sizePerCellChangeRatio() {
-    return SizePerCellChange::getRatio;
+  Feature averageCellSizeIncrease() {
+    return AverageCellSizeChange::averageCellSizeIncrease;
   }
 
-  Feature sizePerCell() {
-    return SizePerCellChange::getSizePerCell;
+  Feature averageCellSizeDecrease() {
+    return AverageCellSizeChange::averageCellSizeDecrease;
   }
 
-  Feature emptyCellRatio() {
-    return EmptyCellChange::getRatio;
+  Feature averageCellSize() {
+    return AverageCellSizeChange::averageCellSize;
+  }
+
+  Feature addedEmptyCellRatio() {
+    return EmptyCellChange::addedRatio;
+  }
+
+  Feature removedEmptyCellRatio() {
+    return EmptyCellChange::removeRatio;
   }
 
   Feature emptyCellCount() {
@@ -120,4 +129,68 @@ class TableFeatureFactory {
     return new AddedInvalidAttributes();
   }
 
+  Feature isTableAdded() {
+    return parameters -> parameters.getResult().getAddedTables().isEmpty() ? 0 : 1;
+  }
+
+  Feature addedTableCount() {
+    return parameters -> parameters.getResult().getAddedTables().size();
+  }
+
+  Feature isTableModified() {
+    return parameters -> {
+      if (parameters.getChangedTables().isEmpty()) {
+        return 0;
+      }
+      return 1;
+    };
+  }
+
+  Feature modifiedTableCount() {
+    return parameters -> parameters.getChangedTables().size();
+  }
+
+  Feature isTableDeleted() {
+    return parameters -> parameters.getResult().getRemovedTables().isEmpty() ? 0 : 1;
+  }
+
+  Feature deletedTableCount() {
+    return parameters -> parameters.getResult().getRemovedTables().size();
+  }
+
+  Feature areMultipleTablesChanged() {
+    return parameters -> {
+      if (parameters.getChangedTables().size() >= 2) {
+        return 1;
+      }
+      return 0;
+    };
+  }
+
+  Feature isTableReplacement() {
+    return parameters -> {
+      int removed = parameters.getResult().getRemovedTables().size();
+      int added = parameters.getResult().getAddedTables().size();
+      if (removed == added) {
+        return 1;
+      }
+      return 0;
+    };
+  }
+
+  Feature hasNumericOutlierInColumns() {
+    return new Outlier(WikiTable::getColumns, new DataTypeInference());
+  }
+
+  Feature hasNumericOutlierInRows() {
+    return new Outlier(WikiTable::getRows, new DataTypeInference());
+  }
+
+  Feature dataTypeDistributionInformationGain() {
+    return new ValueDistributionInformationGain(new ValueDistributionUtil());
+  }
+
+  Feature hasNumericOutlierInChangedCellValues() {
+    return new OutlierToPreviousCellValue();
+  }
 }

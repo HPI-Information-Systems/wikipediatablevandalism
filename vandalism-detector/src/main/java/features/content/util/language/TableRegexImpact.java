@@ -23,8 +23,9 @@ public class TableRegexImpact implements Feature {
 
   @Override
   public double getValue(final FeatureParameters parameters) {
-    val words = WordsExtractor.extractWords(BasicUtils.getCurrentTables(parameters));
-    val previousWords = WordsExtractor.extractWords(BasicUtils.getPreviousTables(parameters));
+    val words = WordsExtractor.extractWords(BasicUtils.getCurrentChangedTables(parameters));
+    val previousWords = WordsExtractor
+        .extractWords(BasicUtils.getPreviousChangedTables(parameters));
 
     val previousMatches = countMatches(this.regularExpressions, previousWords.elementSet());
     val matches = countMatches(this.regularExpressions, words.elementSet());

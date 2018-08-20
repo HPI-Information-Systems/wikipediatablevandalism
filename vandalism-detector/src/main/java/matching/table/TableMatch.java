@@ -17,4 +17,5 @@ public class TableMatch {
   private WikiTable previousTable;
   private BigInteger currentRevision;
   private WikiTable currentTable;
+  private int clusterIndex;
 }

@@ -59,12 +59,13 @@ public class AttributeUtil {
   }
 
   public static Set<Attribute> filterNonStandardAttributes(final Set<Attribute> attributes) {
-    return attributes.stream().filter(a -> !ATTRIBUTE_NAMES.contains(a.getKey()))
+    return attributes.stream()
+        .filter(a -> !isValidAttribute(a))
         .collect(toSet());
   }
 
   public static boolean isValidAttribute(final Attribute attribute) {
-    return ATTRIBUTE_NAMES.contains(attribute.getKey());
+    return ATTRIBUTE_NAMES.contains(attribute.getKey().toLowerCase());
   }
 
 }

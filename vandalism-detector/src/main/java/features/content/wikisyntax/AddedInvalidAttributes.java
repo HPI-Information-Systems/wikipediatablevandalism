@@ -22,7 +22,7 @@ public class AddedInvalidAttributes implements Feature {
       }
     }
 
-    for (final TableMatch match : parameters.getResult().getMatches()) {
+    for (final TableMatch match : parameters.getChangedTables()) {
       final Set<Attribute> previous = collectAttributes(match.getPreviousTable());
       final Set<Attribute> current = collectAttributes(match.getCurrentTable());
       current.removeAll(previous);
