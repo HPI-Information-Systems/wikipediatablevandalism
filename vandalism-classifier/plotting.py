@@ -36,7 +36,7 @@ def plot_scores(scores):
 
     for score in scores:
         sns.lineplot(range(0, 10), score[1], label=score[0])
-        plt.legend(bbox_to_anchor=(1.1, 1.05))
+        plt.legend(bbox_to_anchor=(1.1, 1.05), frameon=False)
     plt.show()
 
 def plot_precision_recall(y_true, y_predict_proba):
@@ -50,7 +50,7 @@ def plot_precision_recall(y_true, y_predict_proba):
     plt.yticks(np.arange(0, 1.1, 0.1))
     plt.ylabel('Precision')
     plt.xlabel('Recall')
-    plt.legend(loc='lower right')
+    plt.legend(loc='lower right', frameon=False)
     plt.show()
     
 def plot_roc(y_true, y_predict_proba):
@@ -59,7 +59,7 @@ def plot_roc(y_true, y_predict_proba):
 
     plt.title('Receiver Operating Characteristic')
     plt.plot(false_positive_rate, true_positive_rate, 'b', label='AUC = %0.2f' % roc_auc)
-    plt.legend(loc='lower right')
+    plt.legend(loc='lower right', frameon=False)
     plt.plot([0, 1], [0, 1], 'r--')
     plt.xlim([0, 1])
     plt.ylim([0, 1])
@@ -132,7 +132,7 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
     plt.xlabel('Recall')
     plt.ylabel('Precision')
     plt.title('Precision-Recall')
-    plt.legend(lines, labels, loc=(0, -.38), bbox_to_anchor=(1.1, 0.4))
+    plt.legend(lines, labels, loc=(0, -.38), bbox_to_anchor=(1.1, 0.4), frameon=False)
     plt.show()
 
 
@@ -189,5 +189,5 @@ def plot_multilabel_roc(Y_true, Y_predict_proba, tag_names):
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
     plt.title('Receiver Operating Characteristic')
-    plt.legend(bbox_to_anchor=(1.1, 1))
+    plt.legend(bbox_to_anchor=(1.1, 1), frameon=False)
     plt.show()
