@@ -47,6 +47,12 @@ public class ContentFeatures {
         .feature("areMultipleTablesChanged", table.areMultipleTablesChanged())
         .feature("isTableReplacement", table.isTableReplacement())
 
+        .feature("hasNumericOutlierInColumns", table.hasNumericOutlierInColumns())
+        .feature("hasNumericOutlierInRows", table.hasNumericOutlierInRows())
+        .feature("hasNumericOutlierInChangedCellValues",
+            table.hasNumericOutlierInChangedCellValues())
+        .feature("tableDataTypeInformationGain", table.dataTypeDistributionInformationGain())
+
         // Language
         .feature("personalPronounInComment", language.personalPronounInComment())
         .feature("personalPronounFrequencyInComment", language.personalPronounFrequencyInComment())
@@ -109,12 +115,6 @@ public class ContentFeatures {
         .feature("kldOfCharDistribution", bytes.kldOfCharDistribution())
         .feature("rawCommentLength", bytes.rawCommentLength())
         .feature("userCommentLength", bytes.userCommentLength())
-
-        .feature("hasNumericOutlierInColumns", table.hasNumericOutlierInColumns())
-        .feature("hasNumericOutlierInRows", table.hasNumericOutlierInRows())
-        .feature("hasNumericOutlierInChangedCellValues",
-            table.hasNumericOutlierInChangedCellValues())
-        .feature("tableDataTypeInformationGain", table.dataTypeDistributionInformationGain())
 
         .build()
         .combineWith(TemplateUseFeatures.get().getFeatures());
