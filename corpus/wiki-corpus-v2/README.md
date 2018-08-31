@@ -48,3 +48,4 @@ Eight tags were defined in total, tags with ids 1-9 denote the kind of vandalism
 - Authors: Falco Duersch, Philipp Hager, Martin Schlegel
 Tobias Bleifuß, Leon Bornemann, Dr. Felix Naumann
 - University: Hasso-Plattner-Institut, University of Potsdam, Germany
+- Date: August 2018

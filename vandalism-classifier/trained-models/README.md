@@ -20,3 +20,4 @@ clf = joblib.load(path)
 - Authors: Falco Duersch, Philipp Hager, Martin Schlegel
 Tobias Bleifuß, Leon Bornemann, Dr. Felix Naumann
 - University: Hasso-Plattner-Institut, University of Potsdam, Germany
+- Date: August 2018
