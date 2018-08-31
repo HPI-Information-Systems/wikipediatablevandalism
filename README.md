@@ -2,7 +2,7 @@
 
 This project contains a vandalism detection system for table edits on Wikipedia. This repository publishes the source code as well as the data used for the paper `Vandalism Detection in Wikipedia Table Revisions` by Dürsch, Hager, Schlegel et al. and was produced in research at the Hasso-Plattner Institute, Unversity of Potsdam, Germany.
 
-## Structure
+## Overview
 - `corpus/` A newly created and fine-granular corpus of vandalized Wikipedia table edits.
 - `sql/` SQL scripts used for storing an index of all Wikipedia revisions in the process of corpus construction.
 - `tagger/` A command line tool for browser-based vandalism tagging on Wikipedia used in corpus annotation.
