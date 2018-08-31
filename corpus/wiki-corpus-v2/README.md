@@ -1,6 +1,6 @@
 # Wikipedia Table Vandalism Corpus
 This is a corpus of revisions that contain table edits on Wikipedia, tagged if and what kind of vandalism they contain.
-Eight tags were defined in total, tags with ids 1-9 denote the kind of vandalism in a revision. The tag intention (id 11) marks if the kind of vandalism was commited on purpose and the constructive tag (id 12) labels non-vandalizing edits.
+Eight tags were defined in total, tags with ids 1-9 denote the kind of vandalism in a revision. The tag intention (id 11) marks if the kind of vandalism was committed on purpose and the constructive tag (id 12) labels non-vandalizing edits.
 
 ### Schema ###
 ```
