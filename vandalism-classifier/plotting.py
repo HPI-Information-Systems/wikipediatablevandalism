@@ -125,11 +125,11 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tags, tag_names, o
     for i in range(len(tag_names)):
         l, = plt.plot(recall[i], precision[i], lw=2, color = colors[tags[i] - 1])
         lines.append(l)
-        labels.append('{0} (AUC = {1:0.2f})'
+        labels.append('{0} ({1:0.2f})'
                     ''.format(tag_names[i], average_precision[i]))
 
-    fig = plt.gcf()
-    fig.subplots_adjust(bottom=0.25)
+    #fig = plt.gcf()
+    #fig.subplots_adjust(bottom=0.25)
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
     plt.xlabel('Recall')
@@ -174,18 +174,18 @@ def plot_multilabel_roc(Y_true, Y_predict_proba, tags, tag_names, output_path):
     # Plot all ROC curves
     plt.figure(figsize=(6, 6))
     plt.plot(fpr["micro"], tpr["micro"],
-            label='Micro-average ROC curve (area = {0:0.2f})'
+            label='Micro-average ({0:0.2f})'
                 ''.format(roc_auc["micro"]),
             color='deeppink', linestyle=':', linewidth=4)
 
     plt.plot(fpr["macro"], tpr["macro"],
-            label='Macro-average ROC curve (area = {0:0.2f})'
+            label='Macro-average ({0:0.2f})'
                 ''.format(roc_auc["macro"]),
             color='navy', linestyle=':', linewidth=4)
 
     for i in range(n_classes):
         plt.plot(fpr[i], tpr[i],
-                label='{0} (AUC = {1:0.2f})'
+                label='{0} ({1:0.2f})'
                 ''.format(tag_names[i], roc_auc[i]),
                 color=colors[tags[i] - 1])
 
