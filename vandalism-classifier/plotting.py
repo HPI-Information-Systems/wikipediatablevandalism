@@ -53,20 +53,20 @@ def plot_precision_recall(y_true, y_predict_proba):
     plt.legend(loc='lower right', frameon=False)
     plt.show()
     
-def plot_roc(y_true, y_predict_proba):
-    false_positive_rate, true_positive_rate, thresholds = roc_curve(y_true, y_predict_proba)
-    roc_auc = auc(false_positive_rate, true_positive_rate)
-
-    plt.title('Receiver Operating Characteristic')
-    plt.plot(false_positive_rate, true_positive_rate, 'b', label='AUC = %0.2f' % roc_auc)
-    plt.legend(loc='lower right', frameon=False)
-    plt.plot([0, 1], [0, 1], 'r--')
-    plt.xlim([0, 1])
-    plt.ylim([0, 1])
-    plt.ylabel('True Positive Rate')
+def plot_roc(Y_true, Y_predict_proba, output_path):
+    fpr, tpr, _ = roc_curve(Y_true, Y_predict_proba)
+    roc_auc = auc(fpr, tpr)
+    
+    plt.figure(figsize=(4, 4))
+    plt.plot(fpr, tpr,label='vandalism (AUC = %0.2f)' % roc_auc)
+    plt.plot([0, 1], [0, 1], 'k--')
+    plt.xlim([0.0, 1.0])
+    plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
+    plt.ylabel('True Positive Rate')
+    plt.legend(loc=9, bbox_to_anchor=(0.5, -0.15), ncol=2, frameon=False)
+    plt.savefig(output_path, bbox_inches='tight')
     plt.show()
-    print('Receiver Operation Characteristic AUC', roc_auc)
 
 
 def plot_feature_importance(clf, feature_labels):
@@ -99,7 +99,7 @@ def plot_multilabel_classification_report(Y_true, Y_predict, tag_names):
     print(classification_report(Y_true, Y_predict, target_names=tag_names))
 
 
-def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
+def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tags, tag_names, output_path=''):
     precision = dict()
     recall = dict()
     average_precision = dict()
@@ -108,7 +108,7 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
         precision[i], recall[i], _ = precision_recall_curve(Y_true[:, i], Y_predict_proba[:, i])
         average_precision[i] = average_precision_score(Y_true[:, i], Y_predict_proba[:, i])
 
-    plt.figure(figsize=(8, 8))
+    plt.figure(figsize=(6, 6))
     f_scores = np.linspace(0.2, 0.8, num=4)
     lines = []
     labels = []
@@ -120,9 +120,10 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
 
     lines.append(l)
     labels.append('iso-f1 curves')
+    colors = plt.get_cmap('tab20').colors
 
     for i in range(len(tag_names)):
-        l, = plt.plot(recall[i], precision[i], lw=2)
+        l, = plt.plot(recall[i], precision[i], lw=2, color = colors[tags[i] - 1])
         lines.append(l)
         labels.append('{0} (AUC = {1:0.2f})'
                     ''.format(tag_names[i], average_precision[i]))
@@ -133,12 +134,13 @@ def plot_multilabel_precision_recall(Y_true, Y_predict_proba, tag_names):
     plt.ylim([0.0, 1.05])
     plt.xlabel('Recall')
     plt.ylabel('Precision')
-    plt.title('Precision-Recall')
-    plt.legend(lines, labels, loc=(0, -.38), bbox_to_anchor=(1.1, 0.4), frameon=False)
+
+    plt.legend(lines, labels, loc=9, bbox_to_anchor=(0.5, -0.15), ncol=2, frameon=False)
+    plt.savefig(output_path, bbox_inches='tight')
     plt.show()
 
 
-def plot_multilabel_roc(Y_true, Y_predict_proba, tag_names):
+def plot_multilabel_roc(Y_true, Y_predict_proba, tags, tag_names, output_path):
     n_classes = Y_true.shape[1]
     # Compute ROC curve and ROC area for each class
     fpr = dict()
@@ -167,29 +169,31 @@ def plot_multilabel_roc(Y_true, Y_predict_proba, tag_names):
     fpr["macro"] = all_fpr
     tpr["macro"] = mean_tpr
     roc_auc["macro"] = auc(fpr["macro"], tpr["macro"])
+    colors = plt.get_cmap('tab20').colors
 
     # Plot all ROC curves
-    plt.figure(figsize=(8, 8))
+    plt.figure(figsize=(6, 6))
     plt.plot(fpr["micro"], tpr["micro"],
-            label='micro-average ROC curve (area = {0:0.2f})'
+            label='Micro-average ROC curve (area = {0:0.2f})'
                 ''.format(roc_auc["micro"]),
             color='deeppink', linestyle=':', linewidth=4)
 
     plt.plot(fpr["macro"], tpr["macro"],
-            label='macro-average ROC curve (area = {0:0.2f})'
+            label='Macro-average ROC curve (area = {0:0.2f})'
                 ''.format(roc_auc["macro"]),
             color='navy', linestyle=':', linewidth=4)
 
     for i in range(n_classes):
         plt.plot(fpr[i], tpr[i],
                 label='{0} (AUC = {1:0.2f})'
-                ''.format(tag_names[i], roc_auc[i]))
+                ''.format(tag_names[i], roc_auc[i]),
+                color=colors[tags[i] - 1])
 
     plt.plot([0, 1], [0, 1], 'k--')
     plt.xlim([0.0, 1.0])
     plt.ylim([0.0, 1.05])
     plt.xlabel('False Positive Rate')
     plt.ylabel('True Positive Rate')
-    plt.title('Receiver Operating Characteristic')
-    plt.legend(bbox_to_anchor=(1.1, 1), frameon=False)
+    plt.legend(loc=9, bbox_to_anchor=(0.5, -0.15), ncol=2, frameon=False)
+    plt.savefig(output_path, bbox_inches='tight')
     plt.show()
