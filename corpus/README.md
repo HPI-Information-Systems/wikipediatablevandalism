@@ -7,4 +7,4 @@ This module contains the annotated corpora containing Wikipedia table vandalism.
 - `wiki-corpus-v2/` Final version of the corpus, in which four tags with low number occurences were re-mapped.
 - `corpus-mapping/` Mapper detailing the tag and revision re-mapping between corpus version v1 and v2.
 - `notebooks/` Jupyter notebooks used to evaluate the corpora.
-- `testset/`
+- `testset/` Random samples of Wikipedia table revisions used for an evaluation of the classifier in a real-world setting.
